@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Inclusi.Via · Inclusão Escolar e Coordenação do Cuidado (TEA) — G3 Health Service</title>
+<meta name="description" content="Painel de apoio à decisão para secretarias de educação e saúde: dimensiona o público com TEA por município e faixa etária (Censo 2022), custeia o serviço especializado com plataforma Inclusi.Via e elabora a proposta ao ente público.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="G3 Health Service · TEAlliance">
+<meta property="og:title" content="Inclusão escolar e coordenação do cuidado (TEA) — Inclusi.Via">
+<meta property="og:description" content="Público com TEA por município e faixa etária, custo do serviço por estudante, valor do projeto para o ente público e elaboração de proposta. G3 Health Service.">
+<meta property="og:url" content="__SITE_URL__">
+<meta property="og:image" content="__SITE_URL__og.png">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="840">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE_URL__og.png">
+<style>
+:root{
+  --navy:#14225A; --navy2:#1F2E73; --ink:#172045; --muted:#59618A; --faint:#8A90AE;
+  --bg:#F4F5FA; --card:#FFFFFF; --line:#E2E5F0; --soft:#EEF0F8;
+  --orange:#E0651A; --orange-l:#FDEBDD; --purple:#6A3FA0; --purple-l:#EFE8F8;
+  --teal:#0E9488; --teal-l:#DDF3F0; --blue:#3A4FA8; --blue-l:#E4E8F7;
+  --red:#B42318; --green:#0F7B55;
+  --c1:#3A4FA8; --c2:#E0651A; --c3:#8A5CC4; --c4:#0E9488; --cgray:#D3D7E5;
+  --r:14px; --sh:0 1px 2px rgba(20,34,90,.06),0 6px 22px rgba(20,34,90,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Inter","Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+a{color:var(--blue)}
+b,strong{font-weight:650}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:18px;height:62px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);flex-shrink:0}
+.brand svg{width:38px;height:26px}
+.brand .bt{line-height:1.1}
+.brand .bt b{display:block;font-size:15.5px;letter-spacing:-.01em}
+.brand .bt span{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.links{display:flex;gap:2px;flex:1;overflow-x:auto;scrollbar-width:none}
+.links::-webkit-scrollbar{display:none}
+.links a{padding:7px 11px;border-radius:9px;color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:550;white-space:nowrap}
+.links a:hover,.links a.on{background:var(--soft);color:var(--navy)}
+.pill{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;padding:5px 12px;border-radius:10px;background:var(--navy);color:#fff;text-decoration:none;line-height:1.2;max-width:260px}
+.pill small{font-size:10.5px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:236px}
+.pill b{font-size:14px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:linear-gradient(125deg,#101B4C 0%,#1C2A6E 55%,#3B2B7E 100%);color:#fff;padding:54px 0 46px}
+.hero:after{content:"";position:absolute;right:-140px;bottom:-190px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#F28A3C,#E0651A 55%,rgba(224,101,26,0) 72%);opacity:.9}
+.hero .wrap{position:relative;z-index:1}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F6A868}
+.hero h1{font-size:clamp(28px,4.2vw,44px);line-height:1.1;letter-spacing:-.02em;margin:10px 0 14px;max-width:860px}
+.hero h1 em{font-style:normal;color:#F6A868}
+.hero p.lead{font-size:17px;max-width:760px;color:#D6DBF2;margin:0 0 26px}
+.hkpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1000px}
+.hk{background:rgba(16,27,76,.62);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:14px 16px;backdrop-filter:blur(6px)}
+.hk b{display:block;font-size:24px;letter-spacing:-.01em}
+.hk span{font-size:12.5px;color:#C9CFEA}
+.tagline{margin-top:20px;display:inline-flex;gap:8px;flex-wrap:wrap}
+.tagline span{font-size:12px;padding:5px 10px;border-radius:99px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#E6E9F7}
+
+/* sections */
+section{padding:56px 0;border-bottom:1px solid var(--line)}
+section.alt{background:#FAFBFE}
+.sh{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--orange)}
+h2{font-size:clamp(22px,2.8vw,30px);line-height:1.2;letter-spacing:-.015em;margin:6px 0 10px;color:var(--navy)}
+h3{font-size:17px;margin:0 0 10px;color:var(--navy)}
+p.lead2{color:var(--muted);max-width:820px;margin:0 0 22px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g25{grid-template-columns:2fr 3fr}
+.g32{grid-template-columns:3fr 2fr}
+td small.et{display:block;color:var(--faint);font-size:11.5px;font-weight:400}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.card.flat{box-shadow:none}
+.stat b{display:block;font-size:28px;letter-spacing:-.02em;color:var(--navy);line-height:1.1}
+.stat .l{font-size:13.5px;color:var(--ink);margin-top:6px}
+.stat .s{font-size:11.5px;color:var(--faint);margin-top:8px}
+.stat.o b{color:var(--orange)} .stat.p b{color:var(--purple)} .stat.t b{color:var(--teal)}
+.callout{border-left:4px solid var(--orange);background:var(--orange-l);padding:14px 16px;border-radius:0 12px 12px 0;font-size:14px;margin-top:16px}
+.callout.blue{border-color:var(--blue);background:var(--blue-l)}
+.callout.purple{border-color:var(--purple);background:var(--purple-l)}
+.callout.teal{border-color:var(--teal);background:var(--teal-l)}
+.note{font-size:12px;color:var(--faint);margin-top:8px}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:650;padding:9px 10px;border-bottom:2px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.grp td{background:var(--soft);font-weight:700;color:var(--navy);font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+tr.tot td{font-weight:700;border-top:2px solid var(--navy);border-bottom:none;color:var(--navy)}
+tr.sel td{background:#FFF6EE}
+tr.off td{color:var(--faint)}
+tr.off td .it-name{text-decoration:line-through;text-decoration-color:#C3C7D8}
+
+/* flow & layers */
+.layers{display:flex;flex-direction:column;gap:10px}
+.layer{display:grid;grid-template-columns:54px 1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.layer .ic{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;font-size:24px}
+.layer h4{margin:0 0 3px;font-size:15px;color:var(--navy)}
+.layer p{margin:0;font-size:13px;color:var(--muted)}
+.layer .tg{font-size:11px;font-weight:700;padding:4px 9px;border-radius:99px;white-space:nowrap}
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;counter-reset:st}
+.step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;position:relative}
+.step:before{counter-increment:st;content:counter(st);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:12.5px;font-weight:700;margin-bottom:8px}
+.step b{display:block;color:var(--navy);font-size:14px}
+.step span{font-size:12.5px;color:var(--muted)}
+.vs td:first-child{font-weight:650;color:var(--navy);width:22%}
+.vs td.srv{background:#F5FBFA}
+.vs th.srv{color:var(--teal)}
+
+/* selector */
+.tabs{display:inline-flex;background:var(--soft);border-radius:11px;padding:4px;gap:4px;flex-wrap:wrap}
+.tab{padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--muted);user-select:none;border:none;background:none;font-family:inherit}
+.tab.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(20,34,90,.12)}
+.fld{display:flex;flex-direction:column;gap:5px;flex:1;min-width:200px}
+.fld label{font-size:12px;font-weight:650;color:var(--muted)}
+input[type=text],input[type=number],input[type=email],select,textarea{font:inherit;font-size:14px;padding:9px 11px;border:1px solid #CDD2E3;border-radius:9px;background:#fff;color:var(--ink);width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid #A9B4E6;border-color:var(--blue)}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.sug{position:absolute;left:0;right:0;top:100%;z-index:20;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:var(--sh);margin-top:4px;overflow:hidden}
+.sug div{padding:9px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.sug div:hover,.sug div.hl{background:var(--soft)}
+.sug small{color:var(--faint)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--blue-l);color:var(--navy);border-radius:99px;padding:5px 6px 5px 12px;font-size:13px;font-weight:550}
+.chip button{border:none;background:#fff;color:var(--muted);width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:12px;line-height:1}
+.presets{display:flex;gap:8px;flex-wrap:wrap}
+.pz{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-family:inherit;text-align:left;color:var(--ink)}
+.pz b{display:block;font-size:13.5px;color:var(--navy)}
+.pz span{font-size:11.5px;color:var(--muted)}
+.pz.on{border-color:var(--orange);box-shadow:0 0 0 2px var(--orange-l);background:#FFFBF7}
+.ente{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;background:linear-gradient(120deg,var(--navy),#2B3A86);color:#fff;border-radius:var(--r);padding:18px 20px;margin:18px 0}
+.ente .nm{font-size:24px;font-weight:700;letter-spacing:-.01em}
+.ente .mt{font-size:13px;color:#C9CFEA}
+.ente .vv{text-align:right}
+.ente .vv b{font-size:24px;display:block}
+.ente .vv span{font-size:12px;color:#C9CFEA}
+.funnel{display:flex;flex-direction:column;gap:7px}
+.fr{display:grid;grid-template-columns:minmax(150px,1.1fr) 2fr 70px;gap:10px;align-items:center;font-size:13px}
+.fr .bar{height:26px;background:var(--soft);border-radius:6px;overflow:hidden}
+.fr .bar i{display:block;height:100%;border-radius:6px 4px 4px 6px;background:var(--c1)}
+.fr .v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;color:var(--navy)}
+.fr .k small{display:block;color:var(--faint);font-size:11px}
+details.prem{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:12px}
+details.prem summary{cursor:pointer;padding:12px 16px;font-weight:650;color:var(--navy);font-size:14px}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:4px 16px 16px}
+.pgrid .fld{min-width:0}
+.chartbox{position:relative;height:250px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:8px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* cost */
+.qd td{font-variant-numeric:tabular-nums}
+.qd tr.hl td{background:#FFF6EE;font-weight:700}
+.scen{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sc{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;cursor:pointer;position:relative;text-align:left;font-family:inherit;color:var(--ink)}
+.sc .t{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.sc h4{margin:2px 0 8px;font-size:15px;color:var(--navy)}
+.sc .v{font-size:22px;font-weight:750;color:var(--navy);letter-spacing:-.01em}
+.sc .s{font-size:12px;color:var(--muted)}
+.sc.on{border-color:var(--orange);box-shadow:0 0 0 2px var(--orange-l)}
+.sc .rec{position:absolute;top:10px;right:10px;font-size:10.5px;background:var(--orange);color:#fff;padding:3px 8px;border-radius:99px;font-weight:700}
+.itab input{width:92px;padding:5px 7px;font-size:13px;text-align:right}
+.itab input.ov{background:#FFF6EE;border-color:var(--orange)}
+.itab .rs{border:none;background:none;color:var(--orange);cursor:pointer;font-size:13px;padding:0 4px;visibility:hidden}
+.itab .rs.show{visibility:visible}
+.itab .anc{display:block;font-size:11px;color:var(--faint)}
+.sw{position:relative;display:inline-block;width:34px;height:20px}
+.sw input{opacity:0;width:0;height:0}
+.sw span{position:absolute;inset:0;background:#CDD2E3;border-radius:99px;cursor:pointer;transition:.15s}
+.sw span:before{content:"";position:absolute;width:16px;height:16px;left:2px;top:2px;background:#fff;border-radius:50%;transition:.15s}
+.sw input:checked+span{background:var(--teal)}
+.sw input:checked+span:before{transform:translateX(14px)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:0}
+
+/* value */
+.big{background:linear-gradient(125deg,#101B4C,#2A2F7A);color:#fff;border-radius:var(--r);padding:24px;position:relative;overflow:hidden}
+.big:after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,#E0651A 0%,rgba(224,101,26,0) 70%);opacity:.55}
+.big .k{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#F6A868;font-weight:700}
+.big .v{font-size:clamp(30px,4vw,44px);font-weight:800;letter-spacing:-.02em;margin:6px 0}
+.big .d{font-size:13.5px;color:#C9CFEA}
+.big .mini{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px;position:relative;z-index:1}
+.big .mini div{background:rgba(255,255,255,.08);border-radius:10px;padding:10px 12px}
+.big .mini b{display:block;font-size:17px}
+.big .mini span{font-size:11.5px;color:#C9CFEA}
+.split{margin-top:6px}
+.split .sb{display:flex;height:30px;border-radius:8px;overflow:hidden;gap:2px;background:#fff}
+.split .sb i{display:block;height:100%}
+.split .sl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:6px;gap:10px}
+.split .sl b{color:var(--ink)}
+.hbars .hb{display:grid;grid-template-columns:minmax(150px,1.2fr) 2fr 110px;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.hbars .hb .bar{height:22px;background:var(--soft);border-radius:6px;overflow:hidden}
+.hbars .hb .bar i{display:block;height:100%;background:var(--cgray);border-radius:6px 4px 4px 6px}
+.hbars .hb.us .bar i{background:var(--c1)}
+.hbars .hb .v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* proposal */
+.prop{display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.ptab{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 13px;cursor:pointer;font:inherit;font-size:13.5px;font-weight:600;color:var(--muted)}
+.ptab i{font-style:normal;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--soft);font-size:12px;color:var(--navy)}
+.ptab.on{border-color:var(--navy);color:var(--navy)}
+.ptab.on i{background:var(--navy);color:#fff}
+.pane{display:none}
+.pane.on{display:block}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px;cursor:pointer;background:#fff}
+.opt input{margin-top:3px;accent-color:var(--orange)}
+.opt b{display:block;font-size:14px;color:var(--navy)}
+.opt span{font-size:12.5px;color:var(--muted)}
+.opt.on{border-color:var(--orange);background:#FFFBF7}
+.qchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.qchips button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;cursor:pointer;font:inherit;font-size:12.5px;color:var(--muted)}
+.qchips button.on{border-color:var(--navy);color:var(--navy);font-weight:650}
+.aside{position:sticky;top:78px}
+.sum{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
+.sum .hd{background:var(--navy);color:#fff;padding:14px 16px}
+.sum .hd small{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#F6A868;font-weight:700}
+.sum .hd b{display:block;font-size:26px;letter-spacing:-.01em;margin-top:2px}
+.sum .hd span{font-size:12px;color:#C9CFEA}
+.sum dl{margin:0;padding:12px 16px;display:grid;grid-template-columns:1fr auto;gap:7px 10px;font-size:13px}
+.sum dt{color:var(--muted)}
+.sum dd{margin:0;text-align:right;font-weight:650;font-variant-numeric:tabular-nums}
+.sum .ly{padding:0 16px 12px;display:flex;flex-direction:column;gap:5px}
+.sum .ly div{font-size:12.5px;display:flex;justify-content:space-between;gap:8px}
+.sum .ly div.off{color:var(--faint);text-decoration:line-through}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:10px;padding:11px 16px;background:var(--orange);color:#fff;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.btn:hover{filter:brightness(1.05)}
+.btn.sec{background:var(--navy)}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn:disabled{opacity:.6;cursor:wait}
+.btns{display:flex;flex-direction:column;gap:8px;padding:0 16px 16px}
+#mailStatus{font-size:12.5px;font-weight:600;padding:0 16px 14px;display:block}
+.navbtn{display:flex;justify-content:space-between;margin-top:14px}
+
+/* ranking */
+.rank tr{cursor:pointer}
+.rank tr:hover td{background:#F8F9FD}
+.rank td .mini{border:1px solid var(--line);background:#fff;border-radius:7px;padding:3px 8px;font:inherit;font-size:12px;cursor:pointer;color:var(--navy)}
+.rscroll{max-height:none}
+.rscroll.open{max-height:480px;overflow:auto}
+.rscroll.open thead th{position:sticky;top:0;background:#fff;z-index:1}
+
+.foot{padding:28px 20px 40px;font-size:12.5px;color:var(--muted)}
+ul.clean{padding-left:18px;margin:6px 0}
+ul.clean li{margin:4px 0;font-size:13.5px}
+
+@media (max-width:980px){
+  .prop{grid-template-columns:1fr}
+  .aside{position:static}
+  .steps{grid-template-columns:repeat(3,1fr)}
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .hkpis,.grid4{grid-template-columns:1fr 1fr}
+  .grid2,.grid3,.scen{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .links{display:none}
+  .pill{margin-left:auto}
+  .big .mini{grid-template-columns:1fr}
+  .fr{grid-template-columns:1fr 1.3fr 58px}
+  .hbars .hb{grid-template-columns:1fr 1fr 90px}
+  .layer{grid-template-columns:44px 1fr}
+  .layer .ic{width:44px;height:44px;font-size:20px}
+  .layer .tg{grid-column:2;justify-self:start}
+  .ente .vv{text-align:left}
+}
+@media print{.nav,.aside .btns{display:none}}
+</style>
+</head>
+<body>
+
+<header class="nav"><div class="wrap">
+  <a class="brand" href="#top" aria-label="Inclusi.Via — início">
+    <svg viewBox="0 0 64 42" aria-hidden="true"><g transform="translate(32,40)">
+      <path d="M0 0C-7-10-6-22 0-31C6-22 7-10 0 0Z" transform="rotate(-62)" fill="#6A3FA0"/>
+      <path d="M0 0C-7-10-6-22 0-31C6-22 7-10 0 0Z" transform="rotate(62)" fill="#F29A4A"/>
+      <path d="M0 0C-7-10-6-22 0-31C6-22 7-10 0 0Z" transform="rotate(-31)" fill="#A0479A"/>
+      <path d="M0 0C-7-10-6-22 0-31C6-22 7-10 0 0Z" transform="rotate(31)" fill="#E0651A"/>
+      <path d="M0 0C-8-11-7-25 0-36C7-25 8-11 0 0Z" fill="#D2452A"/>
+    </g></svg>
+    <span class="bt"><b>Inclusi.Via · TEAlliance</b><span>G3 Health Service</span></span>
+  </a>
+  <nav class="links" id="links">
+    <a href="#problema">Problema</a><a href="#servico">Modelo de serviço</a><a href="#publico">Público-alvo</a><a href="#custos">Custos</a><a href="#valor">Valor p/ o ente</a><a href="#proposta">Proposta</a><a href="#ranking">Ranking</a><a href="#metodo">Metodologia</a>
+  </nav>
+  <a class="pill" href="#valor"><small id="pillEnte">—</small><b id="pillVal">—</b></a>
+</div></header>
+
+<div class="hero" id="top"><div class="wrap">
+  <div class="eyebrow">Inclusão escolar · Coordenação do cuidado · TEA</div>
+  <h1>Um <em>serviço especializado</em> que conecta escola, saúde e família em torno de cada estudante com TEA</h1>
+  <p class="lead">Painel de apoio à decisão para secretarias de educação e de saúde: dimensiona o público com transtorno do espectro autista por município e faixa etária, detalha o custo do serviço por estudante, mostra o valor do projeto para o ente público e elabora a proposta.</p>
+  <div class="hkpis">
+    <div class="hk"><b class="tnum">1.060.019</b><span>pessoas com TEA de 0 a 19 anos no Brasil (Censo 2022)</span></div>
+    <div class="hk"><b class="tnum">R$ 96,77</b><span>por estudante/mês — plataforma, implantação, formação e suporte</span></div>
+    <div class="hk"><b class="tnum">R$ 409,41</b><span>por estudante/mês — programa integral, com cuidado clínico</span></div>
+    <div class="hk"><b class="tnum">R$ 196,8 mi</b><span>em 2 contratos de consórcio (2026) — ambos compram serviço, não licença</span></div>
+  </div>
+  <div class="tagline"><span>Lei nº 13.146/2015 (LBI)</span><span>Lei nº 14.254/2021</span><span>Lei nº 14.133/2021</span><span>FUNDEB · duplo cômputo AEE</span><span>Dados: IBGE Censo 2022, SIDRA 10145</span></div>
+</div></div>
+
+<!-- 01 PROBLEMA -->
+<section id="problema"><div class="wrap">
+  <div class="sh">01 · O problema</div>
+  <h2>O maior problema não é o diagnóstico. É a falta de coordenação do desenvolvimento da criança.</h2>
+  <p class="lead2">Escola, clínica e família produzem informação valiosa sobre o mesmo estudante — e trabalham desconectadas. O plano educacional é feito em papel, o laudo não chega ao professor, e cada troca de escola faz o histórico recomeçar do zero.</p>
+  <div class="grid4">
+    <div class="card stat o"><b class="tnum">2,5 mi</b><div class="l">de alunos na educação especial no Brasil</div><div class="s">TEAlliance, Pitch Deck 2026</div></div>
+    <div class="card stat o"><b>1 em 4</b><div class="l">alunos com transtorno do neurodesenvolvimento ou deficiência conclui a educação básica</div><div class="s">TEAlliance, Pitch Deck 2026</div></div>
+    <div class="card stat"><b class="tnum">1.060.019</b><div class="l">pessoas com diagnóstico de TEA de 0 a 19 anos, em 5.570 municípios</div><div class="s">IBGE, Censo 2022 — SIDRA 10145</div></div>
+    <div class="card stat p"><b>0</b><div class="l">contratos públicos identificados de software isolado de gestão de PEI — o mercado público compra serviço</div><div class="s">Estudo de viabilidade G3, set/2026</div></div>
+  </div>
+  <div class="card flat" style="margin-top:18px">
+    <h3>O que muda na rede</h3>
+    <div class="tscroll"><table>
+      <thead><tr><th>Situação atual</th><th>O que o serviço entrega</th></tr></thead>
+      <tbody>
+        <tr><td>O PEI é feito em papel ou planilha, quando é feito, e raramente é revisado.</td><td>PEI digital com elaboração assistida, homologação pelo professor, controle de prazos legais e histórico versionado.</td></tr>
+        <tr><td>O laudo e o relatório terapêutico não chegam ao professor.</td><td>Módulo de saúde com acesso controlado: o profissional registra conduta e devolutiva que o professor lê.</td></tr>
+        <tr><td>A família observa o dia a dia da criança e não tem como contribuir.</td><td>Canal próprio da família, com registro de observações e acompanhamento da evolução.</td></tr>
+        <tr><td>Troca de professor ou de escola faz o histórico recomeçar do zero.</td><td>Base única por estudante, preservada ao longo de toda a trajetória na rede.</td></tr>
+        <tr><td>A Secretaria não sabe se o que está sendo feito produz resultado.</td><td>Painel de governança com indicadores de cobertura, tempestividade e evolução, pronto para prestação de contas.</td></tr>
+        <tr><td>Não há como comprovar cumprimento da Lei nº 14.254/2021 e da Lei nº 13.146/2015.</td><td>Rastreabilidade documental integral, auditável caso a caso.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div></section>
+
+<!-- 02 SERVIÇO -->
+<section class="alt" id="servico"><div class="wrap">
+  <div class="sh">02 · Modelo de serviço</div>
+  <h2>Não se vende licença. Presta-se um serviço especializado — com a plataforma acoplada.</h2>
+  <p class="lead2">A plataforma Inclusi.Via é o instrumento. O que o ente contrata é a <b>coordenação do desenvolvimento de cada estudante</b>: implantação, formação da rede, supervisão multiprofissional, suporte contínuo e, quando contratado, avaliação pedagógica e cuidado clínico. O serviço é medido e pago pelo que foi efetivamente prestado, mês a mês.</p>
+
+  <div class="grid2">
+    <div>
+      <h3>As quatro camadas do serviço</h3>
+      <div class="layers">
+        <div class="layer"><div class="ic" style="background:var(--blue-l)">🧩</div><div><h4>Plataforma Inclusi.Via — o instrumento</h4><p>Core (PEI assistido, base única por estudante) · School · Clinic · Family · Painel de governança da Secretaria</p></div><span class="tg" style="background:var(--blue-l);color:var(--c1)">Cenário A</span></div>
+        <div class="layer"><div class="ic" style="background:var(--orange-l)">🤝</div><div><h4>Serviços habilitadores — o que faz funcionar</h4><p>Implantação e parametrização · integração com sistemas legados · formação continuada em turmas de até 20 · supervisão e mentoria multiprofissional · suporte e sustentação</p></div><span class="tg" style="background:var(--orange-l);color:#A8470C">Cenário A</span></div>
+        <div class="layer"><div class="ic" style="background:var(--purple-l)">📋</div><div><h4>Avaliação pedagógica de habilidades — opcional</h4><p>Mede leitura, escrita, numeramento e atenção; sinaliza necessidade de aprofundamento e encaminha ao profissional habilitado. Não nomeia diagnóstico.</p></div><span class="tg" style="background:var(--purple-l);color:var(--purple)">Cenário B</span></div>
+        <div class="layer"><div class="ic" style="background:var(--teal-l)">🩺</div><div><h4>Cuidado clínico multiprofissional</h4><p>Neurologia · psiquiatria · fonoaudiologia · psicologia · psicopedagogia. Custeado pela rubrica da Saúde, apartada da Educação.</p></div><span class="tg" style="background:var(--teal-l);color:var(--teal)">Cenário C</span></div>
+      </div>
+    </div>
+    <div>
+      <h3>Venda de produto × prestação de serviço</h3>
+      <div class="card flat" style="padding:6px 8px">
+      <div class="tscroll"><table class="vs">
+        <thead><tr><th></th><th>Produto (ex.: PinkPapa, RosalindTest)</th><th class="srv">Serviço (este programa)</th></tr></thead>
+        <tbody>
+          <tr><td>Unidade de venda</td><td>Kit ou exame entregue</td><td class="srv">Estudante acompanhado por mês, com metas de serviço</td></tr>
+          <tr><td>Relação</td><td>Pontual, por lote</td><td class="srv">Contínua — vigência de 12 a 60 meses</td></tr>
+          <tr><td>Pagamento</td><td>Na entrega do produto</td><td class="srv">Mensal, por medição do serviço prestado</td></tr>
+          <tr><td>O que se comprova</td><td>Conformidade do produto</td><td class="srv">Resultado: PEIs ativos, revisões no prazo, evolução</td></tr>
+          <tr><td>Quem executa</td><td>O próprio ente aplica</td><td class="srv">Equipe técnica especializada junto à rede</td></tr>
+          <tr><td>Orçamento</td><td>Uma rubrica</td><td class="srv">Educação (FUNDEB, MDE) + Saúde, apartadas</td></tr>
+        </tbody>
+      </table></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:26px">Como funciona, do começo ao fim</h3>
+  <div class="steps">
+    <div class="step"><b>Identificação</b><span>A rede levanta os estudantes já diagnosticados e, opcionalmente, aplica a avaliação pedagógica.</span></div>
+    <div class="step"><b>Coleta</b><span>Avaliação da escola, laudos da saúde e observações da família num único ambiente seguro (LGPD).</span></div>
+    <div class="step"><b>Plano</b><span>O sistema propõe o PEI; ele só produz efeito depois de homologado por profissional identificado.</span></div>
+    <div class="step"><b>Execução</b><span>Professor, terapeuta e família trabalham com objetivos compartilhados.</span></div>
+    <div class="step"><b>Mensuração</b><span>Indicadores objetivos e alerta automático de revisão periódica do plano.</span></div>
+    <div class="step"><b>Formação</b><span>Trilhas para regente, AEE, coordenação, gestão e saúde. Sem isso, nenhuma ferramenta funciona.</span></div>
+  </div>
+
+  <h3 style="margin-top:26px">O mercado público compra serviço — as contratações de referência</h3>
+  <div class="grid3">
+    <div class="card stat"><b class="tnum">R$ 116,4 mi</b><div class="l"><b>CIMPAR</b> — Pregão 07/2026, solução integrada de apoio técnico-pedagógico ao AEE nos municípios consorciados</div><div class="s">Homologado em 16/07/2026 · serviço + operação</div></div>
+    <div class="card stat"><b class="tnum">R$ 80,4 mi</b><div class="l"><b>CIMINAS</b> — ARP 045/2026, identificação com avaliação gamificada, implantação, treinamento e laboratórios itinerantes</div><div class="s">Concorrência 004/2026 · 27/08/2026</div></div>
+    <div class="card stat"><b class="tnum">R$ 360 mil</b><div class="l"><b>Chorozinho/CE</b> — locação de software de gestão educacional da rede inteira, sem módulo de PEI ou AEE</div><div class="s">12 meses · a diferença de duas ordens de grandeza é o serviço</div></div>
+  </div>
+</div></section>
+
+<!-- 03 PÚBLICO -->
+<section id="publico"><div class="wrap">
+  <div class="sh">03 · Público-alvo</div>
+  <h2>Quantos estudantes o serviço atende — por município e por faixa etária</h2>
+  <p class="lead2">Parte das pessoas com diagnóstico de TEA informado ao Censo 2022 (IBGE, SIDRA 10145) e aplica, etapa por etapa, os parâmetros do estudo de viabilidade. Escolha um município, monte um consórcio ou selecione um estado.</p>
+
+  <div class="card">
+    <div class="tabs" role="tablist">
+      <button class="tab on" id="t-mun" onclick="setTipo('mun')">🏙️ Município</button>
+      <button class="tab" id="t-cons" onclick="setTipo('cons')">🤝 Consórcio (vários municípios)</button>
+      <button class="tab" id="t-uf" onclick="setTipo('uf')">🗺️ Estado</button>
+    </div>
+    <div class="row" id="r-busca">
+      <div class="fld" style="position:relative">
+        <label id="lblBusca">Município — digite para buscar (sem precisar de acento)</label>
+        <input type="text" id="busca" placeholder="Ex.: guaruja, campinas, sao luis…" autocomplete="off" oninput="onBusca()" onkeydown="navSug(event)">
+        <div id="sug"></div>
+      </div>
+      <div class="fld" id="f-cons" style="display:none;max-width:360px">
+        <label>Nome do consórcio (entra na proposta)</label>
+        <input type="text" id="consNome" placeholder="Ex.: Consórcio Intermunicipal da Baixada Santista" oninput="S.consNome=this.value;update()">
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="row" id="r-uf" style="display:none">
+      <div class="fld" style="max-width:380px">
+        <label>Estado — soma de todos os municípios da UF</label>
+        <select id="selUF" onchange="S.uf=this.value;resetOv();update()"></select>
+      </div>
+    </div>
+
+    <div class="ente">
+      <div><div class="mt" id="enteTipo">Município</div><div class="nm" id="enteNome">—</div><div class="mt" id="enteMeta">—</div></div>
+      <div class="vv"><b class="tnum" id="enteAcomp">—</b><span>estudantes acompanhados pelo serviço</span></div>
+    </div>
+
+    <h3>Faixa etária do público</h3>
+    <div class="presets" id="presets"></div>
+    <div class="row" id="custom" style="display:none"></div>
+
+    <div class="grid2 g25" style="margin-top:18px">
+      <div>
+        <div class="legend"><span><i style="background:var(--c1)"></i>No recorte selecionado</span><span><i style="background:var(--cgray)"></i>Fora do recorte</span></div>
+        <div class="chartbox"><canvas id="chFaixa" aria-label="Pessoas com TEA por faixa etária"></canvas></div>
+      </div>
+      <div class="tscroll"><table id="tbFaixa"></table></div>
+    </div>
+
+    <h3 style="margin-top:22px">Do total populacional ao público atendido</h3>
+    <div class="funnel" id="funnel"></div>
+    <details class="prem" id="prem"><summary>⚙️ Premissas do dimensionamento (editáveis)</summary><div class="pgrid" id="pgrid"></div>
+      <div class="note" style="padding:0 16px 14px">Os parâmetros de rede, de ampliação e de estrutura escolar são provisórios e devem ser substituídos pelos dados do Censo Escolar e da Secretaria antes de uso externo. Dimensionamento inflado é a causa mais comum de impugnação e glosa.</div>
+    </details>
+  </div>
+</div></section>
+
+<!-- 04 CUSTOS -->
+<section class="alt" id="custos"><div class="wrap">
+  <div class="sh">04 · Custos</div>
+  <h2>Quanto custa, por estudante e no total</h2>
+  <p class="lead2">Atenção ao denominador de cada linha: a plataforma e a avaliação incidem sobre todos os acompanhados; o cuidado clínico, apenas sobre quem o recebe.</p>
+
+  <div class="grid2 g32">
+    <div class="card">
+      <h3>Custo por estudante</h3>
+      <div class="tscroll"><table class="qd" id="tbQuadro"></table></div>
+      <div class="note" id="quadroNote"></div>
+    </div>
+    <div class="card">
+      <h3>Composição do cenário da proposta</h3>
+      <div class="legend" id="compLegend"></div>
+      <div class="chartbox" style="height:230px"><canvas id="chComp" aria-label="Composição do custo anual"></canvas></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px">Cenários — clique para escolher o escopo da proposta</h3>
+  <div class="scen" id="scen"></div>
+
+  <div class="card" style="margin-top:18px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap">
+      <div><h3 style="margin:0">Composição detalhada — primeiro ano</h3><div class="note" style="margin-top:2px">Quantidades calculadas a partir do público. Edite quantidade ou preço unitário para ajustar (↺ restaura). Desligue itens para montar um escopo personalizado.</div></div>
+      <button class="btn ghost" onclick="resetOv(true);update()">↺ Restaurar padrões</button>
+    </div>
+    <div class="tscroll" style="margin-top:10px"><table class="itab" id="tbItens"></table></div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3>Pacote de atendimento clínico por estudante/ano</h3>
+    <div class="tscroll"><table class="itab" id="tbPac"></table></div>
+    <div class="callout teal">Recomenda-se estratificar o pacote por nível de suporte do TEA (1, 2 e 3): um pacote único superestima o custo dos casos leves e subestima o dos graves. Ajuste as sessões acima para simular faixas de intensidade.</div>
+  </div>
+</div></section>
+
+<!-- 05 VALOR -->
+<section id="valor"><div class="wrap">
+  <div class="sh">05 · Valor para o ente público</div>
+  <h2>O valor do projeto, e de onde sai o dinheiro</h2>
+  <p class="lead2">Calculado para o ente, o escopo e a vigência escolhidos na proposta. Nos anos seguintes ao primeiro excluem-se implantação e integração, que não se repetem. Preços de setembro de 2026, sem reajuste.</p>
+
+  <div class="grid2">
+    <div class="big">
+      <div class="k">Valor total do projeto</div>
+      <div class="v tnum" id="vTotal">—</div>
+      <div class="d" id="vDesc">—</div>
+      <div class="mini">
+        <div><b class="tnum" id="vAno">—</b><span>no primeiro ano</span></div>
+        <div><b class="tnum" id="vMes">—</b><span>por mês (recorrente)</span></div>
+        <div><b class="tnum" id="vEst">—</b><span>por estudante/mês</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Desembolso por ano de contrato</h3>
+      <div class="legend"><span><i style="background:var(--c1)"></i>Serviço recorrente</span><span><i style="background:var(--c2)"></i>Implantação e integração (uma vez)</span></div>
+      <div class="chartbox" style="height:210px"><canvas id="chAnos" aria-label="Desembolso por ano"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:18px">
+    <div class="card">
+      <h3>Por rubrica orçamentária</h3>
+      <div class="split" id="spRub"></div>
+      <div class="note">A separação entre Educação e Saúde permite custear o componente clínico sem comprometer o limite de MDE e mantém o contrato da plataforma tecnicamente limpo.</div>
+      <h3 style="margin-top:18px">Licença × serviço</h3>
+      <div class="split" id="spSrv"></div>
+      <div class="note">A maior parte do valor é serviço prestado — que é o que o mercado público efetivamente contrata.</div>
+    </div>
+    <div class="card">
+      <h3>Referências de preço por estudante/ano</h3>
+      <div class="hbars" id="bench"></div>
+      <div class="note">A camada tecnológica proposta situa-se entre um plano privado de gestão de PEI e a licença de avaliação registrada na ARP 045/2026 do CIMINAS — e embute implantação, formação, supervisão e suporte.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3>Fontes de custeio — o programa não depende de recurso novo</h3>
+    <div class="tscroll"><table>
+      <thead><tr><th>Fonte</th><th>Aplicação</th><th>Base</th></tr></thead>
+      <tbody>
+        <tr><td><b>FUNDEB</b></td><td>Matrículas da educação especial em AEE admitem duplo cômputo e ponderação diferenciada.</td><td>Lei nº 14.113/2020 · Decreto nº 7.611/2011</td></tr>
+        <tr><td><b>Salário-Educação</b></td><td>Custeio de ações de manutenção e desenvolvimento do ensino.</td><td>Quota municipal</td></tr>
+        <tr><td><b>Recursos próprios — MDE</b></td><td>Percentual constitucional mínimo aplicado em manutenção e desenvolvimento do ensino.</td><td>Art. 212 da Constituição</td></tr>
+        <tr><td><b>Emendas parlamentares</b></td><td>Programas de educação inclusiva e de saúde da criança.</td><td>Individuais e de bancada</td></tr>
+        <tr><td><b>Programas do FNDE</b></td><td>Apoio técnico e financeiro ao AEE e às salas de recursos multifuncionais.</td><td>Decreto nº 7.611/2011</td></tr>
+        <tr><td><b>Bloco de custeio da Saúde</b></td><td>Componente clínico, quando prestado pela rede municipal de saúde ou conveniada.</td><td>Rubrica apartada da Educação</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div></section>
+
+<!-- 06 PROPOSTA -->
+<section class="alt" id="proposta"><div class="wrap">
+  <div class="sh">06 · Elaboração da proposta</div>
+  <h2>Monte a proposta de serviço para o ente</h2>
+  <p class="lead2">Quatro passos: escopo, condições de contratação, partes e emissão. O resumo ao lado se atualiza a cada escolha; o PDF sai com capa, objeto, público, custos detalhados, cronograma físico-financeiro, fontes de custeio e assinaturas.</p>
+
+  <div class="prop">
+    <div class="card">
+      <div class="ptabs">
+        <button class="ptab on" data-p="1" onclick="setPane(1)"><i>1</i>Escopo do serviço</button>
+        <button class="ptab" data-p="2" onclick="setPane(2)"><i>2</i>Condições</button>
+        <button class="ptab" data-p="3" onclick="setPane(3)"><i>3</i>Partes</button>
+        <button class="ptab" data-p="4" onclick="setPane(4)"><i>4</i>Revisar e emitir</button>
+      </div>
+
+      <div class="pane on" id="pane1">
+        <div class="fld"><label>Ente público</label></div>
+        <div class="card flat" style="padding:12px 14px;margin:6px 0 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+          <div><b id="pEnte">—</b><div class="note" style="margin:0" id="pEnteMeta">—</div></div>
+          <a class="btn ghost" href="#publico">Trocar ente ou faixa etária</a>
+        </div>
+        <div class="fld"><label>Escopo — escolha o cenário</label></div>
+        <div id="pScen" style="margin-top:6px"></div>
+        <div class="note">Para ligar/desligar itens individuais ou ajustar quantidades e preços, use a <a href="#custos">composição detalhada</a> — a proposta passa a “Personalizado”.</div>
+        <div class="navbtn"><span></span><button class="btn sec" onclick="setPane(2)">Próximo: condições →</button></div>
+      </div>
+
+      <div class="pane" id="pane2">
+        <div class="fld"><label>Canal de contratação</label></div>
+        <div id="pCanal" style="margin-top:6px"></div>
+        <div class="row">
+          <div class="fld"><label>Vigência (meses)</label><input type="number" id="vig" min="1" max="60" value="12" oninput="S.vig=Math.max(1,Math.min(60,+this.value||12));update()">
+            <div class="qchips" id="vigChips"></div></div>
+          <div class="fld"><label>Validade da proposta (dias)</label><input type="number" id="validade" min="1" max="365" value="60"></div>
+        </div>
+        <div class="row">
+          <div class="fld"><label>Forma de pagamento</label>
+            <select id="pgto"><option>Mensal, por medição dos serviços efetivamente prestados</option><option>Mensal, licenças ativas + serviços por entrega (implantação, turmas, horas técnicas)</option><option>Trimestral, por relatório de medição e indicadores</option></select></div>
+          <div class="fld"><label>Reajuste</label><input type="text" id="reaj" value="Anual, pelo IPCA, após 12 meses da data-base"></div>
+        </div>
+        <div class="callout" id="canalNote" style="font-size:13px"></div>
+        <div class="navbtn"><button class="btn ghost" onclick="setPane(1)">← Escopo</button><button class="btn sec" onclick="setPane(3)">Próximo: partes →</button></div>
+      </div>
+
+      <div class="pane" id="pane3">
+        <h3>Destinatário</h3>
+        <div class="row" style="margin-top:0">
+          <div class="fld"><label>Órgão</label><input type="text" id="destOrg"></div>
+        </div>
+        <div class="row">
+          <div class="fld"><label>Autoridade (nome e cargo)</label><input type="text" id="destNome" placeholder="Ex.: Sra. Maria Silva — Secretária Municipal de Educação"></div>
+          <div class="fld" style="max-width:300px"><label>E-mail do destinatário</label><input type="email" id="destEmail" placeholder="nome@municipio.gov.br"></div>
+        </div>
+        <h3 style="margin-top:18px">Proponente</h3>
+        <div class="row" style="margin-top:0">
+          <div class="fld"><label>Empresa</label><input type="text" id="propEmp" value="G3 Health Service Ltda. — CNPJ 31.652.744/0001-14"></div>
+          <div class="fld" style="max-width:300px"><label>Solução</label><input type="text" id="propSol" value="Plataforma Inclusi.Via — TEAlliance"></div>
+        </div>
+        <div class="row">
+          <div class="fld"><label>Representante</label><input type="text" id="propNome" value="Gerson Gomes"></div>
+          <div class="fld"><label>E-mail</label><input type="email" id="propEmail" value="g3.healthservice@proton.me"></div>
+          <div class="fld" style="max-width:200px"><label>Telefone</label><input type="text" id="propTel" value="+55 61 99255-7690"></div>
+        </div>
+        <div class="navbtn"><button class="btn ghost" onclick="setPane(2)">← Condições</button><button class="btn sec" onclick="setPane(4)">Próximo: revisar →</button></div>
+      </div>
+
+      <div class="pane" id="pane4">
+        <h3>Revisão</h3>
+        <div class="tscroll"><table id="tbRev"></table></div>
+        <div class="callout blue" style="font-size:13px">Antes de enviar a um ente, substitua os parâmetros provisórios de estrutura da rede (unidades escolares, profissionais, percentual em rede pública) pelos dados do Censo Escolar e da Secretaria, e valide os preços sem âncora pública por pesquisa de preços (art. 23 da Lei nº 14.133/2021).</div>
+        <div class="navbtn"><button class="btn ghost" onclick="setPane(3)">← Partes</button><span></span></div>
+      </div>
+    </div>
+
+    <aside class="aside">
+      <div class="sum">
+        <div class="hd"><small>Valor total do projeto</small><b class="tnum" id="sTotal">—</b><span id="sSub">—</span></div>
+        <dl>
+          <dt>Ente</dt><dd id="sEnte">—</dd>
+          <dt>Escopo</dt><dd id="sCen">—</dd>
+          <dt>Estudantes acompanhados</dt><dd id="sAcomp">—</dd>
+          <dt>Com pacote clínico</dt><dd id="sClin">—</dd>
+          <dt>Primeiro ano</dt><dd id="sAno">—</dd>
+          <dt>Por estudante/mês</dt><dd id="sEst">—</dd>
+        </dl>
+        <div class="ly" id="sLy"></div>
+        <div class="btns">
+          <button class="btn" onclick="baixarPDF()">📄 Baixar proposta em PDF</button>
+          <button class="btn sec" id="btnMail" onclick="enviarEmail()">✉️ Enviar por e-mail</button>
+        </div>
+        <span id="mailStatus"></span>
+      </div>
+    </aside>
+  </div>
+</div></section>
+
+<!-- 07 RANKING -->
+<section id="ranking"><div class="wrap">
+  <div class="sh">07 · Ranking de oportunidade</div>
+  <h2>Onde está o público — municípios e estados</h2>
+  <p class="lead2">Ordenado pelo público com TEA no recorte etário selecionado; valor anual estimado no cenário integral (C) com as premissas atuais. Clique em uma linha para carregá-la, ou adicione municípios a um consórcio.</p>
+  <div class="tabs"><button class="tab on" id="rk-mun" onclick="setRank('mun')">Municípios</button><button class="tab" id="rk-uf" onclick="setRank('uf')">Estados</button></div>
+  <div class="card" style="margin-top:12px;padding:8px 10px">
+    <div class="tscroll rscroll" id="rankWrap"><table class="rank"><thead id="rankHead"></thead><tbody id="rankBody"></tbody></table></div>
+  </div>
+  <div class="row" style="align-items:center"><button class="btn ghost" id="btnRank" onclick="toggleRank()">Ver ranking completo ▾</button><span class="note" id="rankCount" style="margin:0"></span></div>
+</div></section>
+
+<!-- 08 METODOLOGIA -->
+<section class="alt" id="metodo"><div class="wrap">
+  <div class="sh">08 · Metodologia, premissas e fontes</div>
+  <h2>Como os números são calculados</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Dimensionamento</h3>
+      <ol style="font-size:13.5px;padding-left:18px;margin:0">
+        <li>Base: pessoas com TEA diagnosticado por profissional de saúde, por faixa quinquenal (IBGE, Censo 2022, SIDRA 10145, variável 13267).</li>
+        <li>O IBGE não publica idade simples: recortes escolares estimados por distribuição uniforme dentro da faixa (ex.: 4 a 18 = ⅕ de 0–4 + 5–9 + 10–14 + ⅘ de 15–19).</li>
+        <li>Em rede pública do ente = recorte × percentual de rede (padrão 60%).</li>
+        <li>Público-alvo do AEE = × fator de ampliação (padrão 1,6 — demais deficiências, TGD e altas habilidades).</li>
+        <li>Acompanhados = × adesão efetiva (padrão 85% — recusa familiar e perda de seguimento).</li>
+        <li>Pacote clínico = × percentual de política pública (padrão 45%; cada ponto ≈ R$ 85 mil/ano no Guarujá).</li>
+        <li>Estrutura: unidades escolares, profissionais de saúde, turmas, horas e laboratórios derivam do número de acompanhados, calibrados no caso Guarujá (60 unidades para 1.295 estudantes).</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Preços e vigência</h3>
+      <ul class="clean">
+        <li>Preços com âncora pública derivam da ARP nº 045/2026 do CIMINAS (licença de avaliação R$ 750,97; laboratório itinerante R$ 2.542,89). Os demais são propostos e devem ser validados por pesquisa de preços (art. 23 da Lei nº 14.133/2021).</li>
+        <li>Pacote clínico com valores unitários informados pelo contratante: 3 consultas/ano de neurologia e psiquiatria; 12 sessões/ano de fono, psicologia e psicopedagogia.</li>
+        <li>Implantação e integração são não recorrentes; os demais itens se repetem a cada 12 meses.</li>
+        <li>Preços de setembro de 2026, sem reajuste. Validação: o caso Guarujá reproduz exatamente os valores do estudo (R$ 1.503.747,20 / R$ 2.514.396,70 / R$ 6.362.196,70 ao ano).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid2" style="margin-top:18px">
+    <div class="card">
+      <h3>O que ficou fora, e por quê — medicação à base de canabidiol</h3>
+      <p style="font-size:13.5px;margin:0">A versão preliminar do estudo previa R$ 4.760,00 por estudante/ano de medicação. A rubrica foi retirada: o canabidiol não é incorporado ao SUS para TEA; os produtos usualmente prescritos não têm registro na ANVISA (logo, não há preço CMED de referência); e a Resolução CFM nº 2.324/2022 não inclui o TEA entre as indicações autorizadas. O acesso individual pelas vias legais permanece, e a plataforma <b>registra</b> a medicação prescrita — função legítima de coordenação do cuidado, sem custeio pelo contrato.</p>
+    </div>
+    <div class="card">
+      <h3>Riscos e mitigação</h3>
+      <ul class="clean">
+        <li><b>Dimensionamento provisório</b> — substituir pelo Censo Escolar e dados da Secretaria.</li>
+        <li><b>Enquadramento regulatório da avaliação</b> — posicionar como avaliação pedagógica de habilidades, não identificação de condição de saúde.</li>
+        <li><b>Dados de crianças</b> — RIPD antes da implantação e matriz controlador-operador (LGPD).</li>
+        <li><b>Autoria do TR</b> — o art. 14 da Lei nº 14.133/2021 impede o autor do projeto de disputar; usar PMI (art. 81) ou consulta pública (art. 21).</li>
+        <li><b>Atestado técnico</b> — piloto municipal remunerado de 3 a 6 meses.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note" style="margin-top:16px">Ferramenta de apoio à decisão e prospecção. Não constitui parecer jurídico nem orientação clínica. Fontes: IBGE Censo 2022 (SIDRA 10145); Projeto de Viabilidade Guarujá/SP (G3 Health Service, set/2026); TEAlliance Pitch Deck 2026; ARP 045/2026 CIMINAS; Pregão 07/2026 CIMPAR.</div>
+</div></section>
+
+<div class="wrap foot">
+  <b>G3 Health Service</b> · Inclusi.Via (TEAlliance) — inclusão escolar e coordenação do cuidado para estudantes com TEA.<br>
+  Contato: g3.healthservice@proton.me · Build __BUILD__ · Base: IBGE, Censo 2022 — 5.570 municípios.
+</div>
+
+<script>__CHARTJS__</script>
+<script>__JSPDF__</script>
+<script>__AUTOTABLE__</script>
+<script>
+const M = __DATA__; // [codIBGE, UF, nome, 0-4, 5-9, 10-14, 15-19]
+const MAIL_ENDPOINT = "__MAIL_ENDPOINT__";
+const MAIL_TOKEN = "__MAIL_TOKEN__";
+const BUILD = "__BUILD__";
+
+const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+M.forEach(m => m.push(norm(m[2])));
+const BY_COD = {}; M.forEach((m,i) => BY_COD[m[0]] = i);
+const UFN = {AC:['Acre','do'],AL:['Alagoas','de'],AP:['Amapá','do'],AM:['Amazonas','do'],BA:['Bahia','da'],CE:['Ceará','do'],DF:['Distrito Federal','do'],ES:['Espírito Santo','do'],GO:['Goiás','de'],MA:['Maranhão','do'],MT:['Mato Grosso','de'],MS:['Mato Grosso do Sul','de'],MG:['Minas Gerais','de'],PA:['Pará','do'],PB:['Paraíba','da'],PR:['Paraná','do'],PE:['Pernambuco','de'],PI:['Piauí','do'],RJ:['Rio de Janeiro','do'],RN:['Rio Grande do Norte','do'],RS:['Rio Grande do Sul','do'],RO:['Rondônia','de'],RR:['Roraima','de'],SC:['Santa Catarina','de'],SP:['São Paulo','de'],SE:['Sergipe','de'],TO:['Tocantins','do']};
+
+/* ---------- formatação ---------- */
+const brl = n => (+n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2,maximumFractionDigits:2});
+const brlK = n => { const a=Math.abs(n); if(a>=1e9) return 'R$ '+(n/1e9).toLocaleString('pt-BR',{maximumFractionDigits:2})+' bi'; if(a>=1e6) return 'R$ '+(n/1e6).toLocaleString('pt-BR',{maximumFractionDigits:2})+' mi'; if(a>=1e4) return 'R$ '+(n/1e3).toLocaleString('pt-BR',{maximumFractionDigits:0})+' mil'; return brl(n); };
+const int = n => Math.round(n).toLocaleString('pt-BR');
+const num = (n,d=2) => (+n).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:d});
+const $ = id => document.getElementById(id);
+const r2 = n => Math.round(n*100)/100;
+
+/* ---------- modelo ---------- */
+const FAIXAS = [
+  {k:'0 a 4 anos', etapa:'Educação infantil — creche e pré-escola'},
+  {k:'5 a 9 anos', etapa:'Pré-escola (5) e Fundamental I'},
+  {k:'10 a 14 anos', etapa:'Fundamental II'},
+  {k:'15 a 19 anos', etapa:'Ensino médio e transição'}];
+const PRESETS = [
+  {id:'escolar', t:'4 a 18 anos', s:'Idade escolar ampla — padrão do estudo', f:[.2,1,1,.8]},
+  {id:'infantil', t:'0 a 5 anos', s:'Educação infantil', f:[1,.2,0,0]},
+  {id:'fund', t:'6 a 14 anos', s:'Ensino fundamental I e II', f:[0,.8,1,0]},
+  {id:'medio', t:'15 a 17 anos', s:'Ensino médio', f:[0,0,0,.6]},
+  {id:'todas', t:'0 a 19 anos', s:'Todas as faixas do Censo', f:[1,1,1,1]},
+  {id:'custom', t:'Personalizado', s:'% de cada faixa', f:null}];
+const DEF_P = {rede:60, aee:1.6, adesao:85, clin:45, familia:90, alunosEsc:21.6, profEsc:1, partEsc:15, horasEsc:8, escLab:4, pontos:4, alunosEquipe:1500};
+const P_META = [
+  ['rede','Em rede pública do ente (%)',1,100,1],['aee','Fator de ampliação p/ público do AEE (×)',1,3,.1],['adesao','Adesão efetiva ao programa (%)',1,100,1],['clin','Recebem pacote clínico (%)',0,100,1],
+  ['familia','Famílias ativas no módulo (%)',0,100,1],['alunosEsc','Estudantes acompanhados por unidade escolar',1,500,.1],['profEsc','Profissionais de saúde por unidade',0,10,.1],['partEsc','Participantes da formação por unidade',1,60,1],
+  ['horasEsc','Horas de supervisão por unidade/ano',0,100,1],['escLab','Unidades por laboratório itinerante',1,50,1],['pontos','Pontos de integração por ente',0,20,1],['alunosEquipe','Estudantes por equipe de suporte',100,20000,100]];
+let P = {...DEF_P};
+const PAC_DEF = [
+  {s:'Neurologista', v:400, n:3, o:'Presencial ou teleconsulta'},
+  {s:'Psiquiatra', v:400, n:3, o:'Presencial ou teleconsulta'},
+  {s:'Fonoaudiologia', v:100, n:12, o:'Uma sessão por mês'},
+  {s:'Psicologia', v:150, n:12, o:'Uma sessão por mês'},
+  {s:'Psicopedagogia', v:100, n:12, o:'Uma sessão por mês'}];
+let PAC = PAC_DEF.map(x=>({...x}));
+const pacoteTotal = () => PAC.reduce((a,x)=>a+x.v*x.n,0);
+
+const CAM = {A:'Coordenação e PEI', B:'Coordenação e avaliação', C:'Programa integral'};
+const GRUPOS = {plat:{n:'Plataforma Inclusi.Via (licenças)',c:'var(--c1)',hex:'#3A4FA8'}, hab:{n:'Serviços habilitadores',c:'var(--c2)',hex:'#E0651A'}, ava:{n:'Avaliação pedagógica',c:'var(--c3)',hex:'#8A5CC4'}, cli:{n:'Cuidado clínico',c:'var(--c4)',hex:'#0E9488'}};
+const ITENS = [
+  {id:'esc', cam:'A', g:'plat', tipo:'lic', nome:'Licença — Módulo Escola (Inclusi.Via School)', un:'Unid. escolar/ano', pu:6000, rec:true, q:d=>d.escolas},
+  {id:'edu', cam:'A', g:'plat', tipo:'lic', nome:'Licença — por educando com PEI ativo (Inclusi.Via Core)', un:'Estudante/ano', pu:320, rec:true, q:d=>d.acomp},
+  {id:'sau', cam:'A', g:'plat', tipo:'lic', nome:'Licença — Módulo Saúde (Inclusi.Via Clinic)', un:'Profissional/ano', pu:900, rec:true, q:d=>d.profs},
+  {id:'fam', cam:'A', g:'plat', tipo:'lic', nome:'Licença — Módulo Família (Inclusi.Via Family)', un:'Família/ano', pu:60, rec:true, q:d=>d.familias},
+  {id:'pai', cam:'A', g:'plat', tipo:'lic', nome:'Painel de governança da Secretaria', un:'Licença/ano', pu:36000, rec:true, q:d=>d.acomp?d.entes:0},
+  {id:'imp', cam:'A', g:'hab', tipo:'srv', nome:'Implantação e parametrização', un:'Serviço/unidade', pu:1162.49, rec:false, q:d=>d.escolas},
+  {id:'int', cam:'A', g:'hab', tipo:'srv', nome:'Migração e integração com sistemas legados', un:'Serviço/ponto', pu:28000, rec:false, q:d=>d.acomp?d.entes*P.pontos:0},
+  {id:'for', cam:'A', g:'hab', tipo:'srv', nome:'Formação continuada de profissionais', un:'Turma de até 20', pu:3520.84, rec:true, q:d=>Math.ceil(d.escolas*P.partEsc/20)},
+  {id:'sup', cam:'A', g:'hab', tipo:'srv', nome:'Supervisão e mentoria multiprofissional', un:'Hora técnica', pu:240, rec:true, q:d=>Math.round(d.escolas*P.horasEsc)},
+  {id:'sus', cam:'A', g:'hab', tipo:'srv', nome:'Suporte técnico e sustentação', un:'Mês', pu:9500, rec:true, q:d=>d.acomp?12*Math.ceil(d.acomp/P.alunosEquipe):0},
+  {id:'ava', cam:'B', g:'ava', tipo:'lic', nome:'Licença de plataforma de avaliação pedagógica gamificada', un:'Estudante/ano', pu:750.97, rec:true, q:d=>d.acomp, anc:'Âncora: ARP 045/2026 CIMINAS'},
+  {id:'lab', cam:'B', g:'ava', tipo:'srv', nome:'Locação de laboratório itinerante', un:'Serviço', pu:2542.89, rec:true, q:d=>Math.ceil(d.escolas/P.escLab), anc:'Âncora: ARP 045/2026 CIMINAS'},
+  {id:'cli', cam:'C', g:'cli', tipo:'srv', nome:'Pacote de atendimento clínico multiprofissional', un:'Estudante/ano', pu:null, rec:true, q:d=>d.clin}];
+const CANAIS = [
+  {id:'direta', t:'Piloto municipal por contratação direta', s:'Mais simples e rápido; gera o atestado de capacidade técnica e o caso de referência. Sugerido: 3 a 6 meses.'},
+  {id:'licit', t:'Licitação do ente — pregão eletrônico ou registro de preços', s:'Contratação própria do município ou estado, nos termos da Lei nº 14.133/2021.'},
+  {id:'cons', t:'Registro de preços por consórcio público intermunicipal', s:'Canal de escala: um certame alcança dezenas de municípios e admite adesão de não participantes.'},
+  {id:'pmi', t:'Procedimento de Manifestação de Interesse ou consulta pública', s:'PMI (art. 81) ou consulta pública (art. 21): vias legítimas para provocar a demanda e depois disputá-la.'}];
+
+/* ---------- estado ---------- */
+const S = {tipo:'mun', mun:BY_COD['3518701'], cons:[], consNome:'', uf:'SP', preset:'escolar', f:[.2,1,1,.8], cen:'C', inc:{}, ovQ:{}, ovPU:{}, vig:12, canal:'direta', pane:1};
+ITENS.forEach(it => S.inc[it.id] = true);
+
+function selIdx(){
+  if(S.tipo==='mun') return S.mun==null?[]:[S.mun];
+  if(S.tipo==='cons') return S.cons.slice();
+  return M.map((m,i)=>m[1]===S.uf?i:-1).filter(i=>i>=0);
+}
+function nEntes(){ return S.tipo==='cons' ? S.cons.length : (selIdx().length?1:0); }
+function enteLabel(){
+  if(S.tipo==='mun'){ const m=M[S.mun]; return m? m[2]+'/'+m[1] : '—'; }
+  if(S.tipo==='cons') return S.consNome.trim() || (S.cons.length? 'Consórcio de '+S.cons.length+' município'+(S.cons.length>1?'s':'') : 'Consórcio (adicione municípios)');
+  const u=UFN[S.uf]; return S.uf==='DF' ? 'Distrito Federal' : 'Estado '+u[1]+' '+u[0];
+}
+function enteOrgao(){
+  if(S.tipo==='mun'){ const m=M[S.mun]; return m? 'Prefeitura Municipal de '+m[2]+'/'+m[1]+' — Secretarias Municipais de Educação e de Saúde' : ''; }
+  if(S.tipo==='cons') return (S.consNome.trim()||'Consórcio público intermunicipal')+' — municípios consorciados';
+  if(S.uf==='DF') return 'Governo do Distrito Federal — Secretarias de Estado de Educação e de Saúde';
+  const u=UFN[S.uf]; return 'Governo do Estado '+u[1]+' '+u[0]+' — Secretarias de Estado da Educação e da Saúde';
+}
+function brackets(idx){ const b=[0,0,0,0]; idx.forEach(i=>{ for(let k=0;k<4;k++) b[k]+=M[i][3+k]; }); return b; }
+
+function dims(b, entes){
+  const rec = b.map((v,k)=>v*S.f[k]);
+  const recorte = Math.round(rec.reduce((a,c)=>a+c,0));
+  const rede = Math.round(recorte*P.rede/100);
+  const aee = Math.round(rede*P.aee);
+  const acomp = Math.round(aee*P.adesao/100);
+  const clin = Math.round(acomp*P.clin/100);
+  const familias = Math.round(acomp*P.familia/100);
+  const escolas = acomp>0 ? Math.max(entes, Math.round(acomp/P.alunosEsc)) : 0;
+  const profs = Math.round(escolas*P.profEsc);
+  return {b, rec, recorte, rede, aee, acomp, clin, familias, escolas, profs, entes, total:b.reduce((a,c)=>a+c,0)};
+}
+function linhas(d, useOvQ){
+  return ITENS.map(it => {
+    const qa = it.q(d);
+    const q = (useOvQ && S.ovQ[it.id]!=null) ? S.ovQ[it.id] : qa;
+    const pa = it.id==='cli' ? pacoteTotal() : it.pu;
+    const pu = S.ovPU[it.id]!=null ? S.ovPU[it.id] : pa;
+    return {...it, qa, q, pa, pu, tot:r2(q*pu)};
+  });
+}
+const CAM_ORD = {A:1,B:2,C:3};
+function incluido(l){ return S.cen==='P' ? !!S.inc[l.id] : CAM_ORD[l.cam] <= CAM_ORD[S.cen]; }
+function somar(ls){ let nr=0, r=0; ls.forEach(l=>{ if(l.rec) r+=l.tot; else nr+=l.tot; }); return {nr:r2(nr), r:r2(r), ano:r2(nr+r)}; }
+function valorVig(t, meses){ return r2(t.nr + t.r*meses/12); }
+
+function calc(){
+  const idx = selIdx(), entes = nEntes();
+  const d = dims(brackets(idx), entes);
+  const ls = linhas(d, true);
+  const inc = ls.filter(incluido);
+  const tA = somar(ls.filter(l=>l.cam==='A')), tB = somar(ls.filter(l=>l.cam==='B')), tC = somar(ls.filter(l=>l.cam==='C'));
+  const cen = {A:somar(ls.filter(l=>l.cam==='A')), B:somar(ls.filter(l=>l.cam!=='C')), C:somar(ls)};
+  const t = somar(inc);
+  const total = valorVig(t, S.vig);
+  const clinIncl = inc.some(l=>l.id==='cli');
+  return {idx, d, ls, inc, tA, tB, tC, cen, t, total, clinIncl};
+}
+
+/* ---------- UI: seleção ---------- */
+let sugList=[], sugHi=-1;
+function onBusca(){
+  const q = norm($('busca').value.trim()), box=$('sug');
+  if(q.length<2){ box.innerHTML=''; sugList=[]; return; }
+  const st=[], ct=[];
+  for(let i=0;i<M.length;i++){ const n=M[i][7]; if(n.startsWith(q)) st.push(i); else if(n.includes(q)) ct.push(i); }
+  const tot = i => M[i][3]+M[i][4]+M[i][5]+M[i][6];
+  st.sort((a,b)=>tot(b)-tot(a)); ct.sort((a,b)=>tot(b)-tot(a));
+  sugList = st.concat(ct).slice(0,8); sugHi=-1;
+  box.innerHTML = sugList.length ? '<div class="sug">'+sugList.map((i,k)=>`<div data-k="${k}" onmousedown="pickSug(${i})"><span>${M[i][2]} <small>/${M[i][1]}</small></span><small>${int(tot(i))} com TEA 0–19</small></div>`).join('')+'</div>' : '<div class="sug"><div><small>Nenhum município encontrado</small></div></div>';
+}
+function navSug(e){
+  if(!sugList.length) return;
+  if(e.key==='ArrowDown'){ sugHi=Math.min(sugList.length-1,sugHi+1); e.preventDefault(); }
+  else if(e.key==='ArrowUp'){ sugHi=Math.max(0,sugHi-1); e.preventDefault(); }
+  else if(e.key==='Enter'){ pickSug(sugList[Math.max(0,sugHi)]); e.preventDefault(); return; }
+  else if(e.key==='Escape'){ $('sug').innerHTML=''; sugList=[]; return; }
+  document.querySelectorAll('#sug .sug > div').forEach((el,k)=>el.classList.toggle('hl',k===sugHi));
+}
+function pickSug(i){
+  $('sug').innerHTML=''; sugList=[];
+  if(S.tipo==='cons'){ if(!S.cons.includes(i)) S.cons.push(i); $('busca').value=''; }
+  else { S.tipo='mun'; S.mun=i; $('busca').value=''; }
+  resetOv(); update(); syncTipo();
+}
+function rmCons(i){ S.cons=S.cons.filter(x=>x!==i); resetOv(); update(); }
+function setTipo(t){
+  S.tipo=t;
+  if(t==='cons' && !S.cons.length && S.mun!=null) S.cons=[S.mun];
+  if(t==='cons' && S.canal==='direta') S.canal='cons';
+  if(t==='uf' && S.mun!=null && !S.ufTouched) S.uf=M[S.mun][1];
+  resetOv(); syncTipo(); update();
+}
+function syncTipo(){
+  ['mun','cons','uf'].forEach(k=>$('t-'+k).classList.toggle('on',S.tipo===k));
+  $('r-busca').style.display = S.tipo==='uf' ? 'none' : '';
+  $('r-uf').style.display = S.tipo==='uf' ? '' : 'none';
+  $('f-cons').style.display = S.tipo==='cons' ? '' : 'none';
+  $('lblBusca').textContent = S.tipo==='cons' ? 'Adicionar município ao consórcio — digite para buscar' : 'Município — digite para buscar (sem precisar de acento)';
+  $('selUF').value = S.uf;
+}
+function resetOv(all){ S.ovQ={}; if(all){ S.ovPU={}; PAC=PAC_DEF.map(x=>({...x})); P={...DEF_P}; buildPrem(); buildPac(); } }
+
+function buildPresets(){
+  $('presets').innerHTML = PRESETS.map(p=>`<button class="pz ${S.preset===p.id?'on':''}" onclick="setPreset('${p.id}')"><b>${p.t}</b><span>${p.s}</span></button>`).join('');
+  const c=$('custom');
+  if(S.preset==='custom'){
+    c.style.display='';
+    c.innerHTML = FAIXAS.map((f,k)=>`<div class="fld" style="min-width:140px"><label>${f.k} — % incluído</label><input type="number" min="0" max="100" step="5" value="${Math.round(S.f[k]*100)}" oninput="S.f[${k}]=Math.max(0,Math.min(100,+this.value||0))/100;resetOv();update()"></div>`).join('');
+  } else c.style.display='none';
+}
+function setPreset(id){ S.preset=id; const p=PRESETS.find(x=>x.id===id); if(p.f) S.f=p.f.slice(); buildPresets(); resetOv(); update(); }
+
+function buildPrem(){
+  $('pgrid').innerHTML = P_META.map(([k,l,mi,ma,st])=>`<div class="fld"><label>${l}</label><input type="number" min="${mi}" max="${ma}" step="${st}" value="${P[k]}" oninput="setP('${k}',this.value)"></div>`).join('');
+}
+function setP(k,v){ const x=parseFloat(String(v).replace(',','.')); if(!isNaN(x)&&x>=0){ P[k]=x; resetOv(); update(); } }
+
+/* ---------- UI: tabelas de custo ---------- */
+function buildItens(){
+  let h='<thead><tr><th>Na proposta</th><th>Item</th><th>Unidade</th><th class="n">Qtd.</th><th class="n">Unitário (R$)</th><th class="n">Total anual</th></tr></thead><tbody>';
+  const grpT={plat:'Plataforma Inclusi.Via — licenças', hab:'Serviços habilitadores', ava:'Avaliação pedagógica (opcional)', cli:'Cuidado clínico (rubrica da Saúde)'};
+  let g=null;
+  ITENS.forEach(it=>{
+    if(it.g!==g){ g=it.g; h+=`<tr class="grp"><td colspan="6"><span class="dot" style="background:${GRUPOS[g].c}"></span>${grpT[g]}</td></tr>`; }
+    h+=`<tr id="tr-${it.id}"><td><label class="sw"><input type="checkbox" id="ck-${it.id}" onchange="toggleItem('${it.id}',this.checked)"><span></span></label></td>
+      <td><span class="it-name">${it.nome}</span>${it.anc?`<span class="anc">${it.anc}</span>`:''}${it.rec?'':'<span class="anc">Não recorrente — só no 1º ano</span>'}</td>
+      <td>${it.un}</td>
+      <td class="n"><input type="number" min="0" step="1" id="q-${it.id}" oninput="ovQ('${it.id}',this.value)"><button class="rs" id="rq-${it.id}" title="Restaurar" onclick="delete S.ovQ['${it.id}'];update()">↺</button></td>
+      <td class="n">${it.id==='cli'?'<span id="pu-cli"></span>':`<input type="number" min="0" step="0.01" id="p-${it.id}" oninput="ovPU('${it.id}',this.value)"><button class="rs" id="rp-${it.id}" title="Restaurar" onclick="delete S.ovPU['${it.id}'];update()">↺</button>`}</td>
+      <td class="n" id="tt-${it.id}"></td></tr>`;
+  });
+  h+='<tr class="tot"><td></td><td colspan="4">Total anual do escopo da proposta (1º ano)</td><td class="n" id="tt-all"></td></tr></tbody>';
+  $('tbItens').innerHTML=h;
+}
+function ovQ(id,v){ if(v===''){ delete S.ovQ[id]; } else { const x=parseFloat(v); if(!isNaN(x)&&x>=0) S.ovQ[id]=x; } update(); }
+function ovPU(id,v){ if(v===''){ delete S.ovPU[id]; } else { const x=parseFloat(v); if(!isNaN(x)&&x>=0) S.ovPU[id]=x; } update(); }
+function toggleItem(id,on){
+  if(S.cen!=='P'){ ITENS.forEach(it=>S.inc[it.id]=CAM_ORD[it.cam]<=CAM_ORD[S.cen]); S.cen='P'; }
+  S.inc[id]=on; update();
+}
+function setCen(c){ S.cen=c; if(c!=='P') ITENS.forEach(it=>S.inc[it.id]=CAM_ORD[it.cam]<=CAM_ORD[c]); update(); }
+function buildPac(){
+  let h='<thead><tr><th>Serviço</th><th class="n">Por atendimento (R$)</th><th class="n">Por ano</th><th class="n">Total/estudante</th><th>Observação</th></tr></thead><tbody>';
+  PAC.forEach((x,k)=>{ h+=`<tr><td><b>${x.s}</b></td><td class="n"><input type="number" min="0" step="10" value="${x.v}" oninput="PAC[${k}].v=+this.value||0;update()"></td><td class="n"><input type="number" min="0" step="1" value="${x.n}" oninput="PAC[${k}].n=+this.value||0;update()"></td><td class="n" id="pac-${k}"></td><td>${x.o}</td></tr>`; });
+  h+='<tr class="tot"><td>Total por estudante/ano</td><td></td><td class="n" id="pac-n"></td><td class="n" id="pac-t"></td><td id="pac-m"></td></tr></tbody>';
+  $('tbPac').innerHTML=h;
+}
+const setIn = (el,v) => { if(el && document.activeElement!==el) el.value = v; };
+
+/* ---------- charts ---------- */
+Chart.defaults.font.family = '"Inter","Segoe UI",system-ui,sans-serif';
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#59618A';
+const TT = {backgroundColor:'#14225A', padding:10, cornerRadius:8, titleFont:{weight:'600'}, displayColors:true, boxPadding:4};
+let chFaixa, chComp, chAnos;
+function initCharts(){
+  chFaixa = new Chart($('chFaixa'), {type:'bar', data:{labels:FAIXAS.map(f=>f.k), datasets:[
+      {label:'No recorte', data:[0,0,0,0], backgroundColor:'#3A4FA8', borderRadius:4, borderSkipped:'bottom', borderColor:'#fff', borderWidth:{top:2}},
+      {label:'Fora do recorte', data:[0,0,0,0], backgroundColor:'#D3D7E5', borderRadius:4, borderSkipped:'bottom'}]},
+    options:{maintainAspectRatio:false, animation:{duration:250}, interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false}, tooltip:{...TT, callbacks:{label:c=>' '+c.dataset.label+': '+int(c.raw)+' pessoas'}}},
+      scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true, grid:{color:'#EEF0F6'}, border:{display:false}, ticks:{callback:v=>int(v)}}}}});
+  chComp = new Chart($('chComp'), {type:'doughnut', data:{labels:[], datasets:[{data:[], backgroundColor:[], borderColor:'#fff', borderWidth:2, hoverOffset:6}]},
+    options:{maintainAspectRatio:false, cutout:'62%', animation:{duration:250}, plugins:{legend:{display:false}, tooltip:{...TT, callbacks:{label:c=>{ const s=c.dataset.data.reduce((a,b)=>a+b,0); return ' '+brl(c.raw)+' ('+num(c.raw/s*100,1)+'%)'; }}}}}});
+  chAnos = new Chart($('chAnos'), {type:'bar', data:{labels:[], datasets:[
+      {label:'Serviço recorrente', data:[], backgroundColor:'#3A4FA8', borderRadius:4, borderSkipped:'bottom'},
+      {label:'Implantação e integração', data:[], backgroundColor:'#E0651A', borderRadius:4, borderSkipped:'bottom'}]},
+    options:{maintainAspectRatio:false, animation:{duration:250}, interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false}, tooltip:{...TT, callbacks:{label:c=>' '+c.dataset.label+': '+brl(c.raw), footer:it=>'Total: '+brl(it.reduce((a,c)=>a+c.raw,0))}}},
+      scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true, grid:{color:'#EEF0F6'}, border:{display:false}, ticks:{callback:v=>brlK(v)}}}}});
+}
+function anos(t, meses){
+  const out=[]; for(let y=1; y<=Math.ceil(meses/12); y++){ const m=Math.min(12, meses-12*(y-1)); out.push({y, m, rec:r2(t.r*m/12), nr:y===1?t.nr:0}); } return out;
+}
+
+/* ---------- render ---------- */
+let LAST=null;
+function update(){
+  syncTipo();
+  const C = calc(); LAST=C; const d=C.d;
+  const label = enteLabel();
+  // ente
+  $('enteTipo').textContent = S.tipo==='mun'?'Município':S.tipo==='cons'?'Consórcio público':'Estado';
+  $('enteNome').textContent = label;
+  const pr = PRESETS.find(p=>p.id===S.preset);
+  $('enteMeta').textContent = (S.tipo==='mun'&&S.mun!=null? 'IBGE '+M[S.mun][0]+' · ' : S.tipo!=='mun'? int(C.idx.length)+' município'+(C.idx.length!==1?'s':'')+' · ' : '') + int(d.total)+' pessoas com TEA de 0 a 19 anos · recorte '+(S.preset==='custom'?'personalizado':pr.t);
+  $('enteAcomp').textContent = int(d.acomp);
+  $('chips').innerHTML = S.tipo==='cons' ? S.cons.map(i=>`<span class="chip">${M[i][2]}/${M[i][1]}<button onclick="rmCons(${i})" aria-label="Remover">✕</button></span>`).join('') : '';
+  // faixa
+  chFaixa.data.datasets[0].data = d.rec.map(v=>Math.round(v));
+  chFaixa.data.datasets[1].data = d.b.map((v,k)=>Math.round(v-d.rec[k]));
+  chFaixa.update();
+  let th='<thead><tr><th>Faixa etária</th><th class="n">TEA (Censo)</th><th class="n">% no recorte</th><th class="n">No recorte</th><th class="n">Acompanhados</th></tr></thead><tbody>';
+  FAIXAS.forEach((f,k)=>{ const a = d.recorte? d.acomp*d.rec[k]/d.rec.reduce((x,y)=>x+y,0) : 0;
+    th+=`<tr${S.f[k]===0?' class="off"':''}><td><b>${f.k}</b><small class="et">${f.etapa}</small></td><td class="n">${int(d.b[k])}</td><td class="n">${num(S.f[k]*100,0)}%</td><td class="n">${int(d.rec[k])}</td><td class="n"><b>${int(a||0)}</b></td></tr>`; });
+  th+=`<tr class="tot"><td>Total</td><td class="n">${int(d.total)}</td><td></td><td class="n">${int(d.recorte)}</td><td class="n">${int(d.acomp)}</td></tr></tbody>`;
+  $('tbFaixa').innerHTML=th;
+  // funil
+  const fun=[['Pessoas com TEA no recorte etário','Censo 2022, recorte estimado',d.recorte],['Em rede pública do ente',num(P.rede,1)+'% — a confirmar no Censo Escolar',d.rede],['Ampliado para o público do AEE','fator '+num(P.aee,2)+' — demais deficiências, TGD, altas habilidades',d.aee],['Acompanhados pelo serviço',num(P.adesao,1)+'% de adesão efetiva',d.acomp],['Recebem o pacote clínico',num(P.clin,1)+'% do público acompanhado',d.clin]];
+  const mx=Math.max(1,...fun.map(x=>x[2]));
+  $('funnel').innerHTML = fun.map((x,k)=>`<div class="fr"><div class="k">${x[0]}<small>${x[1]}</small></div><div class="bar"><i style="width:${Math.max(.5,x[2]/mx*100)}%;background:${k===4?'var(--c4)':k===3?'var(--c2)':'var(--c1)'}"></i></div><div class="v">${int(x[2])}</div></div>`).join('');
+
+  // quadro por estudante
+  const ac=Math.max(1,d.acomp), cliU=pacoteTotal(), cliPu = S.ovPU.cli!=null?S.ovPU.cli:cliU;
+  const q=[['Plataforma, implantação, formação e suporte',C.tA.ano/ac,int(d.acomp)+' — todos os acompanhados',0],['Módulo opcional de avaliação pedagógica',C.tB.ano/ac,int(d.acomp)+' — todos os acompanhados',0],['Subtotal tecnológico',r2(C.tA.ano/ac)+r2(C.tB.ano/ac),int(d.acomp)+' — todos os acompanhados',1],['Pacote de atendimento clínico',cliPu,int(d.clin)+' — apenas os que recebem',0],['Custo médio do programa completo',C.cen.C.ano/ac,int(d.acomp)+' — média sobre o total',1]];
+  $('tbQuadro').innerHTML = '<thead><tr><th>Componente</th><th class="n">Por estudante/ano</th><th class="n">Por estudante/mês</th><th>Aplicado a</th></tr></thead><tbody>'+q.map(x=>`<tr${x[3]?' class="hl"':''}><td>${x[0]}</td><td class="n">${brl(x[1])}</td><td class="n">${brl(x[1]/12)}</td><td>${x[2]}</td></tr>`).join('')+'</tbody>';
+  $('quadroNote').textContent = 'Manter um estudante acompanhado custa '+brl(C.tA.ano/ac/12)+' por mês ('+brl((C.tA.ano+C.tB.ano)/ac/12)+' com avaliação). O atendimento clínico — '+brl(cliPu/12)+'/mês — incide só sobre '+int(d.clin)+' estudantes; diluído sobre todos, o programa completo custa '+brl(C.cen.C.ano/ac/12)+' por estudante ao mês.';
+
+  // cenários
+  const rec5 = t => r2(t.nr + t.r*5);
+  $('scen').innerHTML = ['A','B','C'].map(k=>`<button class="sc ${S.cen===k?'on':''}" onclick="setCen('${k}');setPane(1)">${k==='C'?'<span class="rec">Recomendado</span>':''}<div class="t">Cenário ${k}</div><h4>${CAM[k]}</h4><div class="v tnum">${brl(C.cen[k].ano)}</div><div class="s">por ano · ${brl(C.cen[k].ano/ac)} por estudante/ano<br>5 anos: <b>${brl(rec5(C.cen[k]))}</b></div></button>`).join('');
+  // itens
+  C.ls.forEach(l=>{
+    const on=incluido(l);
+    $('ck-'+l.id).checked=on; $('tr-'+l.id).classList.toggle('off',!on);
+    const qi=$('q-'+l.id); setIn(qi, l.q); qi.classList.toggle('ov',S.ovQ[l.id]!=null); $('rq-'+l.id).classList.toggle('show',S.ovQ[l.id]!=null);
+    if(l.id==='cli'){ $('pu-cli').textContent = l.pu.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+    else { const pi=$('p-'+l.id); setIn(pi, l.pu); pi.classList.toggle('ov',S.ovPU[l.id]!=null); $('rp-'+l.id).classList.toggle('show',S.ovPU[l.id]!=null); }
+    $('tt-'+l.id).textContent = brl(l.tot);
+  });
+  $('tt-all').textContent = brl(C.t.ano);
+  // pacote
+  PAC.forEach((x,k)=>$('pac-'+k).textContent=brl(x.v*x.n));
+  $('pac-n').textContent=PAC.reduce((a,x)=>a+x.n,0); $('pac-t').textContent=brl(cliU); $('pac-m').textContent=brl(cliU/12)+' por mês';
+
+  // composição
+  const gs = {}; C.inc.forEach(l=>{ gs[l.g]=(gs[l.g]||0)+l.tot; });
+  const gk = Object.keys(GRUPOS).filter(k=>gs[k]>0);
+  chComp.data.labels = gk.map(k=>GRUPOS[k].n); chComp.data.datasets[0].data = gk.map(k=>r2(gs[k])); chComp.data.datasets[0].backgroundColor = gk.map(k=>GRUPOS[k].hex); chComp.update();
+  const sg = gk.reduce((a,k)=>a+gs[k],0)||1;
+  $('compLegend').innerHTML = gk.map(k=>`<span><i style="background:${GRUPOS[k].c}"></i>${GRUPOS[k].n} · <b style="color:var(--ink)">${num(gs[k]/sg*100,0)}%</b></span>`).join('');
+
+  // valor
+  const est = C.total / Math.max(1,d.acomp) / S.vig;
+  $('vTotal').textContent = brl(C.total);
+  $('vDesc').textContent = label+' · '+(S.cen==='P'?'escopo personalizado':'Cenário '+S.cen+' — '+CAM[S.cen])+' · vigência de '+S.vig+' '+(S.vig===1?'mês':'meses');
+  $('vAno').textContent = brlK(C.t.ano); $('vMes').textContent = brlK(C.t.r/12); $('vEst').textContent = brl(est);
+  const A = anos(C.t, S.vig);
+  chAnos.data.labels = A.map(a=>'Ano '+a.y+(a.m<12?' ('+a.m+'m)':'')); chAnos.data.datasets[0].data=A.map(a=>a.rec); chAnos.data.datasets[1].data=A.map(a=>a.nr); chAnos.update();
+  const vv = l => l.rec ? l.tot*S.vig/12 : l.tot;
+  const sau = C.inc.filter(l=>l.cam==='C').reduce((a,l)=>a+vv(l),0), edu = C.total - sau;
+  const srv = C.inc.filter(l=>l.tipo==='srv').reduce((a,l)=>a+vv(l),0), lic = C.total - srv;
+  const bar = (a,ca,la,b,cb,lb) => { const s=(a+b)||1; return `<div class="sb">${a>0?`<i style="width:${a/s*100}%;background:${ca}"></i>`:''}${b>0?`<i style="width:${b/s*100}%;background:${cb}"></i>`:''}</div><div class="sl"><span><span class="dot" style="background:${ca}"></span>${la}: <b>${brlK(a)}</b> (${num(a/s*100,0)}%)</span><span><span class="dot" style="background:${cb}"></span>${lb}: <b>${brlK(b)}</b> (${num(b/s*100,0)}%)</span></div>`; };
+  $('spRub').innerHTML = bar(edu,'var(--c1)','Educação',sau,'var(--c4)','Saúde');
+  $('spSrv').innerHTML = bar(lic,'var(--c3)','Licenças',srv,'var(--c2)','Serviços prestados');
+  const tec = C.tA.ano/ac;
+  const bm = [['Plano privado de gestão de PEI (teto)',189,0],['Licença de avaliação — ARP 045/2026 CIMINAS',750.97,0],['Inclusi.Via — plataforma + serviços (cenário A)',tec,1]];
+  const bmx = Math.max(...bm.map(x=>x[1]));
+  $('bench').innerHTML = bm.map(x=>`<div class="hb ${x[2]?'us':''}"><div>${x[0]}</div><div class="bar"><i style="width:${x[1]/bmx*100}%"></i></div><div class="v">${brl(x[1])}</div></div>`).join('');
+
+  // proposta
+  $('pEnte').textContent = label; $('pEnteMeta').textContent = int(d.acomp)+' estudantes acompanhados · '+int(d.clin)+' com pacote clínico · '+int(d.escolas)+' unidades escolares (estimativa)';
+  $('pScen').innerHTML = ['A','B','C','P'].map(k=>`<label class="opt ${S.cen===k?'on':''}"><input type="radio" name="cen" ${S.cen===k?'checked':''} onchange="setCen('${k}')"><div><b>${k==='P'?'Personalizado':'Cenário '+k+' — '+CAM[k]}${k==='C'?' · recomendado':''}</b><span>${k==='A'?'Plataforma Inclusi.Via + serviços habilitadores (implantação, formação, supervisão, suporte).':k==='B'?'Cenário A + avaliação pedagógica de habilidades com laboratórios itinerantes.':k==='C'?'Cenário B + pacote de atendimento clínico multiprofissional (rubrica da Saúde).':'Itens ligados/desligados individualmente na composição detalhada.'} ${k!=='P'?'<b style="display:inline;color:var(--ink)">'+brl(C.cen[k].ano)+'/ano</b>':''}</span></div></label>`).join('');
+  $('pCanal').innerHTML = CANAIS.map(c=>`<label class="opt ${S.canal===c.id?'on':''}"><input type="radio" name="canal" ${S.canal===c.id?'checked':''} onchange="S.canal='${c.id}';update()"><div><b>${c.t}</b><span>${c.s}</span></div></label>`).join('');
+  $('canalNote').innerHTML = S.canal==='direta' ? 'Piloto: recomenda-se vigência de <b>3 a 6 meses</b>, remunerado, para gerar o atestado de capacidade técnica. Em seguida, levar o objeto a registro de preços por consórcio.' : S.canal==='cons' ? 'Consórcio: o valor da proposta é a soma dos municípios selecionados. Cada município adere à ata e contrata a sua parte.' : S.canal==='pmi' ? 'Atenção ao art. 14, I e II, da Lei nº 14.133/2021: o autor do Termo de Referência não pode disputar a licitação. O PMI e a consulta pública são as vias que preservam a participação.' : 'O objeto que vence é <b>serviço técnico-pedagógico especializado com plataforma acoplada</b> — não licença de software.';
+  $('vigChips').innerHTML = [3,6,12,24,36,60].map(m=>`<button class="${S.vig===m?'on':''}" onclick="S.vig=${m};$('vig').value=${m};update()">${m} meses</button>`).join('');
+  setIn($('vig'), S.vig);
+  const org=$('destOrg'); if(!org.dataset.touched) org.value = enteOrgao();
+  $('tbRev').innerHTML = '<tbody>'+[
+    ['Ente', label], ['Público atendido', int(d.acomp)+' estudantes ('+(S.preset==='custom'?'recorte personalizado':pr.t)+'); '+int(d.clin)+' com pacote clínico'],
+    ['Escopo', S.cen==='P'?'Personalizado — '+C.inc.length+' itens':'Cenário '+S.cen+' — '+CAM[S.cen]],
+    ['Canal', CANAIS.find(c=>c.id===S.canal).t], ['Vigência', S.vig+' meses'], ['Primeiro ano', brl(C.t.ano)], ['Valor total do projeto', '<b>'+brl(C.total)+'</b>'],
+    ['Destinatário', ($('destNome').value||'—')+' · '+($('destOrg').value||'—')], ['Proponente', $('propNome').value+' · '+$('propEmp').value]
+  ].map(r=>`<tr><td style="width:32%;color:var(--muted)">${r[0]}</td><td>${r[1]}</td></tr>`).join('')+'</tbody>';
+  // resumo lateral
+  $('sTotal').textContent = brl(C.total); $('sSub').textContent = S.vig+' '+(S.vig===1?'mês':'meses')+' · '+(S.cen==='P'?'personalizado':'cenário '+S.cen);
+  $('sEnte').textContent = label; $('sCen').textContent = S.cen==='P'?'Personalizado':CAM[S.cen];
+  $('sAcomp').textContent = int(d.acomp); $('sClin').textContent = C.clinIncl? int(d.clin) : '—';
+  $('sAno').textContent = brl(C.t.ano); $('sEst').textContent = brl(est);
+  $('sLy').innerHTML = Object.keys(GRUPOS).map(k=>{ const v=C.ls.filter(l=>l.g===k&&incluido(l)).reduce((a,l)=>a+l.tot,0); return `<div class="${v>0?'':'off'}"><span><span class="dot" style="background:${GRUPOS[k].c}"></span>${GRUPOS[k].n}</span><b>${v>0?brlK(v):'—'}</b></div>`; }).join('');
+  // pill
+  $('pillEnte').textContent = label; $('pillVal').textContent = brlK(C.total);
+  // hash
+  const h = S.tipo==='mun'&&S.mun!=null ? '#m='+M[S.mun][0] : S.tipo==='uf' ? '#uf='+S.uf : S.tipo==='cons'&&S.cons.length ? '#c='+S.cons.map(i=>M[i][0]).join(',') : '';
+  if(h && location.hash.split('&')[0]!==h && !/^#(problema|servico|publico|custos|valor|proposta|ranking|metodo|top)$/.test(location.hash)) history.replaceState(null,'',h);
+  renderRankDeb();
+}
+
+function setPane(n){ S.pane=n; document.querySelectorAll('.ptab').forEach(b=>b.classList.toggle('on',+b.dataset.p===n)); for(let k=1;k<=4;k++) $('pane'+k).classList.toggle('on',k===n); if(n===4) update(); }
+
+/* ---------- ranking ---------- */
+let rankMode='mun', rankOpen=false, rankT=null;
+function renderRankDeb(){ clearTimeout(rankT); rankT=setTimeout(renderRank,120); }
+function valC(b, entes){ const d=dims(b,entes); return {d, v:somar(linhas(d,false)).ano}; }
+function renderRank(){
+  const lim = rankOpen ? (rankMode==='mun'?200:27) : 10;
+  let rows;
+  if(rankMode==='mun'){
+    rows = M.map((m,i)=>{ const r=valC([m[3],m[4],m[5],m[6]],1); return {i, nome:m[2], uf:m[1], rec:r.d.recorte, ac:r.d.acomp, v:r.v}; });
+  } else {
+    const agg={}; M.forEach(m=>{ const a=agg[m[1]]||(agg[m[1]]={b:[0,0,0,0],n:0}); for(let k=0;k<4;k++) a.b[k]+=m[3+k]; a.n++; });
+    rows = Object.keys(agg).map(u=>{ const r=valC(agg[u].b,1); return {uf:u, nome:UFN[u][0], n:agg[u].n, rec:r.d.recorte, ac:r.d.acomp, v:r.v}; });
+  }
+  rows.sort((a,b)=>b.rec-a.rec);
+  const tot = rows.length; rows = rows.slice(0,lim);
+  $('rankHead').innerHTML = rankMode==='mun' ? '<tr><th>#</th><th>Município</th><th class="n">TEA no recorte</th><th class="n">Acompanhados</th><th class="n">Valor anual (C)</th><th></th></tr>' : '<tr><th>#</th><th>Estado</th><th class="n">Municípios</th><th class="n">TEA no recorte</th><th class="n">Acompanhados</th><th class="n">Valor anual (C)</th></tr>';
+  $('rankBody').innerHTML = rows.map((r,k)=> rankMode==='mun'
+    ? `<tr onclick="loadMun(${r.i})"><td>${k+1}</td><td><b>${r.nome}</b> <span class="note">/${r.uf}</span></td><td class="n">${int(r.rec)}</td><td class="n">${int(r.ac)}</td><td class="n">${brlK(r.v)}</td><td class="n"><button class="mini" onclick="event.stopPropagation();addCons(${r.i})">+ consórcio</button></td></tr>`
+    : `<tr onclick="loadUF('${r.uf}')"><td>${k+1}</td><td><b>${r.nome}</b></td><td class="n">${int(r.n)}</td><td class="n">${int(r.rec)}</td><td class="n">${int(r.ac)}</td><td class="n">${brlK(r.v)}</td></tr>`).join('');
+  $('rankCount').textContent = rankOpen ? 'Mostrando '+rows.length+' de '+int(tot)+(rankMode==='mun'?' municípios — use a busca na seção 03 para os demais.':' estados.') : 'Top 10 de '+int(tot)+(rankMode==='mun'?' municípios.':' estados.');
+  $('btnRank').textContent = rankOpen ? 'Recolher ▴' : 'Ver ranking completo ▾';
+  $('rankWrap').classList.toggle('open', rankOpen);
+}
+function setRank(m){ rankMode=m; $('rk-mun').classList.toggle('on',m==='mun'); $('rk-uf').classList.toggle('on',m==='uf'); renderRank(); }
+function toggleRank(){ rankOpen=!rankOpen; renderRank(); }
+function loadMun(i){ S.tipo='mun'; S.mun=i; resetOv(); syncTipo(); update(); location.href='#publico'; }
+function loadUF(u){ S.tipo='uf'; S.uf=u; S.ufTouched=true; resetOv(); syncTipo(); update(); location.href='#publico'; }
+function addCons(i){ if(S.tipo!=='cons'){ S.cons = S.tipo==='mun'&&S.mun!=null&&S.mun!==i ? [S.mun] : []; S.tipo='cons'; if(S.canal==='direta') S.canal='cons'; } if(!S.cons.includes(i)) S.cons.push(i); resetOv(); syncTipo(); update(); }
+
+/* ---------- PDF ---------- */
+const WA = '€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ';
+function W(s){
+  return String(s==null?'':s).replace(/[→➜]/g,'->').replace(/≈/g,'~').replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/[✓✔]/g,'OK').replace(/⅕/g,'1/5').replace(/⅘/g,'4/5').replace(/ /g,' ')
+    .split('').filter(c=>c.charCodeAt(0)<256||WA.includes(c)).join('');
+}
+function slug(s){ return norm(s).replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,''); }
+function nomeArq(){ return 'Proposta_InclusiVia_TEA_'+slug(enteLabel())+'.pdf'; }
+function refCode(){ const dt=new Date(); const y=dt.getFullYear()+String(dt.getMonth()+1).padStart(2,'0')+String(dt.getDate()).padStart(2,'0'); const k = S.tipo==='mun'&&S.mun!=null?M[S.mun][0]:S.tipo==='uf'?S.uf:'CONS'+S.cons.length; return 'G3-TEA-'+k+'-'+y; }
+
+function montarPDF(){
+  const C = LAST || calc(); const d=C.d;
+  if(!d.acomp){ alert('Selecione um ente com público no recorte etário antes de gerar a proposta.'); return null; }
+  const {jsPDF} = window.jspdf; const doc = new jsPDF({unit:'pt', format:'a4'});
+  const PW=595.28, PH=841.89, mx=46, cw=PW-2*mx;
+  const NAVY=[20,34,90], OR=[224,101,26], PU=[106,63,160], TE=[14,148,136], INK=[23,32,69], MU=[89,97,138], LN=[226,229,240], SOFT=[238,240,248], BL=[58,79,168];
+  const T = (t,x,y,o) => doc.text(Array.isArray(t)?t.map(W):W(t), x, y, o);
+  const split = (t,w) => doc.splitTextToSize(W(t), w);
+  const label = enteLabel(), ref = refCode(), agora = new Date();
+  const emit = agora.toLocaleDateString('pt-BR')+' às '+agora.toLocaleTimeString('pt-BR');
+  const pr = PRESETS.find(p=>p.id===S.preset);
+  const recorteTxt = S.preset==='custom' ? 'recorte etário personalizado' : pr.t+' ('+pr.s.toLowerCase().replace(' — padrão do estudo','')+')';
+  const cenTxt = S.cen==='P' ? 'Escopo personalizado' : 'Cenário '+S.cen+' — '+CAM[S.cen];
+  const est = C.total/d.acomp/S.vig;
+  const vv = l => l.rec ? r2(l.tot*S.vig/12) : l.tot;
+  let y;
+  const band = (titulo) => { doc.setFillColor(...NAVY); doc.rect(0,0,PW,54,'F'); doc.setFillColor(...OR); doc.rect(0,54,PW,3,'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(12.5); T(titulo, mx, 33);
+    const livre = cw - doc.getTextWidth(W(titulo)) - 24;
+    doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(200,206,236);
+    let rt = W('Inclusi.Via · '+label); while(rt.length>12 && doc.getTextWidth(rt)>livre) rt = rt.slice(0,-2).trimEnd()+'…';
+    if(doc.getTextWidth(rt)<=livre) T(rt, PW-mx, 33, {align:'right'}); };
+  const head = (titulo) => { band(titulo); y = 86; };
+  const h2 = (t) => { if(y>100) y+=8; ensure(40); doc.setFont('helvetica','bold'); doc.setFontSize(12.5); doc.setTextColor(...NAVY); T(t, mx, y); doc.setDrawColor(...OR); doc.setLineWidth(1.6); doc.line(mx, y+5, mx+28, y+5); y += 20; };
+  const para = (t, sz=9.5, col=INK) => { doc.setFont('helvetica','normal'); doc.setFontSize(sz); doc.setTextColor(...col); const L=split(t,cw); ensure(L.length*sz*1.35+4); T(L, mx, y, {lineHeightFactor:1.35}); y += L.length*sz*1.35+6; };
+  const ensure = (h) => { if(y+h > PH-60){ doc.addPage(); head('Proposta técnica e comercial (continuação)'); } };
+  const tbl = (opts) => { doc.autoTable(Object.assign({startY:y, margin:{left:mx,right:mx,top:80,bottom:60}, theme:'grid',
+      styles:{font:'helvetica', fontSize:8.4, cellPadding:4.2, textColor:INK, lineColor:LN, lineWidth:.5},
+      headStyles:{fillColor:NAVY, textColor:255, fontStyle:'bold', fontSize:8.2},
+      alternateRowStyles:{fillColor:[250,251,254]},
+      didDrawPage:(dt)=>{ if(dt.pageNumber>1) band('Proposta técnica e comercial (continuação)'); }}, opts));
+    y = doc.lastAutoTable.finalY + 14; };
+  const Wt = rows => rows.map(r=>r.map(c=> (c && typeof c==='object') ? Object.assign({},c,{content:W(c.content)}) : W(c)));
+
+  /* ===== Página 1 — capa ===== */
+  const bands=90, capH=372;
+  for(let i=0;i<bands;i++){ const t=i/(bands-1); doc.setFillColor(Math.round(16+(52-16)*t), Math.round(27+(38-27)*t), Math.round(76+(120-76)*t)); doc.rect(0, capH*i/bands, PW, capH/bands+1, 'F'); }
+  doc.setGState(new doc.GState({opacity:.10})); doc.setDrawColor(255,255,255); doc.setLineWidth(.5);
+  for(let gx=0; gx<PW; gx+=26) doc.line(gx,0,gx,capH); for(let gy=0; gy<capH; gy+=26) doc.line(0,gy,PW,gy);
+  doc.setGState(new doc.GState({opacity:1}));
+  doc.setGState(new doc.GState({opacity:.35})); doc.setFillColor(242,154,74); doc.circle(PW-20, capH-20, 128, 'F'); doc.setGState(new doc.GState({opacity:1}));
+  doc.setFillColor(...OR); doc.circle(PW-20, capH-20, 95, 'F');
+  doc.setFillColor(255,255,255); doc.rect(0, capH, PW, PH-capH, 'F'); // recorta o círculo na borda da capa
+  doc.setFillColor(...OR); doc.rect(0, capH, PW, 3, 'F');
+  doc.setTextColor(246,168,104); doc.setFont('helvetica','bold'); doc.setFontSize(9); T('PROPOSTA TÉCNICA E COMERCIAL  ·  G3 HEALTH SERVICE  ·  TEALLIANCE', mx, 58);
+  doc.setTextColor(255,255,255); doc.setFontSize(25);
+  const tL = split('Serviço especializado de inclusão escolar e coordenação do cuidado — TEA', cw-60);
+  T(tL, mx, 102, {lineHeightFactor:1.15}); let cy = 102 + tL.length*29;
+  doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(214,219,242);
+  const sL = split('Com plataforma Inclusi.Via acoplada: identificação, Plano Educacional Individualizado, coordenação entre escola, saúde e família, formação da rede e mensuração de resultados.', cw-90);
+  T(sL, mx, cy+4, {lineHeightFactor:1.35}); cy += sL.length*15+22;
+  doc.setFont('helvetica','bold'); doc.setFontSize(15); doc.setTextColor(255,255,255); T(label, mx, cy);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(201,207,234); T(cenTxt+'  ·  vigência de '+S.vig+' '+(S.vig===1?'mês':'meses')+'  ·  '+recorteTxt, mx, cy+16);
+  // caixa do valor
+  const bx=mx, by=capH-78, bw=330, bh=104;
+  doc.setFillColor(255,255,255); doc.roundedRect(bx, by, bw, bh, 10, 10, 'F');
+  doc.setFillColor(...OR); doc.rect(bx, by+14, 4, bh-28, 'F');
+  doc.setTextColor(...MU); doc.setFont('helvetica','bold'); doc.setFontSize(8.5); T('VALOR TOTAL DO PROJETO', bx+18, by+26);
+  doc.setTextColor(...NAVY); doc.setFontSize(24); T(brl(C.total), bx+18, by+56);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.8); doc.setTextColor(...MU);
+  T(brl(C.t.ano)+' no 1º ano  ·  '+brl(est)+' por estudante/mês', bx+18, by+76);
+  T('Preços de setembro de 2026', bx+18, by+90);
+  // KPIs
+  y = capH + 48;
+  const kp = [[int(d.acomp),'estudantes acompanhados pelo serviço'],[C.clinIncl?int(d.clin):'—','com pacote clínico multiprofissional'],[int(d.escolas),'unidades escolares atendidas (estimativa)']];
+  const kw=(cw-20)/3;
+  kp.forEach((k,i)=>{ const kx=mx+i*(kw+10); doc.setFillColor(...SOFT); doc.roundedRect(kx,y,kw,62,8,8,'F'); doc.setFillColor(...[BL,OR,TE][i]); doc.rect(kx,y+12,3,38,'F');
+    doc.setTextColor(...NAVY); doc.setFont('helvetica','bold'); doc.setFontSize(19); T(k[0], kx+14, y+30); doc.setFont('helvetica','normal'); doc.setFontSize(8.3); doc.setTextColor(...MU); T(split(k[1],kw-22), kx+14, y+45); });
+  y += 90;
+  // partes
+  const colW=(cw-16)/2;
+  const bloco = (x, tit, linhasB) => { doc.setDrawColor(...LN); doc.setLineWidth(.8); doc.roundedRect(x,y,colW,112,8,8,'S');
+    doc.setTextColor(...OR); doc.setFont('helvetica','bold'); doc.setFontSize(8.3); T(tit, x+14, y+20);
+    let yy=y+38; linhasB.forEach((l,i)=>{ doc.setFont('helvetica', i===0?'bold':'normal'); doc.setFontSize(i===0?10:8.8); doc.setTextColor(...(i===0?NAVY:INK)); const L=split(l,colW-28).slice(0,2); T(L,x+14,yy); yy+=L.length*11.5+3; }); };
+  bloco(mx,'DESTINATÁRIO',[$('destNome').value.trim()||'A/C Gestor(a) responsável', $('destOrg').value.trim()||enteOrgao(), $('destEmail').value.trim()]);
+  bloco(mx+colW+16,'PROPONENTE',[$('propNome').value.trim(), $('propEmp').value.trim(), $('propSol').value.trim(), [$('propEmail').value.trim(),$('propTel').value.trim()].filter(Boolean).join('  ·  ')]);
+  y += 132;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.6); doc.setTextColor(...MU);
+  T('Referência: '+ref+'   ·   Emitida em '+emit+'   ·   Validade: '+(+$('validade').value||60)+' dias', mx, y);
+  T('Canal de contratação: '+CANAIS.find(c=>c.id===S.canal).t, mx, y+13);
+
+  /* ===== Página 2 — objeto e público ===== */
+  doc.addPage(); head('1. Objeto, modelo de serviço e público atendido');
+  h2('1.1 Objeto');
+  const camTxt = {A:'plataforma Inclusi.Via e serviços habilitadores (implantação e parametrização, integração com sistemas legados, formação continuada da rede, supervisão e mentoria multiprofissional, suporte técnico e sustentação)', B:'avaliação pedagógica de habilidades, com laboratórios itinerantes', C:'pacote de atendimento clínico multiprofissional'};
+  const camsIn = ['A','B','C'].filter(k=>C.inc.some(l=>l.cam===k));
+  para('Prestação de serviço técnico-pedagógico especializado de apoio à inclusão escolar e à coordenação do cuidado de estudantes com transtorno do espectro autista (TEA) e demais público-alvo do Atendimento Educacional Especializado (AEE) — '+label+' — compreendendo: '+camsIn.map(k=>camTxt[k]).join('; ')+'.');
+  para('A plataforma é o instrumento; o objeto é o serviço. A contratada responde pela operação contínua junto à rede, com medição mensal do que foi efetivamente prestado — licenças ativas, unidades implantadas, turmas formadas, horas técnicas e atendimentos realizados — e por indicadores de cobertura, tempestividade e evolução.', 9.2, MU);
+  h2('1.2 Como o serviço funciona');
+  tbl({head:[['Etapa','O que acontece']], body:Wt([
+    ['1. Identificação','A rede levanta os estudantes já diagnosticados e, opcionalmente, aplica a avaliação pedagógica de habilidades. A criança não recebe rótulo do sistema: é encaminhada ao profissional habilitado.'],
+    ['2. Coleta','Avaliação pedagógica, laudos e relatórios da saúde e observações da família reunidos num ambiente único e seguro, em conformidade com a LGPD.'],
+    ['3. Plano','O sistema propõe o Plano Educacional Individualizado (objetivos, metas, estratégias, recursos, responsáveis e prazos). Só produz efeito depois de homologado por profissional identificado.'],
+    ['4. Execução','Professor, terapeuta e família trabalham com objetivos compartilhados e registram o que foi feito.'],
+    ['5. Mensuração e revisão','Evolução acompanhada por indicadores objetivos, com alerta automático de revisão periódica do plano.'],
+    ['6. Formação','Toda a rede capacitada em turmas de até 20, com trilhas para regente, AEE, coordenação, gestão e saúde.']]),
+    columnStyles:{0:{cellWidth:118, fontStyle:'bold', textColor:NAVY}}});
+  h2('1.3 Público atendido — '+recorteTxt);
+  tbl({head:[['Faixa etária','Etapa de ensino','TEA (Censo 2022)','% no recorte','No recorte','Acompanhados']],
+    body:Wt(FAIXAS.map((f,k)=>{ const a = d.acomp*d.rec[k]/(d.rec.reduce((x,z)=>x+z,0)||1); return [f.k, f.etapa, int(d.b[k]), num(S.f[k]*100,0)+'%', int(d.rec[k]), int(a)]; }).concat([[{content:'Total',styles:{fontStyle:'bold'}},'',int(d.total),'',int(d.recorte),int(d.acomp)]])),
+    columnStyles:{2:{halign:'right'},3:{halign:'right'},4:{halign:'right'},5:{halign:'right',fontStyle:'bold'}}});
+  tbl({head:[['Etapa do dimensionamento','Estudantes','Parâmetro aplicado']], body:Wt([
+    ['Pessoas com TEA no recorte etário', int(d.recorte), 'IBGE, Censo 2022 — SIDRA 10145; distribuição uniforme na faixa'],
+    ['Em rede pública do ente', int(d.rede), num(P.rede,1)+'% — a confirmar no Censo Escolar'],
+    ['Ampliado para o público-alvo do AEE', int(d.aee), 'Fator '+num(P.aee,2)+' — demais deficiências, TGD e altas habilidades'],
+    ['Com adesão efetiva ao programa', int(d.acomp), num(P.adesao,1)+'% — recusa familiar e perda de seguimento'],
+    ['Que recebem o pacote clínico', C.clinIncl?int(d.clin):'não contratado', num(P.clin,1)+'% do público acompanhado']]),
+    columnStyles:{1:{halign:'right',fontStyle:'bold',cellWidth:70}}});
+
+  /* ===== Página 3 — custos ===== */
+  doc.addPage(); head('2. Composição de custos');
+  h2('2.1 Itens do serviço — primeiro ano');
+  const body=[]; const gT={plat:'PLATAFORMA INCLUSI.VIA — LICENÇAS', hab:'SERVIÇOS HABILITADORES', ava:'AVALIAÇÃO PEDAGÓGICA', cli:'CUIDADO CLÍNICO (RUBRICA DA SAÚDE)'};
+  let gg=null;
+  C.inc.forEach(l=>{ if(l.g!==gg){ gg=l.g; body.push([{content:gT[gg], colSpan:5, styles:{fillColor:SOFT, textColor:NAVY, fontStyle:'bold', fontSize:7.8}}]); }
+    body.push([l.nome+(l.rec?'':' *'), l.un, int(l.q), brl(l.pu), brl(l.tot)]); });
+  body.push([{content:'Total do primeiro ano', colSpan:4, styles:{fontStyle:'bold', textColor:NAVY}}, {content:brl(C.t.ano), styles:{fontStyle:'bold', textColor:NAVY}}]);
+  tbl({head:[['Item','Unidade','Qtd.','Unitário','Total anual']], body:Wt(body), columnStyles:{0:{cellWidth:210},2:{halign:'right'},3:{halign:'right'},4:{halign:'right'}}});
+  doc.setFontSize(7.8); doc.setTextColor(...MU); T('* Item não recorrente: incide apenas no primeiro ano. Demais itens se repetem a cada 12 meses de vigência.', mx, y-4); y+=8;
+  h2('2.2 Custo por estudante');
+  const ac=d.acomp, cliPu = (C.ls.find(l=>l.id==='cli')||{}).pu;
+  const qrows=[]; if(camsIn.includes('A')) qrows.push(['Plataforma, implantação, formação e suporte', brl(C.tA.ano/ac), brl(C.tA.ano/ac/12), int(ac)+' — todos os acompanhados']);
+  if(camsIn.includes('B')) qrows.push(['Módulo de avaliação pedagógica', brl(C.tB.ano/ac), brl(C.tB.ano/ac/12), int(ac)+' — todos os acompanhados']);
+  if(camsIn.includes('C')) qrows.push(['Pacote de atendimento clínico', brl(cliPu), brl(cliPu/12), int(d.clin)+' — apenas os que recebem']);
+  qrows.push([{content:'Custo médio do escopo contratado',styles:{fontStyle:'bold'}}, {content:brl(C.t.ano/ac),styles:{fontStyle:'bold'}}, {content:brl(C.t.ano/ac/12),styles:{fontStyle:'bold'}}, int(ac)+' — média sobre o total']);
+  tbl({head:[['Componente','Por estudante/ano','Por estudante/mês','Aplicado a']], body:Wt(qrows), columnStyles:{1:{halign:'right'},2:{halign:'right'}}});
+  if(camsIn.includes('C')){
+    h2('2.3 Pacote clínico por estudante/ano');
+    tbl({head:[['Serviço','Por atendimento','Atendimentos/ano','Total/estudante','Observação']], body:Wt(PAC.map(x=>[x.s, brl(x.v), String(x.n), brl(x.v*x.n), x.o]).concat([[{content:'Total',styles:{fontStyle:'bold'}}, '', String(PAC.reduce((a,x)=>a+x.n,0)), {content:brl(pacoteTotal()),styles:{fontStyle:'bold'}}, brl(pacoteTotal()/12)+' por mês']])),
+      columnStyles:{1:{halign:'right'},2:{halign:'right'},3:{halign:'right'}}});
+  }
+  const sau = C.inc.filter(l=>l.cam==='C').reduce((a,l)=>a+vv(l),0), edu=C.total-sau;
+  const srv = C.inc.filter(l=>l.tipo==='srv').reduce((a,l)=>a+vv(l),0), lic=C.total-srv;
+  const sbar = (lbl, a, ca, la, b, cb, lb, x0, bw2) => { const s=(a+b)||1; doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...NAVY); T(lbl, x0, y);
+    if(a>0){ doc.setFillColor(...ca); doc.rect(x0, y+6, bw2*a/s, 12, 'F'); } if(b>0){ doc.setFillColor(...cb); doc.rect(x0+bw2*a/s+(a>0?1.5:0), y+6, Math.max(0,bw2*b/s-(a>0?1.5:0)), 12, 'F'); }
+    doc.setFont('helvetica','normal'); doc.setFontSize(7.9); doc.setTextColor(...INK); T(la+': '+brl(a)+' ('+num(a/s*100,0)+'%)', x0, y+30); T(lb+': '+brl(b)+' ('+num(b/s*100,0)+'%)', x0, y+41); };
+
+  /* ===== Página 4 — cronogramas e custeio ===== */
+  doc.addPage(); head('3. Cronograma físico-financeiro e fontes de custeio');
+  h2('3.1 Cronograma de execução — '+S.vig+' '+(S.vig===1?'mês':'meses'));
+  const V=S.vig, cl=(a)=>Math.min(a, Math.max(0,V-1));
+  const fases=[['Planejamento, parametrização e plano de trabalho',0,Math.min(1,V),'impl','Contratada + Secretaria'],
+    ['Implantação nas unidades e integração de sistemas',0,Math.min(3,V),'impl','Contratada'],
+    ['Formação da rede em turmas de até 20',cl(1),V,'op','Contratada'],
+    ['Elaboração e homologação dos PEIs',cl(1),V,'op','Professores + contratada']];
+  if(camsIn.includes('B')) fases.push(['Avaliação pedagógica de habilidades',cl(1),V,'op','Contratada + escolas']);
+  if(camsIn.includes('C')) fases.push(['Atendimento clínico multiprofissional',cl(2),V,'cli','Rede de saúde / contratada']);
+  fases.push(['Supervisão, mentoria e suporte técnico',0,V,'op','Contratada']);
+  fases.push(['Mensuração, revisão de PEI e prestação de contas',cl(2),V,'mon','Contratada + Secretaria']);
+  tbl({head:[['Fase','Início','Término','Responsável']], body:Wt(fases.map(f=>[f[0],'Mês '+(f[1]+1),'Mês '+f[2],f[4]])), columnStyles:{1:{halign:'center',cellWidth:52},2:{halign:'center',cellWidth:52}}});
+  // gantt
+  const Lp=190, gx0=mx+Lp, gw=cw-Lp, rh=17, gh=fases.length*rh+24;
+  ensure(gh+10);
+  doc.setFillColor(250,251,254); doc.rect(mx, y, cw, gh, 'F');
+  const step = V<=12?1:V<=24?2:V<=36?3:6;
+  doc.setFontSize(6.8); doc.setTextColor(...MU);
+  for(let m=0;m<=V;m+=step){ const xx=gx0+gw*m/V; doc.setDrawColor(...LN); doc.setLineWidth(.4); doc.line(xx,y+14,xx,y+gh-4); if(m<V) T('M'+(m+1), xx+2, y+10); }
+  const corF={impl:OR, op:BL, cli:TE, mon:PU};
+  fases.forEach((f,i)=>{ const yy=y+18+i*rh; doc.setFontSize(7.4); doc.setTextColor(...INK); T(split(f[0],Lp-8)[0], mx+6, yy+9);
+    const x1=gx0+gw*f[1]/V, x2=gx0+gw*f[2]/V; doc.setFillColor(...corF[f[3]]); doc.roundedRect(x1, yy+2, Math.max(4,x2-x1), rh-6, 3, 3, 'F'); });
+  y += gh + 8;
+  doc.setFontSize(7.6); doc.setTextColor(...MU); T('Laranja: implantação  ·  Azul: operação contínua  ·  Verde-azulado: cuidado clínico  ·  Roxo: mensuração e governança', mx, y); y+=18;
+  h2('3.2 Cronograma financeiro');
+  const A=anos(C.t,V);
+  tbl({head:[['Período','Meses','Serviço recorrente','Implantação e integração','Total do período']], body:Wt(A.map(a=>['Ano '+a.y, String(a.m), brl(a.rec), brl(a.nr), brl(a.rec+a.nr)]).concat([[{content:'Total do projeto',styles:{fontStyle:'bold'}}, String(V), brl(A.reduce((s,a)=>s+a.rec,0)), brl(C.t.nr), {content:brl(C.total),styles:{fontStyle:'bold'}}]])),
+    columnStyles:{1:{halign:'center'},2:{halign:'right'},3:{halign:'right'},4:{halign:'right'}}});
+  para('Medição e pagamento: '+$('pgto').value+'. Parcela recorrente estimada: '+brl(C.t.r/12)+' por mês. Reajuste: '+$('reaj').value+'.', 9, INK);
+  h2('3.3 Fontes de custeio');
+  tbl({head:[['Fonte','Aplicação','Base']], body:Wt([
+    ['FUNDEB','Matrículas da educação especial em AEE admitem duplo cômputo e ponderação diferenciada.','Lei nº 14.113/2020; Decreto nº 7.611/2011'],
+    ['Salário-Educação','Custeio de ações de manutenção e desenvolvimento do ensino.','Quota municipal'],
+    ['Recursos próprios — MDE','Percentual constitucional mínimo em manutenção e desenvolvimento do ensino.','Art. 212 da Constituição'],
+    ['Emendas parlamentares','Programas de educação inclusiva e de saúde da criança.','Individuais e de bancada'],
+    ['Programas do FNDE','Apoio ao AEE e às salas de recursos multifuncionais.','Decreto nº 7.611/2011'],
+    ['Bloco de custeio da Saúde','Componente clínico, prestado pela rede municipal de saúde ou conveniada.','Rubrica apartada da Educação']]),
+    columnStyles:{0:{cellWidth:110,fontStyle:'bold',textColor:NAVY}}});
+
+  /* ===== Página 5 — condições e assinaturas ===== */
+  doc.addPage(); head('4. Condições, premissas e assinaturas');
+  h2('4.1 Condições comerciais');
+  tbl({body:Wt([['Escopo', cenTxt+' ('+C.inc.length+' itens)'],['Vigência', V+' '+(V===1?'mês':'meses')],['Valor total do projeto', brl(C.total)],['Valor do primeiro ano', brl(C.t.ano)],['Canal de contratação', CANAIS.find(c=>c.id===S.canal).t],['Medição e pagamento', $('pgto').value],['Reajuste', $('reaj').value],['Validade da proposta', (+$('validade').value||60)+' dias a partir da emissão'],['Data-base dos preços','Setembro de 2026']]),
+    theme:'plain', columnStyles:{0:{cellWidth:150,fontStyle:'bold',textColor:NAVY}}, styles:{fontSize:9, cellPadding:3.6, lineColor:LN, lineWidth:{bottom:.5}}});
+  h2('4.2 Distribuição do valor total do projeto');
+  const hw=(cw-24)/2;
+  sbar('Por rubrica orçamentária', edu, BL, 'Educação', sau, TE, 'Saúde', mx, hw);
+  sbar('Licença × serviço prestado', lic, [138,92,196], 'Licenças', srv, OR, 'Serviços prestados', mx+hw+24, hw);
+  y += 52;
+  h2('4.3 Premissas e ressalvas');
+  [ 'Base populacional: IBGE, Censo 2022 (SIDRA 10145, variável 13267) — pessoas com diagnóstico de TEA informado por profissional de saúde, por faixa quinquenal; recortes escolares estimados por distribuição uniforme dentro de cada faixa.',
+    'Os parâmetros de estrutura da rede (unidades escolares, profissionais, percentual em rede pública, fator de ampliação) são provisórios e serão substituídos pelos dados do Censo Escolar e da Secretaria na fase de plano de trabalho; as quantidades serão ajustadas por termo aditivo ou apostilamento, mantidos os preços unitários.',
+    'Preços com âncora pública derivam da ARP nº 045/2026 do CIMINAS; os demais são propostos e sujeitos à pesquisa de preços nos termos do art. 23 da Lei nº 14.133/2021.',
+    'A avaliação é pedagógica, de habilidades (leitura, escrita, numeramento, atenção): sinaliza necessidade de aprofundamento e encaminha ao profissional habilitado, sem nomear diagnóstico.',
+    'Excluída a rubrica de medicação à base de canabidiol: não incorporada ao SUS para TEA, sem registro ANVISA dos produtos usualmente prescritos e fora das indicações da Resolução CFM nº 2.324/2022. A plataforma registra a medicação prescrita, sem custeio pelo contrato.',
+    'Tratamento de dados pessoais de crianças conforme a LGPD, com Relatório de Impacto (RIPD) antes da implantação e consentimento parental específico.',
+    'Documento de apoio à decisão; não constitui parecer jurídico nem orientação clínica.'
+  ].forEach(t=>{ doc.setFont('helvetica','normal'); doc.setFontSize(8.3); doc.setTextColor(...INK); const L=split(t, cw-14); ensure(L.length*10.8+5); doc.setFillColor(...OR); doc.circle(mx+3, y-3, 1.8, 'F'); T(L, mx+12, y, {lineHeightFactor:1.3}); y+=L.length*10.8+5; });
+  // assinaturas
+  ensure(130); y = Math.max(y+30, PH-190);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(...INK);
+  T('Local e data: _____________________________________, ____ de ______________ de ______', mx, y); y+=64;
+  const sw=(cw-40)/2; doc.setDrawColor(...INK); doc.setLineWidth(.6);
+  doc.line(mx, y, mx+sw, y); doc.line(mx+sw+40, y, PW-mx, y);
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); T($('propNome').value.trim()||'Proponente', mx, y+14); T($('destNome').value.trim()||'Autoridade competente', mx+sw+40, y+14);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...MU);
+  T(split($('propEmp').value.trim()+' — Proponente', sw), mx, y+26); T(split(($('destOrg').value.trim()||enteOrgao())+' — Contratante', sw), mx+sw+40, y+26);
+
+  // rodapés
+  const n = doc.getNumberOfPages();
+  for(let p=1;p<=n;p++){ doc.setPage(p); doc.setDrawColor(...LN); doc.setLineWidth(.5); doc.line(mx, PH-40, PW-mx, PH-40);
+    doc.setFont('helvetica','normal'); doc.setFontSize(7.4); doc.setTextColor(...MU);
+    T('G3 Health Service · Inclusi.Via (TEAlliance) · '+$('propEmail').value.trim()+' · '+$('propTel').value.trim(), mx, PH-28);
+    T('Ref. '+ref+' · Fontes: IBGE Censo 2022; Projeto de Viabilidade G3 (set/2026); ARP 045/2026 CIMINAS', mx, PH-18);
+    T('Página '+p+' de '+n, PW-mx, PH-28, {align:'right'}); }
+  return {doc, ref, alvo:label};
+}
+function baixarPDF(){ const r=montarPDF(); if(r) r.doc.save(nomeArq()); }
+async function enviarEmail(){
+  const r=montarPDF(); if(!r) return;
+  const email=$('destEmail').value.trim(), btn=$('btnMail'), st=$('mailStatus');
+  if(!email){ st.style.color='#B42318'; st.textContent='Informe o e-mail do destinatário (passo 3 — Partes).'; setPane(3); $('destEmail').focus(); return; }
+  const C=LAST;
+  const assunto='Proposta de serviço — inclusão escolar e coordenação do cuidado (TEA) · '+r.alvo;
+  const corpo='Prezado(a) '+($('destNome').value.trim()||'Gestor(a)')+',\n\n'+
+    'Segue em anexo a proposta técnica e comercial do serviço especializado de inclusão escolar e coordenação do cuidado para estudantes com transtorno do espectro autista, com a plataforma Inclusi.Via acoplada, para '+r.alvo+'.\n\n'+
+    'Escopo: '+(S.cen==='P'?'personalizado':'Cenário '+S.cen+' — '+CAM[S.cen])+'\n'+
+    'Estudantes acompanhados: '+int(C.d.acomp)+'\n'+
+    'Vigência: '+S.vig+' meses\n'+
+    'Valor total do projeto: '+brl(C.total)+'\n'+
+    'Referência: '+r.ref+'\n\n'+
+    'Permaneço à disposição para apresentar o plano de trabalho.\n\n'+
+    $('propNome').value.trim()+'\nG3 Health Service\n'+$('propEmail').value.trim()+'\n'+$('propTel').value.trim();
+  if(!MAIL_ENDPOINT || MAIL_ENDPOINT.startsWith('__')){
+    r.doc.save(nomeArq()); st.style.color='#14225A'; st.textContent='Abrindo seu e-mail… anexe o PDF que acabou de baixar.';
+    location.href='mailto:'+email+'?subject='+encodeURIComponent(assunto)+'&body='+encodeURIComponent(corpo+'\n\n(Anexe o PDF baixado: '+nomeArq()+')'); return;
+  }
+  btn.disabled=true; st.style.color='#14225A'; st.textContent='Enviando…';
+  try{
+    const b64 = r.doc.output('datauristring').split(',')[1];
+    await fetch(MAIL_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'enviarProposta',token:MAIL_TOKEN,para:email,assunto,corpo,nomeArquivo:nomeArq(),pdfBase64:b64,ref:r.ref,alvo:r.alvo,valor:C.total,copia:$('propEmail').value.trim()})});
+    st.style.color='#0F7B55'; st.textContent='✅ Proposta enviada para '+email;
+  }catch(e){ st.style.color='#B42318'; st.textContent='Falha no envio. Baixando o PDF…'; r.doc.save(nomeArq()); }
+  finally{ btn.disabled=false; }
+}
+
+/* ---------- init ---------- */
+function init(){
+  $('selUF').innerHTML = Object.keys(UFN).sort((a,b)=>UFN[a][0].localeCompare(UFN[b][0],'pt')).map(u=>`<option value="${u}">${UFN[u][0]} (${u})</option>`).join('');
+  $('destOrg').addEventListener('input', e=>{ e.target.dataset.touched = e.target.value ? '1' : ''; });
+  ['destNome','destEmail','propNome','propEmp'].forEach(id=>$(id).addEventListener('change', ()=>{ if(S.pane===4) update(); }));
+  // deep link
+  const h = location.hash;
+  let m;
+  if((m=h.match(/^#m=(\d{7})/)) && BY_COD[m[1]]!=null){ S.tipo='mun'; S.mun=BY_COD[m[1]]; }
+  else if((m=h.match(/^#uf=([A-Z]{2})/)) && UFN[m[1]]){ S.tipo='uf'; S.uf=m[1]; S.ufTouched=true; }
+  else if((m=h.match(/^#c=([\d,]+)/))){ S.cons=m[1].split(',').map(c=>BY_COD[c]).filter(i=>i!=null); if(S.cons.length){ S.tipo='cons'; S.canal='cons'; } }
+  buildPresets(); buildPrem(); buildItens(); buildPac(); initCharts(); syncTipo(); update(); renderRank();
+  // nav ativo
+  const secs=[...document.querySelectorAll('section[id]')], links=[...document.querySelectorAll('#links a')];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)); }),{rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(s=>io.observe(s));
+  document.addEventListener('click', e=>{ if(!e.target.closest('#r-busca')) $('sug').innerHTML=''; });
+}
+init();
+</script>
+</body>
+</html>
