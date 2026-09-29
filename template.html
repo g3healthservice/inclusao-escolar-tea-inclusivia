@@ -268,6 +268,27 @@ details.prem summary{cursor:pointer;padding:12px 16px;font-weight:650;color:var(
 .tipos .v{text-align:right;font-weight:650;font-variant-numeric:tabular-nums}
 .gasto{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px}
 @media (max-width:760px){ .basesel,.cebox .cg,.gasto{grid-template-columns:1fr 1fr} .tipos .hb{grid-template-columns:1fr 1.3fr 58px} }
+.ente .vvs{display:flex;gap:26px;align-items:flex-end}
+.ente .vv.fam{border-left:1px solid rgba(255,255,255,.25);padding-left:24px}
+.ente .vv.fam b{color:#7BE0CB}
+.escmap{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:16px;background:#fff}
+.emh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.emh b{color:var(--navy);font-size:15px}
+.emk{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 4px}
+.emk div{background:var(--soft);border-radius:10px;padding:9px 12px}
+.emk div b{display:block;font-size:20px;color:var(--navy);font-variant-numeric:tabular-nums}
+.emk div span{font-size:12px;color:var(--muted)}
+.emk div.warn{background:#FFF4E5}
+.emk div.warn b{color:#A8470C}
+.emf{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.emf input[type=text]{max-width:340px}
+.emck{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.emtab{max-height:440px;overflow:auto}
+.emtab thead th{position:sticky;top:0;background:#fff;z-index:1}
+.lote{display:inline-block;min-width:26px;text-align:center;font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:99px}
+.lote.l1{background:#DDF3F0;color:#0B6F66} .lote.l2{background:#FFF1E4;color:#A8470C} .lote.l3{background:var(--soft);color:var(--muted)}
+.nao{color:#A8470C;font-weight:600}
+@media (max-width:760px){ .emk{grid-template-columns:1fr 1fr} .ente .vvs{gap:14px} .ente .vv.fam{padding-left:14px} }
 /* módulo de proposta em destaque */
 #proposta{background:linear-gradient(180deg,#FFF4EA 0%,#FDF8F3 55%,#F7F3FB 100%);border-top:4px solid var(--orange)}
 #proposta .sh{display:inline-block;background:var(--orange);color:#fff;padding:5px 12px;border-radius:99px;letter-spacing:.12em}
@@ -473,7 +494,10 @@ ul.clean li{margin:4px 0;font-size:13.5px}
 
     <div class="ente">
       <div><div class="mt" id="enteTipo">Município</div><div class="nm" id="enteNome">—</div><div class="mt" id="enteMeta">—</div></div>
-      <div class="vv"><b class="tnum" id="enteAcomp">—</b><span>estudantes acompanhados pelo serviço</span></div>
+      <div class="vvs">
+        <div class="vv"><b class="tnum" id="enteAcomp">—</b><span>estudantes acompanhados</span></div>
+        <div class="vv fam"><b class="tnum" id="enteFam">—</b><span>famílias alcançadas</span></div>
+      </div>
     </div>
     <div class="callout blue" id="capHint" style="display:none;margin:-6px 0 16px;font-size:13.5px"></div>
 
@@ -499,6 +523,24 @@ ul.clean li{margin:4px 0;font-size:13.5px}
 
     <h3 style="margin-top:22px" id="hFunil">Do total populacional ao público atendido</h3>
     <div class="funnel" id="funnel"></div>
+
+    <div class="escmap" id="escMap">
+      <div class="emh">
+        <div><b id="emTit">🏫 Escolas da rede municipal</b> <span class="note" style="margin:0">· Censo Escolar <span id="emAno">2024</span>, escola a escola</span></div>
+        <button class="btn ghost" id="emBtn" onclick="toggleMapa()">Mostrar mapa de escolas ▾</button>
+      </div>
+      <div class="emk" id="emKpis"></div>
+      <div id="emBody" style="display:none">
+        <div class="note" id="emLotes" style="margin:0 0 10px"></div>
+        <div class="emf">
+          <input type="text" id="emBusca" placeholder="Buscar escola pelo nome" oninput="renderMapa()">
+          <label class="emck"><input type="checkbox" id="emSo" checked onchange="renderMapa()"> Só escolas com educação especial</label>
+          <button class="btn ghost" onclick="exportarMapa()">⬇ Exportar CSV</button>
+        </div>
+        <div class="tscroll emtab"><table id="emTab"></table></div>
+        <div class="note" id="emNote"></div>
+      </div>
+    </div>
     <details class="prem" id="prem"><summary>⚙️ Premissas do dimensionamento (editáveis)</summary><div class="pgrid" id="pgrid"></div>
       <div class="note" style="padding:0 16px 14px">Os parâmetros de rede, de ampliação e de estrutura escolar são provisórios e devem ser substituídos pelos dados do Censo Escolar e da Secretaria antes de uso externo. Dimensionamento inflado é a causa mais comum de impugnação e glosa.</div>
     </details>
@@ -686,6 +728,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
           <dt>Escopo</dt><dd id="sCen">—</dd>
           <dt>Estudantes acompanhados</dt><dd id="sAcomp">—</dd>
           <dt>Com pacote clínico</dt><dd id="sClin">—</dd>
+          <dt>Famílias alcançadas</dt><dd id="sFam">—</dd>
           <dt>Primeiro ano</dt><dd id="sAno">—</dd>
           <dt>Por estudante/mês</dt><dd id="sEst">—</dd>
         </dl>
@@ -823,7 +866,8 @@ ul.clean li{margin:4px 0;font-size:13.5px}
 <script>
 const M = __DATA__; // [codIBGE, UF, nome, 0-4, 5-9, 10-14, 15-19]
 const CE = __CENSO__;    // Censo Escolar 2025 (INEP): {cod:[tot, federal, estadual, municipal, privada, TEA, intelectual, física, auditiva, visual, múltipla, AH/SD, escolas estaduais, escolas municipais, escolas total]}
-const SF = __SICONFI__;  // SICONFI/DCA: {cod:[exercício, Ed. Especial empenhado, liquidado, Educação empenhado]}
+const SF = __SICONFI__;
+const ES = __ESCOLAS__;   // resumo do mapa de escolas (microdados do Censo Escolar): {ano, mun:{cod:[mEsc, mComEsp, mSala, mComEspSemSala, eEsc, eComEsp, eSala, eComEspSemSala]}}  // SICONFI/DCA: {cod:[exercício, Ed. Especial empenhado, liquidado, Educação empenhado]}
 const MAIL_ENDPOINT = "__MAIL_ENDPOINT__";
 const MAIL_TOKEN = "__MAIL_TOKEN__";
 const BUILD = "__BUILD__";
@@ -973,6 +1017,72 @@ function funil(d){
     ['Recebem o pacote clínico', d.clin, num(P.clin,1)+'% do público acompanhado']];
 }
 function setBase(b){ S.base=b; resetOv(); update(); }
+
+/* ---------- mapa de escolas (microdados do Censo Escolar, carregados por UF sob demanda) ---------- */
+const _escUF = {}; let MAPA = {key:null, list:null, erro:null, carregando:false};
+function enteKey(){ return [S.tipo, S.mun, S.uf, S.cons.join(','), redeKey()].join('|'); }
+function escResumo(){
+  const o = redeKey()==='est' ? 4 : 0, r = [0,0,0,0];
+  selIdx().forEach(i=>{ const v = ES.mun && ES.mun[M[i][0]]; if(v) for(let k=0;k<4;k++) r[k]+=v[o+k]; });
+  return {esc:r[0], comEsp:r[1], sala:r[2], semSala:r[3]};
+}
+async function escolasUF(uf){
+  if(_escUF[uf]) return _escUF[uf];
+  const resp = await fetch('escolas/'+uf+'.json'); if(!resp.ok) throw new Error('arquivo de escolas indisponível');
+  return (_escUF[uf] = await resp.json());
+}
+// lista de escolas da rede do ente, com lote sugerido: 25% das escolas com mais estudantes da educação especial no lote 1, os 35% seguintes no lote 2, o restante no lote 3
+async function escolasEnte(){
+  const key = enteKey();
+  if(MAPA.key===key && MAPA.list) return MAPA.list;
+  const rk = redeKey()==='est' ? 'e' : 'm', idx = selIdx(), ufs = [...new Set(idx.map(i=>M[i][1]))];
+  const base = {}; for(const u of ufs) base[u] = await escolasUF(u);
+  const out = [];
+  idx.forEach(i=>{ const m=M[i], d=base[m[1]].mun[m[0]]; if(d) d[rk].forEach(x=>out.push({cod:x[0], nome:x[1], bas:x[2], esp:x[3], sala:x[4], mun:m[2]+'/'+m[1]})); });
+  out.sort((a,b)=>b.esp-a.esp || b.bas-a.bas);
+  const com = out.filter(x=>x.esp>0), n = com.length, c1 = Math.ceil(n*.25), c2 = Math.ceil(n*.6);
+  com.forEach((x,k)=>{ x.lote = k<c1 ? 1 : k<c2 ? 2 : 3; });
+  MAPA = {key, list:out, erro:null, carregando:false, ano:base[ufs[0]] && base[ufs[0]].ano};
+  return out;
+}
+function lotesResumo(list){
+  const tot = list.reduce((a,x)=>a+x.esp,0) || 1;
+  return [1,2,3].map(l=>{ const xs=list.filter(x=>x.lote===l); const e=xs.reduce((a,x)=>a+x.esp,0); return {l, n:xs.length, esp:e, pct:e/tot*100, semSala:xs.filter(x=>!x.sala).length}; });
+}
+async function prepEscolas(){ try{ return await escolasEnte(); }catch(e){ MAPA = {key:enteKey(), list:null, erro:e.message}; return null; } }
+function mapaAberto(){ try{ return localStorage.getItem('g3_mapa_escolas')==='1'; }catch(e){ return false; } }
+function toggleMapa(){ const ab=!mapaAberto(); try{ localStorage.setItem('g3_mapa_escolas', ab?'1':'0'); }catch(e){} renderMapaBloco(); }
+function renderMapaBloco(){
+  const R = escResumo(), redeNome = redeKey()==='est' ? (isDF()?'rede distrital':'rede estadual') : (S.tipo==='cons'?'redes municipais do consórcio':'rede municipal');
+  $('emTit').textContent = '🏫 Escolas da '+redeNome; $('emAno').textContent = ES.ano || '2024';
+  $('emKpis').innerHTML = `<div><b>${int(R.esc)}</b><span>escolas em atividade</span></div><div><b>${int(R.comEsp)}</b><span>com educação especial</span></div><div><b>${int(R.sala)}</b><span>com sala de recursos</span></div><div class="warn"><b>${int(R.semSala)}</b><span>com educação especial e sem sala de recursos</span></div>`;
+  const ab = mapaAberto();
+  $('emBtn').textContent = ab ? 'Ocultar mapa de escolas ▴' : 'Mostrar mapa de escolas ▾';
+  $('emBody').style.display = ab ? '' : 'none';
+  if(ab) renderMapa();
+}
+async function renderMapa(){
+  const key = enteKey();
+  if(MAPA.key!==key || (!MAPA.list && !MAPA.erro)){
+    $('emTab').innerHTML = '<tbody><tr><td class="note">Carregando escolas…</td></tr></tbody>';
+    await prepEscolas(); if(enteKey()!==key) return;
+  }
+  if(!MAPA.list){ $('emTab').innerHTML=''; $('emLotes').textContent=''; $('emNote').textContent = 'Não foi possível carregar a lista de escolas ('+MAPA.erro+'). Ela é carregada do site publicado; abra o painel pelo link on-line.'; return; }
+  const L = lotesResumo(MAPA.list), multi = S.tipo!=='mun';
+  $('emLotes').innerHTML = 'Implantação sugerida em 3 lotes, pelas escolas com mais estudantes da educação especial: '+L.map(x=>`<span class="lote l${x.l}">Lote ${x.l}</span> ${int(x.n)} escolas · ${num(x.pct,0)}% dos estudantes`).join(' &nbsp; ');
+  const q = norm($('emBusca').value.trim()), so = $('emSo').checked;
+  const rows = MAPA.list.filter(x=>(!so || x.esp>0) && (!q || norm(x.nome).includes(q) || norm(x.mun).includes(q)));
+  const lim = 400, vis = rows.slice(0,lim);
+  $('emTab').innerHTML = '<thead><tr><th>Escola</th>'+(multi?'<th>Município</th>':'')+'<th class="n">Alunos</th><th class="n">Ed. especial</th><th class="n">% do total</th><th>Sala de recursos</th><th>Lote</th></tr></thead><tbody>'+
+    vis.map(x=>`<tr><td>${x.nome}<small class="et">INEP ${x.cod}</small></td>${multi?`<td>${x.mun}</td>`:''}<td class="n">${int(x.bas)}</td><td class="n"><b>${int(x.esp)}</b></td><td class="n">${x.bas?num(x.esp/x.bas*100,1)+'%':'—'}</td><td>${x.sala?'sim':'<span class="nao">não</span>'}</td><td>${x.lote?`<span class="lote l${x.lote}">${x.lote}</span>`:'—'}</td></tr>`).join('')+'</tbody>';
+  $('emNote').textContent = (rows.length>lim ? 'Mostrando '+lim+' de '+int(rows.length)+' escolas — use a busca ou exporte a lista completa. ' : int(rows.length)+' escolas. ') + 'Fonte: INEP, microdados do Censo Escolar '+(MAPA.ano||ES.ano)+' (escolas em atividade da rede do ente). Os totais do município no painel usam o Censo Escolar 2025.';
+}
+function exportarMapa(){
+  if(!MAPA.list) return;
+  const linhas = [['Código INEP','Escola','Município','Matrículas','Matrículas educação especial','Sala de recursos','Lote sugerido']].concat(MAPA.list.map(x=>[x.cod,x.nome,x.mun,x.bas,x.esp,x.sala?'sim':'não',x.lote||'']));
+  const csv = '﻿'+linhas.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\r\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download='Escolas_'+slug(enteLabel())+'.csv'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+}
 function linhas(d, useOvQ){
   return ITENS.map(it => {
     const qa = it.q(d);
@@ -1135,7 +1245,8 @@ function update(){
   $('enteNome').textContent = label;
   const pr = PRESETS.find(p=>p.id===S.preset);
   $('enteMeta').textContent = (S.tipo==='mun'&&S.mun!=null? 'IBGE '+M[S.mun][0]+' · ' : S.tipo!=='mun'? int(C.idx.length)+' município'+(C.idx.length!==1?'s':'')+' · ' : '') + int(d.total)+' pessoas com TEA de 0 a 19 anos · recorte '+(S.preset==='custom'?'personalizado':pr.t);
-  $('enteAcomp').textContent = int(d.acomp);
+  $('enteAcomp').textContent = int(d.acomp); $('enteFam').textContent = int(d.familias);
+  renderMapaBloco();
   $('chips').innerHTML = S.tipo==='cons' ? S.cons.map(i=>`<span class="chip">${M[i][2]}/${M[i][1]}<button onclick="rmCons(${i})" aria-label="Remover">✕</button></span>`).join('') : '';
   // base do público + Censo Escolar
   const censo = d.censo, ce = C.ceAll;
@@ -1252,7 +1363,7 @@ function update(){
   // resumo lateral
   $('sTotal').textContent = brl(C.total); $('sSub').textContent = S.vig+' '+(S.vig===1?'mês':'meses')+' · '+(S.cen==='P'?'personalizado':'cenário '+S.cen);
   $('sEnte').textContent = label; $('sCen').textContent = S.cen==='P'?'Personalizado':CAM[S.cen];
-  $('sAcomp').textContent = int(d.acomp); $('sClin').textContent = C.clinIncl? int(d.clin) : '—';
+  $('sAcomp').textContent = int(d.acomp); $('sFam').textContent = int(d.familias); $('sClin').textContent = C.clinIncl? int(d.clin) : '—';
   $('sAno').textContent = brl(C.t.ano); $('sEst').textContent = brl(est);
   $('sLy').innerHTML = Object.keys(GRUPOS).map(k=>{ const v=C.ls.filter(l=>l.g===k&&incluido(l)).reduce((a,l)=>a+l.tot,0); return `<div class="${v>0?'':'off'}"><span><span class="dot" style="background:${GRUPOS[k].c}"></span>${GRUPOS[k].n}</span><b>${v>0?brlK(v):'—'}</b></div>`; }).join('');
   // pill
@@ -1368,7 +1479,7 @@ function montarPDF(){
 
   secao('1. Resumo da proposta');
   kv([['Ente público', label], ['Órgão', $('destOrg').value.trim()||enteOrgao()], ['Escopo', cenTxt], ['Base do público', d.censo ? 'INEP, Censo Escolar 2025 — matrículas da educação especial na rede '+esfAdj() : 'IBGE, Censo 2022 — '+recorteTxt],
-    ['Estudantes acompanhados', int(d.acomp)], ['Com pacote clínico', C.clinIncl?int(d.clin):'Não contratado'], ['Unidades escolares (estimativa)', int(d.escolas)],
+    ['Estudantes acompanhados', int(d.acomp)], ['Com pacote clínico', C.clinIncl?int(d.clin):'Não contratado'], ['Famílias alcançadas', int(d.familias)+' ('+num(P.familia,0)+'% dos acompanhados)'], ['Unidades escolares (estimativa)', int(d.escolas)],
     ['Vigência', S.vig+' '+(S.vig===1?'mês':'meses')], ['Valor do primeiro ano', brl(C.t.ano)], [B('VALOR TOTAL DO PROJETO'), B(brl(C.total))],
     ['Custo por estudante/mês', brl(est)], ...(C.gasto.emp>0?[['Gasto atual com Educação Especial', brl(C.gasto.emp)+' em '+C.gasto.anos.join(' e ')+' (SICONFI, subfunção 12.367)'], ['Escopo (1º ano) sobre o gasto atual', num(C.t.ano/C.gasto.emp*100,1)+'%']]:[]), ['Canal de contratação', CANAIS.find(c=>c.id===S.canal).t]]);
 
@@ -1402,7 +1513,16 @@ function montarPDF(){
       FAIXAS.map((f,k)=>[f.k, f.etapa, R(int(d.b[k])), R(num(S.f[k]*100,0)+'%'), R(int(d.rec[k])), R(int(Math.round(d.acomp*d.rec[k]/sr)))]).concat([[B('Total'),'',BR(int(d.total)),'',BR(int(d.recorte)),BR(int(d.acomp))]]));
   }
   tabela(['Etapa do dimensionamento','Estudantes','Parâmetro aplicado'],
-    funil(d).filter((x,k,a)=>C.clinIncl || k<a.length-1).map(x=>[x[0], /^Acompanhados/.test(x[0])?BR(int(x[1])):R(int(x[1])), x[2]]), {columnStyles:{1:{cellWidth:62}}});
+    funil(d).filter((x,k,a)=>C.clinIncl || k<a.length-1).map(x=>[x[0], /^Acompanhados/.test(x[0])?BR(int(x[1])):R(int(x[1])), x[2]])
+      .concat([['Famílias alcançadas', R(int(d.familias)), num(P.familia,0)+'% dos acompanhados — fator de irmandade']]), {columnStyles:{1:{cellWidth:62}}});
+  const ESC = (MAPA.key===enteKey() && MAPA.list) ? MAPA.list : null;
+  if(ESC && ESC.some(x=>x.esp>0)){
+    subsecao('3.1. Escolas e implantação em lotes');
+    const LR = lotesResumo(ESC), RS = escResumo();
+    par('A rede tem '+int(RS.esc)+' escolas em atividade, das quais '+int(RS.comEsp)+' com estudantes da educação especial; '+int(RS.semSala)+' delas não têm sala de recursos multifuncionais. A implantação é proposta em três lotes, a partir das escolas com mais estudantes da educação especial (relação completa no Anexo II do ETP).');
+    tabela(['Lote','Escolas','Estudantes da educação especial','% do total','Sem sala de recursos'], LR.map(x=>['Lote '+x.l, R(int(x.n)), R(int(x.esp)), R(num(x.pct,0)+'%'), R(int(x.semSala))]));
+    par('Fonte: INEP, microdados do Censo Escolar '+(MAPA.ano||ES.ano)+'.', {fs:FT, simples:true});
+  }
 
   secao('4. Composição de custos');
   subsecao('4.1. Itens do serviço — primeiro ano');
@@ -1484,8 +1604,9 @@ function montarPDF(){
     T('Página '+pg+' de '+n, PW/2, PH-20, {align:'center'}); }
   return {doc, ref, alvo:label};
 }
-function baixarPDF(){ const r=montarPDF(); if(r) r.doc.save(nomeArq()); }
+async function baixarPDF(){ await prepEscolas(); const r=montarPDF(); if(r) r.doc.save(nomeArq()); }
 async function enviarEmail(){
+  await prepEscolas();
   const r=montarPDF(); if(!r) return;
   const email=$('destEmail').value.trim(), btn=$('btnMail'), st=$('mailStatus');
   if(!email){ st.style.color='#B42318'; st.textContent='Informe o e-mail do destinatário (passo 3 — Partes).'; setPane(3); $('destEmail').focus(); return; }

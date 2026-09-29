@@ -359,6 +359,19 @@ async function gerarXlsx(ctx){
   ['D','E','F','G','H','I','J','K','L','M','N'].forEach((col,k)=>put(w8,col+rt,fx(`SUM(${col}${mR0}:${col}${mR1})`,undefined),{tot:true,bold:true,fmt:'int'}));
   w8.views=[{state:'frozen',ySplit:4}];
 
+  if(ctx.escolas && ctx.escolas.length){
+    const w9 = wb.addWorksheet('9. Escolas', {properties:{tabColor:{argb:'FF0E9488'}}});
+    w9.columns=[{width:12},{width:52},{width:26},{width:13},{width:15},{width:13},{width:14},{width:10}];
+    title(w9,'A1','UNIDADES ESCOLARES DA '+redeTxt().toUpperCase()+' — INEP, microdados do Censo Escolar '+(MAPA.ano||ES.ano)+' (Anexo II do ETP)');
+    put(w9,'A2','Escolas em atividade. Lote sugerido: 25% das escolas com mais estudantes da educação especial no lote 1, os 35% seguintes no lote 2, as demais no lote 3.');
+    hdr(w9,4,['Código INEP','Unidade escolar','Município','Matrículas','Ed. especial','% ed. especial','Sala de recursos','Lote']);
+    ctx.escolas.forEach((x,k)=>{ const r=5+k; w9.getRow(r).values=[x.cod,x.nome,x.mun,x.bas,x.esp,{formula:`IFERROR(E${r}/D${r},0)`,result:x.bas?x.esp/x.bas:0},x.sala?'sim':'não',x.lote||''];
+      w9.getRow(r).eachCell(c=>{ c.font={name:F,size:11}; }); w9.getCell('D'+r).numFmt=FM.int; w9.getCell('E'+r).numFmt=FM.int; w9.getCell('F'+r).numFmt='0.0%'; });
+    const r9=5+ctx.escolas.length; put(w9,'B'+r9,'TOTAL',{tot:true,bold:true});
+    put(w9,'D'+r9,fx(`SUM(D5:D${r9-1})`,ctx.escolas.reduce((a,x)=>a+x.bas,0)),{tot:true,bold:true,fmt:'int'}); put(w9,'E'+r9,fx(`SUM(E5:E${r9-1})`,ctx.escolas.reduce((a,x)=>a+x.esp,0)),{tot:true,bold:true,fmt:'int'});
+    put(w9,'G'+r9,fx(`COUNTIF(G5:G${r9-1},"não")`,ctx.escolas.filter(x=>!x.sala).length),{tot:true,bold:true,fmt:'int'});
+    w9.views=[{state:'frozen',ySplit:4}];
+  }
   wb.worksheets.forEach(ws=>{ ws.pageSetup={paperSize:9, orientation:'landscape', fitToPage:true, fitToWidth:1, fitToHeight:0}; });
   const buf = await wb.xlsx.writeBuffer();
   return new Blob([buf], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
@@ -531,12 +544,19 @@ async function gerarETP(ctx){
   }
   c.push(h2(d.censo ? 'IV.2. Das matrículas ao público atendido' : 'IV.2. Do total populacional ao público atendido'));
   c.push(tbl(['Etapa','Educandos','Parâmetro aplicado'], funil(d).filter((x,k,a)=>ctx.cams.has('C') || k<a.length-1)
-    .map(x=>[x[0], /^Acompanhados/.test(x[0]) ? {__c:1,t:int(x[1]),bold:true} : int(x[1]), x[2]]),[40,16,44],{right:[1]}));
+    .map(x=>[x[0], /^Acompanhados/.test(x[0]) ? {__c:1,t:int(x[1]),bold:true} : int(x[1]), x[2]])
+    .concat([['Famílias alcançadas',int(d.familias),num(P.familia,1)+'% dos educandos acompanhados — fator de irmandade (Módulo Família)']]),[40,16,44],{right:[1]}));
   c.push(h2('IV.3. Itens, quantidades e memória de cálculo'));
   c.push(tbl(['#','Item','Unidade','Qtd. (ano 1)','Memória de cálculo'], tabelaItens(K, L, [{v:x=>String(x.n)},{v:x=>x.desc},{v:x=>x.un},{v:x=>({__c:1,t:num(x.q),right:true})},{v:x=>x.memo}]), [5,33,13,11,38]));
   if(ctx.part.length){ c.push(h2('IV.4. Estimativa por município participante'));
     c.push(tbl(['Município','TEA 0–19','No recorte','Acompanhados','Valor anual estimado'], ctx.part.map(x=>[x.nome,int(x.total),int(x.recorte),int(x.acomp),brl(x.ano)]).concat([[{__c:1,t:'Total',bold:true},int(ctx.part.reduce((a,x)=>a+x.total,0)),int(ctx.part.reduce((a,x)=>a+x.recorte,0)),int(ctx.part.reduce((a,x)=>a+x.acomp,0)),{__c:1,t:brl(ctx.part.reduce((a,x)=>a+x.ano,0)),bold:true}]]),[34,14,14,16,22],{right:[1,2,3,4]}));
     c.push(p('A estimativa individual serve à Intenção de Registro de Preços e à distribuição das quantidades entre participantes. A soma pode diferir ligeiramente do consolidado por arredondamento e pelo mínimo de uma unidade escolar por município.',{size:18}));
+  }
+  if(ctx.escolas && ctx.escolas.some(x=>x.esp>0)){
+    const LR = lotesResumo(ctx.escolas);
+    c.push(h2('IV.'+(ctx.part.length?5:4)+'. Unidades escolares e implantação faseada'));
+    c.push(p('A relação das unidades da rede, com as matrículas totais e da educação especial e a existência de sala de recursos multifuncionais, integra este ETP como **Anexo II** (INEP, microdados do Censo Escolar '+(MAPA.ano||ES.ano)+'). Propõe-se implantação em três lotes, a partir das escolas com mais estudantes da educação especial:'));
+    c.push(tbl(['Lote','Escolas','Estudantes da educação especial','% do total','Sem sala de recursos'], LR.map(x=>['Lote '+x.l,int(x.n),int(x.esp),num(x.pct,0)+'%',int(x.semSala)]),[16,16,28,18,22],{right:[1,2,3,4]}));
   }
   c.push(gap(), box('Advertência de dimensionamento',['Os parâmetros de rede, de ampliação e de estrutura escolar (unidades, profissionais, horas) são provisórios e estão sinalizados no Anexo I. Devem ser substituídos pelos dados do Censo Escolar e da Secretaria antes da publicação. '+(['srp','srpcons'].includes(ctx.modo)?'Em Registro de Preços, as quantidades são estimativa máxima, sem obrigação de contratação; recomenda-se implantação faseada, com o primeiro exercício cobrindo de 20% a 30% da rede.':'Dimensionamento inflado é a causa mais comum de impugnação e glosa.')]));
 
@@ -617,6 +637,15 @@ async function gerarETP(ctx){
     direta:'a contratação direta de piloto, com fundamento na hipótese legal a ser definida pela assessoria jurídica (arts. 74 ou 75), instruída na forma do art. 72 da Lei nº 14.133/2021'}[ctx.modo];
   c.push(box('Conclusão',['Conclui-se pela viabilidade técnica e pela adequação da contratação, no valor estimado de **'+brl(ctx.total)+'** para '+ctx.vig+' meses. Recomenda-se: (a) '+recModo+'; (b) implantação faseada, com validação no primeiro lote antes da expansão; e (c) o prosseguimento do feito com a elaboração do Termo de Referência, do qual este ETP e seu Anexo I são parte integrante.'],'EEF0F8'));
   c.push(...K.assinaturas());
+  if(ctx.escolas && ctx.escolas.some(x=>x.esp>0)){
+    const multi = S.tipo!=='mun', lista = ctx.escolas.filter(x=>x.esp>0);
+    c.push(new K.X.Paragraph({children:[], pageBreakBefore:true}));
+    c.push(...h1('Anexo II — Relação de unidades escolares', 'INEP, microdados do Censo Escolar '+(MAPA.ano||ES.ano)+' — escolas em atividade da '+redeTxt()+' com estudantes da educação especial'));
+    c.push(p(int(lista.length)+' unidades, ordenadas pelo número de estudantes da educação especial. Lote 1: 25% das unidades com mais estudantes; lote 2: os 35% seguintes; lote 3: as demais. '+(()=>{ const f=ctx.escolas.length-lista.length; return f===0?'Todas as unidades da rede registram estudantes da educação especial.':f===1?'1 unidade da rede não registra estudantes da educação especial e não consta da relação.':int(f)+' unidades da rede não registram estudantes da educação especial e não constam da relação.'; })(),{size:18}));
+    c.push(tbl(['#','Unidade escolar','Código INEP',...(multi?['Município']:[]),'Matrículas','Ed. especial','Sala de recursos','Lote'],
+      lista.map((x,k)=>[String(k+1), x.nome, x.cod, ...(multi?[x.mun]:[]), int(x.bas), int(x.esp), x.sala?'sim':'não', String(x.lote)]),
+      multi?[5,33,11,15,9,9,10,8]:[5,43,12,10,10,12,8], {right:multi?[4,5]:[3,4]}));
+  }
   const doc = K.documento('Estudo Técnico Preliminar — '+ctx.label, c);
   return K.X.Packer.toBlob(doc);
 }
@@ -671,7 +700,7 @@ async function gerarTR(ctx){
 
   c.push(...h1('5. Do modelo de execução do objeto','(art. 6º, XXIII, "e")'));
   c.push(p('Regime de empreitada por preço unitário, iniciando-se com a ordem de serviço e desenvolvendo-se em fases:'));
-  const fases=[['1 — Planejamento','Reunião inicial; plano de implantação; matriz LGPD; RIPD; cronograma físico.','Até 30 dias da ordem de serviço'],['2 — Provisionamento','Ambientes de produção e homologação; SSO; perfis.','Até 15 dias do aceite da fase 1'],['3 — Integração','Integração com sistemas legados; carga inicial validada.','Até 45 dias do aceite da fase 2'],['4 — Implantação por lote','Parametrização por unidade; habilitação de usuários; termo de aceite.','Lotes de até '+PRE()+' unidades'],['5 — Capacitação','Turmas de até 20 por perfil, com avaliação e certificação.','Concomitante à fase 4'],['6 — Operação assistida','Ajustes, suporte reforçado e mentoria de casos.','90 dias após cada lote']];
+  const fases=[['1 — Planejamento','Reunião inicial; plano de implantação; matriz LGPD; RIPD; cronograma físico.','Até 30 dias da ordem de serviço'],['2 — Provisionamento','Ambientes de produção e homologação; SSO; perfis.','Até 15 dias do aceite da fase 1'],['3 — Integração','Integração com sistemas legados; carga inicial validada.','Até 45 dias do aceite da fase 2'],['4 — Implantação por lote','Parametrização por unidade; habilitação de usuários; termo de aceite.', (ctx.escolas && ctx.escolas.some(x=>x.esp>0)) ? lotesResumo(ctx.escolas).map(x=>'Lote '+x.l+': '+int(x.n)+' unidades').join('; ')+' (Anexo II do ETP)' : 'Lotes de até '+PRE()+' unidades'],['5 — Capacitação','Turmas de até 20 por perfil, com avaliação e certificação.','Concomitante à fase 4'],['6 — Operação assistida','Ajustes, suporte reforçado e mentoria de casos.','90 dias após cada lote']];
   if(ctx.cams.has('B')) fases.push(['7 — Avaliação pedagógica','Aplicação com laboratórios itinerantes; importação dos resultados ao PEI.','Ciclos semestrais']);
   if(ctx.cams.has('C')) fases.push([(ctx.cams.has('B')?'8':'7')+' — Atendimento multiprofissional','Início dos atendimentos regulados a partir dos PEIs homologados.','A partir do 3º mês']);
   fases.push(['Operação plena','Uso regular; SLA; relatórios mensais.','Até o término da vigência'],['Encerramento','Exportação integral; transferência de conhecimento; eliminação segura dos dados.','Últimos 60 dias']);
@@ -722,7 +751,7 @@ async function gerarTR(ctx){
   c.push(p('As matrículas da educação especial em AEE admitem duplo cômputo no FUNDEB (Lei nº 14.113/2020; Decreto nº 7.611/2011). A separação entre Educação e Saúde permite custear a parcela clínica sem comprometer o limite de manutenção e desenvolvimento do ensino.',{before:100}));
 
   c.push(...h1('11. Das disposições finais'));
-  c.push(p('Integram este Termo, independentemente de transcrição: o Estudo Técnico Preliminar; o **Anexo I — Memória de cálculo** (Ref. '+ctx.ref+'); o roteiro da prova de conceito; o modelo de acordo de tratamento de dados; o modelo de termo de aceite'+(srp?'; e a minuta da Ata de Registro de Preços':'')+'. A titularidade dos dados é exclusiva da Administração e dos titulares. Esta minuta deve ser adequada aos dados e à regulamentação locais e submetida à assessoria jurídica (art. 53 da Lei nº 14.133/2021).'));
+  c.push(p('Integram este Termo, independentemente de transcrição: o Estudo Técnico Preliminar; o **Anexo I — Memória de cálculo** (Ref. '+ctx.ref+');'+((ctx.escolas && ctx.escolas.some(x=>x.esp>0))?' o **Anexo II — Relação de unidades escolares**, com os lotes de implantação;':'')+' o roteiro da prova de conceito; o modelo de acordo de tratamento de dados; o modelo de termo de aceite'+(srp?'; e a minuta da Ata de Registro de Preços':'')+'. A titularidade dos dados é exclusiva da Administração e dos titulares. Esta minuta deve ser adequada aos dados e à regulamentação locais e submetida à assessoria jurídica (art. 53 da Lei nº 14.133/2021).'));
   c.push(...K.assinaturas());
   const doc = K.documento('Termo de Referência — '+ctx.label, c);
   return K.X.Packer.toBlob(doc);
@@ -751,6 +780,7 @@ async function baixarDoc(tipo){
   btns.forEach(b=>b.disabled=true); st.style.color='#14225A';
   try{
     const ctx = ctxDoc();
+    st.textContent = 'Carregando a relação de escolas…'; ctx.escolas = await prepEscolas();
     const nomes = {etp:'1_ETP_Inclusao_Escolar_TEA_'+ctx.slug+'.docx', xlsx:'2_Anexo_I_Memoria_de_Calculo_'+ctx.slug+'.xlsx', tr:'3_TR_Inclusao_Escolar_TEA_'+ctx.slug+'.docx', pdf:'4_Proposta_Referencia_'+ctx.slug+'.pdf'};
     const gera = {etp:()=>gerarETP(ctx), xlsx:()=>gerarXlsx(ctx), tr:()=>gerarTR(ctx), pdf:async()=>{ const r=montarPDF(); return r.doc.output('blob'); }};
     if(tipo==='zip'){
