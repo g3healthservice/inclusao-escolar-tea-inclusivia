@@ -51,7 +51,8 @@ def main():
     endpoint, token = ler_opcional("mail_endpoint.txt"), ler_opcional("mail_token.txt")
     build = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    html = ler("template.html")
+    docs = ler("docs.js").replace("__XLSX_STATIC__", ler("dados/xlsx_estatico.json"))
+    html = ler("template.html").replace("__DOCSJS__", docs)
     # dados e libs por último: não podem ter seus conteúdos reinterpretados como placeholder
     for k, v in {"__SITE_URL__": SITE_URL, "__BUILD__": build,
                  "__MAIL_ENDPOINT__": endpoint, "__MAIL_TOKEN__": token}.items():

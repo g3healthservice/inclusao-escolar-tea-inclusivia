@@ -249,6 +249,15 @@ details.prem summary{cursor:pointer;padding:12px 16px;font-weight:650;color:var(
 .rscroll.open{max-height:480px;overflow:auto}
 .rscroll.open thead th{position:sticky;top:0;background:#fff;z-index:1}
 
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.ch{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 14px 12px;box-shadow:var(--sh)}
+.ch i{font-style:normal;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;font-size:12.5px;font-weight:700;margin-bottom:8px}
+.ch b{display:block;color:var(--navy);font-size:14px}
+.ch span{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+.ch em{font-style:normal;position:absolute;top:14px;right:12px;font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-l);padding:2px 7px;border-radius:99px}
+.ch:not(:last-child):after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--orange);font-weight:800;font-size:16px;z-index:1}
+@media (max-width:980px){.chain{grid-template-columns:1fr 1fr}.ch:nth-child(2):after{display:none}}
+@media (max-width:560px){.chain{grid-template-columns:1fr}.ch:after{display:none}}
 .foot{padding:28px 20px 40px;font-size:12.5px;color:var(--muted)}
 ul.clean{padding-left:18px;margin:6px 0}
 ul.clean li{margin:4px 0;font-size:13.5px}
@@ -291,7 +300,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
     <span class="bt"><b>Inclusi.Via · TEAlliance</b><span>G3 Health Service</span></span>
   </a>
   <nav class="links" id="links">
-    <a href="#problema">Problema</a><a href="#servico">Modelo de serviço</a><a href="#publico">Público-alvo</a><a href="#custos">Custos</a><a href="#valor">Valor p/ o ente</a><a href="#proposta">Proposta</a><a href="#ranking">Ranking</a><a href="#metodo">Metodologia</a>
+    <a href="#problema">Problema</a><a href="#servico">Modelo de serviço</a><a href="#publico">Público-alvo</a><a href="#custos">Custos</a><a href="#valor">Valor p/ o ente</a><a href="#proposta">Proposta</a><a href="#documentos">ETP / TR</a><a href="#ranking">Ranking</a><a href="#metodo">Metodologia</a>
   </nav>
   <a class="pill" href="#valor"><small id="pillEnte">—</small><b id="pillVal">—</b></a>
 </div></header>
@@ -633,9 +642,61 @@ ul.clean li{margin:4px 0;font-size:13.5px}
   </div>
 </div></section>
 
-<!-- 07 RANKING -->
-<section id="ranking"><div class="wrap">
-  <div class="sh">07 · Ranking de oportunidade</div>
+<!-- 07 DOCUMENTOS -->
+<section id="documentos"><div class="wrap">
+  <div class="sh">07 · Documentos da contratação</div>
+  <h2>ETP, memória de cálculo e Termo de Referência — prontos para o ente selecionado</h2>
+  <p class="lead2">Toda compra pública começa pelo Estudo Técnico Preliminar e pelo Termo de Referência (Lei nº 14.133/2021). Aqui eles saem preenchidos com o público, as quantidades e os valores deste painel — adaptados à esfera, ao órgão demandante e ao tipo de contratação — e encadeados com a memória de cálculo e a proposta.</p>
+  <div class="chain">
+    <div class="ch"><i>1</i><b>ETP</b><span>Por que contratar, quanto e como — art. 18, incisos I a XIII</span><em>.docx</em></div>
+    <div class="ch"><i>2</i><b>Anexo I — Memória de cálculo</b><span>Censo 2022 → público → itens → cenários, com fórmulas vivas</span><em>.xlsx</em></div>
+    <div class="ch"><i>3</i><b>Termo de Referência</b><span>Objeto, requisitos, execução, medição e pagamento — art. 6º, XXIII</span><em>.docx</em></div>
+    <div class="ch"><i>4</i><b>Proposta de referência</b><span>Insumo da pesquisa de preços — art. 23, § 1º, IV</span><em>.pdf</em></div>
+  </div>
+  <div class="grid2" style="margin-top:18px">
+    <div class="card">
+      <h3>Enquadramento</h3>
+      <div class="card flat" style="padding:12px 14px;margin-bottom:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+        <div><b id="docEnte">—</b><div class="note" style="margin:0">Esfera: <span id="docEsfera">—</span></div></div>
+        <a class="btn ghost" href="#publico">Trocar ente</a>
+      </div>
+      <div class="row" style="margin-top:0">
+        <div class="fld"><label>Órgão demandante</label>
+          <select id="docDem" onchange="S.doc.dem=this.value;update()"><option value="edu">Educação</option><option value="sau">Saúde</option><option value="conj">Educação e Saúde (demanda conjunta)</option></select></div>
+        <div class="fld"><label>Estrutura de lotes</label>
+          <select id="docLotes" onchange="S.doc.lotes=this.value;update()"><option value="rubrica">Lotes separados por natureza e rubrica (recomendado)</option><option value="unico">Lote único</option></select></div>
+      </div>
+      <div class="note" id="docOrgao" style="margin:6px 0 12px"></div>
+      <div class="fld"><label>Tipo de contratação</label></div>
+      <div id="docModo" style="margin-top:6px"></div>
+      <div class="row">
+        <div class="fld"><label>Nº do processo administrativo</label><input type="text" id="docProc" placeholder="opcional" oninput="S.doc.proc=this.value"></div>
+        <div class="fld"><label>Item do PCA</label><input type="text" id="docPCA" placeholder="opcional — ex.: PCA 2027, item 45" oninput="S.doc.pca=this.value"></div>
+        <div class="fld"><label>Unidade orçamentária</label><input type="text" id="docUO" placeholder="opcional" oninput="S.doc.uo=this.value"></div>
+      </div>
+      <label class="opt" style="margin-top:12px"><input type="checkbox" id="docG3" onchange="S.doc.g3=this.checked;update()"><div><b>Identificar a G3 e a TEAlliance como elaboração técnica e solução de referência</b><span>Desligado por padrão: as minutas saem em nome da equipe de planejamento do órgão.</span></div></label>
+      <div class="callout" id="docWarn" style="display:none;font-size:13px">Atenção: o art. 14, I e II, da Lei nº 14.133/2021 impede o autor do projeto (papel ocupado pelo TR em serviços) de disputar a licitação, e a indicação de marca exige justificativa (art. 41, I). Use esta opção apenas em contribuição formal por PMI (art. 81) ou consulta pública (art. 21).</div>
+    </div>
+    <div class="card">
+      <h3>Lotes e valores que irão para os documentos</h3>
+      <div class="tscroll"><table id="docLotesTb"></table></div>
+      <div class="btns" style="padding:16px 0 0">
+        <button class="btn docbtn" onclick="baixarDoc('zip')">📦 Baixar pacote completo (.zip)</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <button class="btn sec docbtn" onclick="baixarDoc('etp')">ETP (.docx)</button>
+          <button class="btn sec docbtn" onclick="baixarDoc('xlsx')">Memória (.xlsx)</button>
+          <button class="btn sec docbtn" onclick="baixarDoc('tr')">TR (.docx)</button>
+        </div>
+      </div>
+      <span id="docStatus" class="note" style="display:block;font-weight:600;font-size:12.5px;margin-top:8px"></span>
+      <div class="callout blue" style="font-size:13px">As minutas trazem quantidades, valores, público por faixa etária, lotes, cronograma, medição e fontes de custeio já preenchidos. Ficam como <b>[PREENCHER]</b> só os dados que dependem do órgão: matrículas do Censo Escolar, item do PCA, dotação e assinaturas. Revisão da assessoria jurídica obrigatória (art. 53).</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 08 RANKING -->
+<section class="alt" id="ranking"><div class="wrap">
+  <div class="sh">08 · Ranking de oportunidade</div>
   <h2>Onde está o público — municípios e estados</h2>
   <p class="lead2">Ordenado pelo público com TEA no recorte etário selecionado; valor anual estimado no cenário integral (C) com as premissas atuais. Clique em uma linha para carregá-la, ou adicione municípios a um consórcio.</p>
   <div class="tabs"><button class="tab on" id="rk-mun" onclick="setRank('mun')">Municípios</button><button class="tab" id="rk-uf" onclick="setRank('uf')">Estados</button></div>
@@ -645,9 +706,9 @@ ul.clean li{margin:4px 0;font-size:13.5px}
   <div class="row" style="align-items:center"><button class="btn ghost" id="btnRank" onclick="toggleRank()">Ver ranking completo ▾</button><span class="note" id="rankCount" style="margin:0"></span></div>
 </div></section>
 
-<!-- 08 METODOLOGIA -->
-<section class="alt" id="metodo"><div class="wrap">
-  <div class="sh">08 · Metodologia, premissas e fontes</div>
+<!-- 09 METODOLOGIA -->
+<section id="metodo"><div class="wrap">
+  <div class="sh">09 · Metodologia, premissas e fontes</div>
   <h2>Como os números são calculados</h2>
   <div class="grid2">
     <div class="card">
@@ -1046,7 +1107,8 @@ function update(){
   $('pillEnte').textContent = label; $('pillVal').textContent = brlK(C.total);
   // hash
   const h = S.tipo==='mun'&&S.mun!=null ? '#m='+M[S.mun][0] : S.tipo==='uf' ? '#uf='+S.uf : S.tipo==='cons'&&S.cons.length ? '#c='+S.cons.map(i=>M[i][0]).join(',') : '';
-  if(h && location.hash.split('&')[0]!==h && !/^#(problema|servico|publico|custos|valor|proposta|ranking|metodo|top)$/.test(location.hash)) history.replaceState(null,'',h);
+  if(h && location.hash.split('&')[0]!==h && !/^#(problema|servico|publico|custos|valor|proposta|documentos|ranking|metodo|top)$/.test(location.hash)) history.replaceState(null,'',h);
+  renderDocs();
   renderRankDeb();
 }
 
@@ -1333,6 +1395,8 @@ async function enviarEmail(){
   }catch(e){ st.style.color='#B42318'; st.textContent='Falha no envio. Baixando o PDF…'; r.doc.save(nomeArq()); }
   finally{ btn.disabled=false; }
 }
+
+__DOCSJS__
 
 /* ---------- init ---------- */
 function init(){
