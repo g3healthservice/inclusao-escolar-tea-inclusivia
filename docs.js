@@ -348,46 +348,62 @@ async function gerarXlsx(ctx){
 /* =====================================================================
    ETP e TR (.docx)
    ===================================================================== */
+/* Padrão de edital para todo Word/PDF gerado: Times New Roman, preto, justificado, entrelinha 1,5, margens ABNT. */
+const EDITAL = {fonte:'Times New Roman', corpo:12, cabecalho:12, tabela:10, nota:10, entrelinha:1.5, margem:{sup:3, esq:3, inf:2, dir:2}};
 function docKit(ctx, sigla){
   const X = window.docx;
-  const {Paragraph, TextRun, Table, TableRow, TableCell, WidthType, ShadingType, AlignmentType, HeadingLevel, BorderStyle, VerticalAlign} = X;
-  const NAVY='14225A', OR='E0651A', MUT='59618A', GRID='C9CEDF', SOFT='EEF0F8';
-  const runs = (t, o={}) => String(t).split('**').map((s,i)=>new TextRun({text:s, bold:!!o.bold || i%2===1, italics:!!o.it, color:o.color, size:o.size}));
-  const p = (t, o={}) => new Paragraph({children:runs(t,o), spacing:{after:o.after??120, before:o.before??0, line:276}, alignment:o.align??AlignmentType.JUSTIFIED, keepNext:!!o.keepNext});
-  const h1 = (t, sub) => [new Paragraph({heading:HeadingLevel.HEADING_1, children:[new TextRun(t)], spacing:{before:360, after:sub?40:140}, keepNext:true}),
-    ...(sub ? [new Paragraph({children:[new TextRun({text:sub, italics:true, color:MUT, size:18})], spacing:{after:160}, keepNext:true})] : [])];
-  const h2 = t => new Paragraph({heading:HeadingLevel.HEADING_2, children:[new TextRun(t)], spacing:{before:220, after:100}, keepNext:true});
-  const bl = t => new Paragraph({children:runs(t), bullet:{level:0}, spacing:{after:70, line:264}, alignment:AlignmentType.JUSTIFIED});
-  const B = {style:BorderStyle.SINGLE, size:4, color:GRID};
+  const {Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, BorderStyle, VerticalAlign} = X;
+  const E = EDITAL, hp = pt => Math.round(pt*2), cm = v => Math.round(v*567), LINE = Math.round(240*E.entrelinha);
+  const NAVY='000000', SOFT=null;                       // mantidos por compatibilidade: sem cor, sem fundo
+  const PRETO = {style:BorderStyle.SINGLE, size:4, color:'000000'};
+  let alinea = 0;                                        // a), b), c)… — reinicia a cada parágrafo, título ou tabela
+  const runs = (t, o={}) => String(t).split('**').map((s,i)=>new TextRun({text:s, bold:!!o.bold || i%2===1, italics:!!o.it, size:o.size, font:E.fonte, color:'000000'}));
+  const p = (t, o={}) => { alinea = 0; const nota = o.size && o.size < hp(E.corpo);
+    return new Paragraph({children:runs(t,{...o, size:nota?hp(E.nota):hp(E.corpo)}), spacing:{after:o.after??120, before:o.before??0, line:nota?240:LINE},
+      alignment:o.align??AlignmentType.JUSTIFIED, keepNext:!!o.keepNext}); };
+  const h1 = (t, sub) => { alinea = 0; return [new Paragraph({heading:HeadingLevel.HEADING_1, children:[new TextRun({text:t.toUpperCase(), font:E.fonte, bold:true, size:hp(E.corpo), color:'000000'})],
+      spacing:{before:360, after:sub?0:120, line:LINE}, keepNext:true}),
+    ...(sub ? [new Paragraph({children:[new TextRun({text:sub, italics:true, font:E.fonte, size:hp(E.corpo), color:'000000'})], spacing:{after:120, line:LINE}, keepNext:true})] : [])]; };
+  const h2 = t => { alinea = 0; return new Paragraph({heading:HeadingLevel.HEADING_2, children:[new TextRun({text:t, font:E.fonte, bold:true, size:hp(E.corpo), color:'000000'})], spacing:{before:240, after:120, line:LINE}, keepNext:true}); };
+  const bl = t => { const l = String.fromCharCode(97 + (alinea++ % 26));
+    return new Paragraph({children:[new TextRun({text:l+') ', font:E.fonte, size:hp(E.corpo), color:'000000'}), ...runs(t,{size:hp(E.corpo)})],
+      indent:{left:cm(1.25), hanging:cm(0.63)}, spacing:{after:80, line:LINE}, alignment:AlignmentType.JUSTIFIED}); };
   const cell = (c, o={}) => {
     const x = (c && c.__c) ? Object.assign({}, o, c) : Object.assign({}, o, {t:c});
-    const paras = String(x.t==null?'':x.t).split('\n').map(line=>new Paragraph({children:runs(line,{bold:x.bold, color:x.color, size:x.size||18}), alignment:x.right?AlignmentType.RIGHT:AlignmentType.LEFT, spacing:{after:0}}));
-    return new TableCell({children:paras, columnSpan:x.span, verticalAlign:VerticalAlign.CENTER, margins:{top:55, bottom:55, left:90, right:90},
-      shading:x.fill?{fill:x.fill, type:ShadingType.CLEAR, color:'auto'}:undefined, width:x.w?{size:x.w, type:WidthType.PERCENTAGE}:undefined});
+    const paras = String(x.t==null?'':x.t).split('\n').map(line=>new Paragraph({children:runs(line,{bold:x.bold, size:hp(E.tabela)}),
+      alignment:x.right?AlignmentType.RIGHT:(x.center?AlignmentType.CENTER:AlignmentType.LEFT), spacing:{after:0, line:240}}));
+    return new TableCell({children:paras, columnSpan:x.span, verticalAlign:VerticalAlign.CENTER, margins:{top:40, bottom:40, left:80, right:80},
+      width:x.w?{size:x.w, type:WidthType.PERCENTAGE}:undefined});
   };
-  const tbl = (head, rows, w, o={}) => new Table({width:{size:100, type:WidthType.PERCENTAGE},
-    borders:{top:B, bottom:B, left:B, right:B, insideHorizontal:B, insideVertical:B},
-    rows:[...(head?[new TableRow({tableHeader:true, cantSplit:true, children:head.map((h,i)=>cell(h,{bold:true, color:'FFFFFF', fill:NAVY, w:w&&w[i], right:(o.right||[]).includes(i)}))})]:[]),
-      ...rows.map((r,ri)=>new TableRow({cantSplit:true, children:r.map((c,i)=>cell(c,{w:w&&w[i], right:(o.right||[]).includes(i), fill:(o.zebra&&ri%2)?'F7F8FC':undefined}))}))]});
-  const kv = pairs => tbl(null, pairs.map(([k,v])=>[{__c:1, t:k, bold:true, color:NAVY, fill:SOFT, size:17}, v]), [30,70]);
-  const box = (titulo, linhas, cor='FFF4EA') => new Table({width:{size:100, type:WidthType.PERCENTAGE},
-    borders:{top:{style:BorderStyle.NONE,size:0,color:'FFFFFF'}, bottom:{style:BorderStyle.NONE,size:0,color:'FFFFFF'}, right:{style:BorderStyle.NONE,size:0,color:'FFFFFF'}, left:{style:BorderStyle.SINGLE,size:24,color:OR}, insideHorizontal:{style:BorderStyle.NONE,size:0,color:'FFFFFF'}, insideVertical:{style:BorderStyle.NONE,size:0,color:'FFFFFF'}},
-    rows:[new TableRow({children:[new TableCell({shading:{fill:cor, type:ShadingType.CLEAR, color:'auto'}, margins:{top:110,bottom:110,left:160,right:160},
-      children:[new Paragraph({children:[new TextRun({text:titulo, bold:true, color:NAVY})], spacing:{after:70}}), ...linhas.map(t=>p(t,{after:60}))]})]})]});
+  const tbl = (head, rows, w, o={}) => { alinea = 0; return new Table({width:{size:100, type:WidthType.PERCENTAGE},
+    borders:{top:PRETO, bottom:PRETO, left:PRETO, right:PRETO, insideHorizontal:PRETO, insideVertical:PRETO},
+    rows:[...(head?[new TableRow({tableHeader:true, cantSplit:true, children:head.map((h,i)=>cell(h,{bold:true, center:true, w:w&&w[i]}))})]:[]),
+      ...rows.map(r=>new TableRow({cantSplit:true, children:r.map((c,i)=>cell(c,{w:w&&w[i], right:(o.right||[]).includes(i)}))}))]}); };
+  const kv = pairs => tbl(null, pairs.map(([k,v])=>[{__c:1, t:k, bold:true}, v]), [30,70]);
+  const box = (titulo, linhas) => { alinea = 0; return new Table({width:{size:100, type:WidthType.PERCENTAGE},
+    borders:{top:PRETO, bottom:PRETO, left:PRETO, right:PRETO, insideHorizontal:PRETO, insideVertical:PRETO},
+    rows:[new TableRow({cantSplit:true, children:[new TableCell({margins:{top:100,bottom:100,left:140,right:140},
+      children:[new Paragraph({children:[new TextRun({text:titulo.toUpperCase(), bold:true, font:E.fonte, size:hp(E.corpo), color:'000000'})], spacing:{after:80, line:LINE}}), ...linhas.map(t=>p(t,{after:60}))]})]})]}); };
   const gap = (n=120) => new Paragraph({children:[], spacing:{after:n}});
-  const assinaturas = () => [gap(300), p(PRE('Local')+', '+PRE('data')+'.',{align:AlignmentType.LEFT}), gap(360),
-    p('_______________________________________',{align:AlignmentType.LEFT, after:0}), p('Equipe de Planejamento da Contratação',{bold:true, align:AlignmentType.LEFT, after:0}), p(PRE('Nome / matrícula / cargo'),{align:AlignmentType.LEFT}), gap(300),
-    p('_______________________________________',{align:AlignmentType.LEFT, after:0}), p('Autoridade competente — aprovação',{bold:true, align:AlignmentType.LEFT, after:0}), p(PRE('Nome / cargo'),{align:AlignmentType.LEFT})];
-  const documento = (titulo, children) => new X.Document({creator:'G3 Health Service', title:titulo, description:'Minuta gerada pelo painel Inclusi.Via — Ref. '+ctx.ref,
-    styles:{default:{document:{run:{font:'Calibri', size:21, color:'1B2240'}}, heading1:{run:{font:'Calibri', size:27, bold:true, color:NAVY}}, heading2:{run:{font:'Calibri', size:22, bold:true, color:NAVY}}}},
-    sections:[{properties:{page:{margin:{top:1134, bottom:1134, left:1247, right:1134}}},
-      headers:{default:new X.Header({children:[new Paragraph({alignment:AlignmentType.RIGHT, children:[new TextRun({text:sigla+' · MINUTA · '+ctx.label, size:16, color:MUT})]})]})},
-      footers:{default:new X.Footer({children:[new Paragraph({alignment:AlignmentType.CENTER, children:[new TextRun({text:'Ref. '+ctx.ref+'  ·  Lei nº 14.133/2021  ·  ', size:16, color:MUT}), new TextRun({children:['Página ', X.PageNumber.CURRENT, ' de ', X.PageNumber.TOTAL_PAGES], size:16, color:MUT})]})]})},
+  const centro = (t, o={}) => new Paragraph({children:runs(t,{...o, size:hp(E.corpo)}), alignment:AlignmentType.CENTER, spacing:{after:o.after??0, line:LINE}});
+  const assinaturas = () => [gap(240), p(PRE('Local')+', '+PRE('data')+'.',{align:AlignmentType.RIGHT}), gap(480),
+    centro('_______________________________________'), centro('Equipe de Planejamento da Contratação',{bold:true}), centro(PRE('Nome / matrícula / cargo'),{after:480}),
+    centro('_______________________________________'), centro('Autoridade competente — aprovação',{bold:true}), centro(PRE('Nome / cargo'))];
+  const documento = (titulo, children) => new X.Document({creator:'G3 Health Service', title:titulo, description:'Minuta — Ref. '+ctx.ref,
+    styles:{default:{document:{run:{font:E.fonte, size:hp(E.corpo), color:'000000'}, paragraph:{spacing:{line:LINE}}},
+      heading1:{run:{font:E.fonte, size:hp(E.corpo), bold:true, color:'000000'}}, heading2:{run:{font:E.fonte, size:hp(E.corpo), bold:true, color:'000000'}}}},
+    sections:[{properties:{page:{margin:{top:cm(E.margem.sup), left:cm(E.margem.esq), bottom:cm(E.margem.inf), right:cm(E.margem.dir), header:cm(1.25), footer:cm(1.0)}}},
+      headers:{default:new X.Header({children:[
+        new Paragraph({alignment:AlignmentType.CENTER, spacing:{after:0}, children:[new TextRun({text:ctx.orgao.toUpperCase(), bold:true, font:E.fonte, size:hp(E.cabecalho), color:'000000'})]}),
+        new Paragraph({alignment:AlignmentType.CENTER, spacing:{after:120}, border:{bottom:{style:BorderStyle.SINGLE, size:6, color:'000000', space:4}},
+          children:[new TextRun({text:titulo.split(' — ')[0]+' — Minuta', font:E.fonte, size:hp(E.cabecalho), color:'000000'})]})]})},
+      footers:{default:new X.Footer({children:[new Paragraph({alignment:AlignmentType.CENTER, children:[
+        new TextRun({text:'Ref. '+ctx.ref+'   ·   ', font:E.fonte, size:hp(E.nota), color:'000000'}),
+        new TextRun({children:['Página ', X.PageNumber.CURRENT, ' de ', X.PageNumber.TOTAL_PAGES], font:E.fonte, size:hp(E.nota), color:'000000'})]})]})},
       children}]});
   const capa = (rotulo, titulo, subtitulo, pares) => [
-    p(rotulo,{bold:true, color:OR, size:18, align:AlignmentType.LEFT, after:60}),
-    new Paragraph({children:[new TextRun({text:titulo, bold:true, size:40, color:NAVY})], spacing:{after:100}}),
-    p(subtitulo,{size:23, color:MUT, align:AlignmentType.LEFT, after:220}), kv(pares), gap(160)];
+    centro('**'+titulo.replace(/ — (ETP|TR)$/,' ($1)').toUpperCase()+'**'), centro('(MINUTA)',{after:240}),
+    p('**Objeto:** '+subtitulo, {after:200}), kv(pares), gap(200)];
   return {X, p, h1, h2, bl, tbl, kv, box, gap, assinaturas, documento, capa, NAVY, SOFT};
 }
 function paresCapa(ctx, fundamento, extra){
