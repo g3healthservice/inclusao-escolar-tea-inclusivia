@@ -79,8 +79,8 @@ function memo(l, d){
   const aj = l.q!==l.qa ? ' Quantidade ajustada manualmente para '+num(l.q)+' (cálculo-padrão: '+num(l.qa)+').' : '';
   const nEq = Math.ceil(d.acomp/P.alunosEquipe);
   const m = {
-    esc:int(d.escolas)+' unidades escolares — estimativa de '+int(d.acomp)+' educandos ÷ '+num(P.alunosEsc,1)+' por unidade. Confirmar no Censo Escolar.',
-    edu:int(d.acomp)+' educandos = '+int(d.recorte)+' no recorte etário × '+num(P.rede,1)+'% em rede pública × fator '+num(P.aee,2)+' (público do AEE) × '+num(P.adesao,1)+'% de adesão.',
+    esc:d.censo ? int(d.escolas)+' escolas da rede '+esfAdj()+' com matrículas da educação especial (INEP, Censo Escolar 2025).' : int(d.escolas)+' unidades escolares — estimativa de '+int(d.acomp)+' educandos ÷ '+num(P.alunosEsc,1)+' por unidade. Confirmar no Censo Escolar.',
+    edu:d.censo ? int(d.acomp)+' educandos = '+int(d.rede)+' matrículas da educação especial na rede '+esfAdj()+' (INEP, Censo Escolar 2025) × '+num(P.adesao,1)+'% de adesão.' : int(d.acomp)+' educandos = '+int(d.recorte)+' no recorte etário × '+num(P.rede,1)+'% em rede pública × fator '+num(P.aee,2)+' (público do AEE) × '+num(P.adesao,1)+'% de adesão.',
     sau:int(d.profs)+' profissionais — '+num(P.profEsc,1)+' por unidade escolar. Confirmar com a Saúde (AEE, CER, RAPS, eMulti).',
     fam:num(P.familia,1)+'% dos educandos acompanhados (fator de irmandade).',
     pai:'1 licença por órgão demandante'+(d.entes>1?' ('+d.entes+' entes)':'')+'.',
@@ -126,8 +126,8 @@ function montarLotes(C){
 }
 function participantes(){
   if(S.tipo!=='cons') return [];
-  return S.cons.map(i=>{ const d=dims([M[i][3],M[i][4],M[i][5],M[i][6]],1); const t=somar(linhas(d,false).filter(incluido));
-    return {nome:M[i][2]+'/'+M[i][1], cod:M[i][0], total:d.total, recorte:d.recorte, acomp:d.acomp, clin:d.clin, ano:t.ano}; });
+  return S.cons.map(i=>{ const d=dims([M[i][3],M[i][4],M[i][5],M[i][6]],1,ceInfo([i],'mun')); const t=somar(linhas(d,false).filter(incluido));
+    return {nome:M[i][2]+'/'+M[i][1], cod:M[i][0], total:d.total, recorte:d.recorte, rede:d.rede, acomp:d.acomp, clin:d.clin, ano:t.ano}; });
 }
 function objetoPartes(L){
   const cams = new Set(L.flatMap(x=>x.itens.map(i=>i.cam)));
@@ -144,7 +144,7 @@ function ctxDoc(){
   return {C, d:C.d, L, label:enteLabel(), orgao:orgaoDemandante(), esfera:esferaTxt(), modo:docModo(), dem:docDem(), vig:S.vig,
     ref:refCode(), data:dataExt(), recorteTxt: S.preset==='custom'?'recorte etário personalizado':pr.t, part:participantes(),
     total:r2(L.reduce((a,x)=>a+x.vig,0)), ano:r2(L.reduce((a,x)=>a+x.ano,0)), nr:r2(L.reduce((a,x)=>a+x.nr,0)),
-    cams:new Set(C.inc.map(l=>l.cam)), partes:objetoPartes(L), slug:slug(enteLabel())};
+    cams:new Set(C.inc.map(l=>l.cam)), partes:objetoPartes(L), slug:slug(enteLabel()), gasto:gastoEnte()};
 }
 
 /* =====================================================================
@@ -202,7 +202,7 @@ async function gerarXlsx(ctx){
   title(w1,'A28','D. ESTRUTURA DA REDE (editáveis — confirmar no Censo Escolar)');
   hdr(w1,29,['Parâmetro','Valor','Observação']);
   const nEq = d.acomp? Math.ceil(d.acomp/P.alunosEquipe):0;
-  const est = [['Unidades escolares com educandos atendidos',d.escolas,'int','A CONFIRMAR. Estimativa: '+int(d.acomp)+' educandos ÷ '+num(P.alunosEsc,1)+' por unidade (calibração Guarujá).'],
+  const est = [['Unidades escolares com educandos atendidos',d.escolas,'int',d.censo?'Censo Escolar 2025: escolas da rede com educação especial (célula B62).':'A CONFIRMAR. Estimativa: '+int(d.acomp)+' educandos ÷ '+num(P.alunosEsc,1)+' por unidade (calibração Guarujá).'],
     ['Profissionais da educação a capacitar',d.escolas*P.partEsc,'int','A CONFIRMAR. '+num(P.partEsc)+' por unidade: regentes, AEE, coordenação e gestão.'],
     ['Profissionais de saúde com acesso ao módulo',d.profs,'int','A CONFIRMAR. Rede municipal e conveniada que atende o público-alvo.'],
     ['Participantes por turma de formação',20,'int','Limite pedagógico usual e adotado na ARP 045/2026 do CIMINAS.'],
@@ -221,6 +221,14 @@ async function gerarXlsx(ctx){
   put(w1,'A52','Vigência do contrato (meses)'); put(w1,'B52',S.vig,{inp:true,fmt:'int'}); put(w1,'C52','Serviço contínuo: até 5 anos (arts. 106 e 107 da Lei nº 14.133/2021).');
   put(w1,'A53','Escopo adotado'); put(w1,'B53',S.cen==='P'?'Personalizado':'Cenário '+S.cen); put(w1,'C53','Itens da proposta marcados com 1 na coluna G da aba 3 e na célula F16 da aba 4.');
   put(w1,'A54','Tipo de contratação'); put(w1,'B54',MODOS[ctx.modo].t,{wrap:true}); put(w1,'C54','Órgão demandante: '+ctx.orgao,{wrap:true});
+  const est8 = redeKey()==='est', ceX = C.ceAll || {tot:0,rede:0,tea:0,esc:0};
+  title(w1,'A56','G. CENSO ESCOLAR 2025 — EDUCAÇÃO ESPECIAL (INEP, Sinopse Estatística; dado oficial, somado da aba 8)');
+  hdr(w1,57,['Indicador','Valor','Observação']);
+  put(w1,'A58','Base do público adotada (digite CENSO ou IBGE)'); put(w1,'B58',d.censo?'CENSO':'IBGE',{inp:true}); put(w1,'C58','CENSO: matrículas reais da educação especial na rede do ente. IBGE: pessoas com TEA × % de rede × fator AEE (seções B e C).',{wrap:true});
+  put(w1,'A59','Matrículas da educação especial — todas as redes'); put(w1,'B59',fx(`SUM('8. Municipios'!I${mR0}:I${mR1})`,ceX.tot),{fmt:'int'}); put(w1,'C59','Sinopse Estatística 2025, tabela 1.56');
+  put(w1,'A60','Matrículas da educação especial na rede '+esfAdj()+' do ente',{bold:true}); put(w1,'B60',fx(`SUM('8. Municipios'!${est8?'K':'J'}${mR0}:${est8?'K':'J'}${mR1})`,ceX.rede),{fmt:'int',bold:true}); put(w1,'C60','Sinopse Estatística 2025, tabela 1.56 — base do cálculo quando B58 = CENSO');
+  put(w1,'A61','Estudantes com TEA — todas as redes'); put(w1,'B61',fx(`SUM('8. Municipios'!L${mR0}:L${mR1})`,ceX.tea),{fmt:'int'}); put(w1,'C61','Sinopse Estatística 2025, tabela 1.58');
+  put(w1,'A62','Escolas da rede '+esfAdj()+' com educação especial'); put(w1,'B62',fx(`SUM('8. Municipios'!${est8?'N':'M'}${mR0}:${est8?'N':'M'}${mR1})`,ceX.esc),{fmt:'int'}); put(w1,'C62','Sinopse Estatística 2025, tabela 3.45 — referência para a célula B30');
 
   /* ---- 2. Dimensionamento ---- */
   const w2 = wb.addWorksheet('2. Dimensionamento', {properties:{tabColor:{argb:'FF3A4FA8'}}});
@@ -229,8 +237,8 @@ async function gerarXlsx(ctx){
   put(w2,'A2','Todos os valores derivam da aba 1. Alterar os parâmetros lá, não aqui.');
   hdr(w2,4,['Etapa do dimensionamento','Alunos','Cálculo']);
   [['Pessoas com TEA no recorte adotado (Censo 2022)',P1+'C18',d.recorte,'Base populacional oficial — '+ctx.recorteTxt],
-   ['Em rede pública',`ROUND(B5*${P1}$B$22,0)`,d.rede,'Aplicado o percentual de rede'],
-   ['Ampliado para o público-alvo do AEE',`ROUND(B6*${P1}$B$23,0)`,d.aee,'Inclui demais deficiências, TGD e altas habilidades'],
+   ['Em rede pública (IBGE) ou matrículas da educação especial na rede (Censo Escolar)',`IF(${P1}$B$58="CENSO",${P1}$B$60,ROUND(B5*${P1}$B$22,0))`,d.rede,'CENSO: matrículas reais (aba 1, B60). IBGE: percentual de rede (aba 1, B22)'],
+   ['Público-alvo do AEE',`IF(${P1}$B$58="CENSO",B6,ROUND(B6*${P1}$B$23,0))`,d.aee,'CENSO: já inclui todas as deficiências. IBGE: fator de ampliação (aba 1, B23)'],
    ['Com adesão efetiva ao programa',`ROUND(B7*${P1}$B$24,0)`,d.acomp,'PÚBLICO ATENDIDO PELA PLATAFORMA'],
    ['Público que recebe o pacote clínico',`ROUND(B8*${P1}$B$25,0)`,d.clin,'Aplica o percentual clínico da aba 1']]
    .forEach((x,i)=>{ const r=5+i, key=(r===8); put(w2,'A'+r,x[0],{bold:key,tot:key}); put(w2,'B'+r,fx(x[1],x[2]),{fmt:'int',bold:key,tot:key}); put(w2,'C'+r,x[3],{bold:key,tot:key}); });
@@ -319,6 +327,16 @@ async function gerarXlsx(ctx){
    ['VALOR TOTAL DO PROJETO','B25+B26*B27/12',C.total,'Não recorrente + recorrente × vigência/12'],
    ['Por estudante/mês',`IFERROR(B28/${P2}B8/B27,0)`,d.acomp?C.total/d.acomp/S.vig:0,'Sobre o público acompanhado']]
    .forEach((x,i)=>{ const r=24+i, key=(r===28); put(w5,'A'+r,x[0],{bold:key,tot:key}); put(w5,'B'+r,fx(x[1],x[2]),{fmt:r===27?'int':'money',bold:key,tot:key}); put(w5,'C'+r,x[3],{tot:key}); });
+  title(w5,'A31','REFERÊNCIA — GASTO ATUAL COM EDUCAÇÃO ESPECIAL (Tesouro Nacional, SICONFI — DCA Anexo I-E)');
+  hdr(w5,32,['Indicador','Valor','Fonte / cálculo']);
+  const G = ctx.gasto;
+  if(G.emp>0){
+    put(w5,'A33','Despesa empenhada — subfunção 12.367 Educação Especial'); put(w5,'B33',G.emp,{fmt:'money'}); put(w5,'C33','Exercício '+G.anos.join(' e ')+(G.n>1?' — soma de '+G.com+' de '+G.n+' municípios':''));
+    put(w5,'A34','Despesa empenhada — função 12 Educação'); put(w5,'B34',G.edu,{fmt:'money'}); put(w5,'C34','Mesmo exercício');
+    put(w5,'A35','Educação Especial sobre a despesa com Educação'); put(w5,'B35',fx('IFERROR(B33/B34,0)',G.edu?G.emp/G.edu:0),{fmt:'0.0%'}); put(w5,'C35','B33 ÷ B34');
+    put(w5,'A36','Escopo da proposta (1º ano) sobre o gasto atual',{bold:true,tot:true}); put(w5,'B36',fx('IFERROR(B24/B33,0)',C.t.ano/G.emp),{fmt:'0.0%',bold:true,tot:true}); put(w5,'C36','B24 ÷ B33',{tot:true});
+    put(w5,'A37','Parte da despesa com o público pode estar em outras subfunções (ensino fundamental, educação infantil).',{it:true});
+  } else put(w5,'A33','Sem despesa registrada na subfunção 12.367 nas contas anuais disponíveis deste ente.',{it:true});
 
   /* ---- 6 e 7. Anexos estáticos ---- */
   ['6. Canabidiol','7. Fontes'].forEach(nome=>{
@@ -331,14 +349,14 @@ async function gerarXlsx(ctx){
 
   /* ---- 8. Municipios ---- */
   const w8 = wb.addWorksheet('8. Municipios', {properties:{tabColor:{argb:'FF8A90AE'}}});
-  w8.columns=[{width:14},{width:6},{width:34},{width:12},{width:12},{width:13},{width:13},{width:14}];
-  title(w8,'A1','BASE MUNICIPAL — PESSOAS COM TEA POR FAIXA ETÁRIA (IBGE, Censo 2022, SIDRA 10145)');
+  w8.columns=[{width:14},{width:6},{width:34},{width:12},{width:12},{width:13},{width:13},{width:14},{width:16},{width:16},{width:16},{width:14},{width:16},{width:16}];
+  title(w8,'A1','BASE MUNICIPAL — IBGE, Censo 2022 (SIDRA 10145) e INEP, Censo Escolar 2025 (Sinopse Estatística, tabelas 1.56, 1.58 e 3.45)');
   put(w8,'A2','Municípios que compõem o ente desta memória. A aba 1 soma estas linhas.');
-  hdr(w8,4,['Código IBGE','UF','Município','0 a 4 anos','5 a 9 anos','10 a 14 anos','15 a 19 anos','Total 0 a 19']);
-  idx.forEach((i,k)=>{ const r=5+k, m=M[i]; w8.getRow(r).values=[m[0],m[1],m[2],m[3],m[4],m[5],m[6],{formula:`SUM(D${r}:G${r})`,result:m[3]+m[4]+m[5]+m[6]}];
-    w8.getRow(r).eachCell(c=>{ c.font={name:F,size:11}; }); ['D','E','F','G','H'].forEach(col=>w8.getCell(col+r).numFmt=FM.int); });
+  hdr(w8,4,['Código IBGE','UF','Município','TEA 0 a 4 (IBGE)','TEA 5 a 9 (IBGE)','TEA 10 a 14 (IBGE)','TEA 15 a 19 (IBGE)','TEA 0 a 19 (IBGE)','Ed. especial — total (INEP)','Ed. especial — rede municipal','Ed. especial — rede estadual','TEA matriculados (INEP)','Escolas municipais c/ ed. esp.','Escolas estaduais c/ ed. esp.']);
+  idx.forEach((i,k)=>{ const r=5+k, m=M[i]; const cv=CE[m[0]]||new Array(15).fill(0); w8.getRow(r).values=[m[0],m[1],m[2],m[3],m[4],m[5],m[6],{formula:`SUM(D${r}:G${r})`,result:m[3]+m[4]+m[5]+m[6]},cv[0],cv[3],cv[2],cv[5],cv[13],cv[12]];
+    w8.getRow(r).eachCell(c=>{ c.font={name:F,size:11}; }); ['D','E','F','G','H','I','J','K','L','M','N'].forEach(col=>w8.getCell(col+r).numFmt=FM.int); });
   const rt = mR1+1; put(w8,'C'+rt,'TOTAL',{tot:true,bold:true});
-  ['D','E','F','G','H'].forEach((col,k)=>put(w8,col+rt,fx(`SUM(${col}${mR0}:${col}${mR1})`,k<4?b[k]:d.total),{tot:true,bold:true,fmt:'int'}));
+  ['D','E','F','G','H','I','J','K','L','M','N'].forEach((col,k)=>put(w8,col+rt,fx(`SUM(${col}${mR0}:${col}${mR1})`,undefined),{tot:true,bold:true,fmt:'int'}));
   w8.views=[{state:'frozen',ySplit:4}];
 
   wb.worksheets.forEach(ws=>{ ws.pageSetup={paperSize:9, orientation:'landscape', fitToPage:true, fitToWidth:1, fitToHeight:0}; });
@@ -443,8 +461,9 @@ async function gerarETP(ctx){
     cadeiaTxt(ctx,'ETP')]));
 
   c.push(...h1('I — Descrição da necessidade pública','(art. 18, § 1º, I)'), h2('I.1. O problema a ser resolvido'));
-  c.push(p('Segundo o Censo Demográfico 2022 (IBGE, SIDRA 10145), '+oEnte()+' registra **'+int(d.total)+' pessoas de 0 a 19 anos com diagnóstico de transtorno do espectro autista** informado por profissional de saúde, das quais '+int(d.recorte)+' no recorte etário de '+ctx.recorteTxt+'. Aplicados os parâmetros de rede pública, de ampliação para o público-alvo do AEE e de adesão detalhados no item IV, estima-se em **'+int(d.acomp)+' educandos** o público a ser acompanhado na '+redeTxt()+'.'));
-  c.push(p('A '+redeTxt()+' atende '+PRE('nº')+' matrículas na educação básica, das quais '+PRE('nº')+' na educação especial (Censo Escolar '+PRE('ano')+'). O atendimento a esse público hoje se dá de forma fragmentada: a escola registra avaliações e planos em documentos físicos ou planilhas isoladas; a rede de saúde produz laudos e relatórios terapêuticos que raramente chegam ao professor; e a família, que detém a observação mais contínua do desenvolvimento, não dispõe de canal estruturado para contribuir nem para acompanhar. O resultado é conhecido e mensurável:'));
+  if(d.censo) c.push(p('Segundo o Censo Escolar 2025 (INEP), '+oEnte()+' registra **'+int(d.ce.tot)+' matrículas na educação especial**, das quais **'+int(d.rede)+' na '+redeTxt()+'** e '+int(d.ce.tea)+' de estudantes com transtorno do espectro autista (todas as redes), distribuídas em '+int(d.ce.esc)+' escolas da rede com esse público. Aplicada a taxa de adesão detalhada no item IV, estima-se em **'+int(d.acomp)+' educandos** o público a ser acompanhado. Como referência, o Censo Demográfico 2022 (IBGE) registra '+int(d.total)+' pessoas de 0 a 19 anos com diagnóstico de TEA no território.'));
+  else c.push(p('Segundo o Censo Demográfico 2022 (IBGE, SIDRA 10145), '+oEnte()+' registra **'+int(d.total)+' pessoas de 0 a 19 anos com diagnóstico de transtorno do espectro autista** informado por profissional de saúde, das quais '+int(d.recorte)+' no recorte etário de '+ctx.recorteTxt+'. Aplicados os parâmetros de rede pública, de ampliação para o público-alvo do AEE e de adesão detalhados no item IV, estima-se em **'+int(d.acomp)+' educandos** o público a ser acompanhado na '+redeTxt()+'.'));
+  c.push(p((d.censo ? 'A '+redeTxt()+' atende '+PRE('nº')+' matrículas na educação básica (Censo Escolar 2025). O atendimento' : 'A '+redeTxt()+' atende '+PRE('nº')+' matrículas na educação básica, das quais '+PRE('nº')+' na educação especial (Censo Escolar '+PRE('ano')+'). O atendimento')+' a esse público hoje se dá de forma fragmentada: a escola registra avaliações e planos em documentos físicos ou planilhas isoladas; a rede de saúde produz laudos e relatórios terapêuticos que raramente chegam ao professor; e a família, que detém a observação mais contínua do desenvolvimento, não dispõe de canal estruturado para contribuir nem para acompanhar. O resultado é conhecido e mensurável:'));
   ['Plano Educacional Individualizado inexistente, desatualizado ou meramente formal, elaborado sem a informação clínica disponível e sem revisão periódica documentada.',
    'Retrabalho e descontinuidade terapêutica — a intervenção realizada no consultório não se reflete na rotina escolar, e o professor não é informado de mudanças no quadro clínico do educando.',
    'Perda de histórico nas transições — troca de professor, mudança de unidade ou passagem entre etapas implicam recomeço do processo de conhecimento do educando.',
@@ -492,18 +511,27 @@ async function gerarETP(ctx){
 
   c.push(...h1('IV — Estimativa das quantidades','(art. 18, § 1º, IV)'));
   c.push(p('As quantidades foram dimensionadas pelo público efetivamente atendido pela educação especial, e não pela matrícula total — critério tecnicamente mais defensável, que reduz o valor global e evita questionamento por superdimensionamento. A memória completa, com fórmulas, integra este ETP como **Anexo I — Memória de cálculo**.'));
-  c.push(h2('IV.1. Base populacional — Censo 2022'));
-  const sr = d.rec.reduce((a,x)=>a+x,0)||1;
-  c.push(tbl(['Faixa etária','Etapa de ensino','Pessoas com TEA','% no recorte','No recorte','Acompanhados'],
-    FAIXAS.map((f,k)=>[f.k, f.etapa, int(d.b[k]), num(S.f[k]*100,0)+'%', int(d.rec[k]), int(Math.round(d.acomp*d.rec[k]/sr))]).concat([[{__c:1,t:'Total',bold:true},'',{__c:1,t:int(d.total),bold:true},'',{__c:1,t:int(d.recorte),bold:true},{__c:1,t:int(d.acomp),bold:true}]]),
-    [16,32,14,12,12,14],{right:[2,3,4,5]}));
-  c.push(h2('IV.2. Do total populacional ao público atendido'));
-  c.push(tbl(['Etapa','Educandos','Parâmetro aplicado'],[
-    ['Pessoas com TEA no recorte etário',int(d.recorte),'IBGE, Censo 2022 — distribuição uniforme dentro da faixa quinquenal'],
-    ['Em rede pública',int(d.rede),num(P.rede,1)+'% — a confirmar no Censo Escolar'],
-    ['Ampliado para o público-alvo do AEE',int(d.aee),'Fator '+num(P.aee,2)+' — demais deficiências, TGD e altas habilidades'],
-    ['Com adesão efetiva',{__c:1,t:int(d.acomp),bold:true},num(P.adesao,1)+'% — recusa familiar e perda de seguimento'],
-    ...(ctx.cams.has('C')?[['Com atendimento clínico',int(d.clin),num(P.clin,1)+'% do público acompanhado — parâmetro de política']]:[])],[40,16,44],{right:[1]}));
+  if(d.censo){
+    c.push(h2('IV.1. Base do público — Censo Escolar 2025 (INEP)'));
+    c.push(tbl(['Indicador','Quantidade','Fonte'],[
+      ['Matrículas da educação especial — todas as redes',int(d.ce.tot),'Sinopse Estatística 2025, tab. 1.56'],
+      ['Rede municipal / estadual / privada',int(d.ce.mun)+' / '+int(d.ce.est)+' / '+int(d.ce.priv),'Sinopse Estatística 2025, tab. 1.56'],
+      [{__c:1,t:'Matrículas na '+redeTxt()+' (base do cálculo)',bold:true},{__c:1,t:int(d.rede),bold:true},'Sinopse Estatística 2025, tab. 1.56'],
+      ['Estudantes com TEA — todas as redes',int(d.ce.tea),'Sinopse Estatística 2025, tab. 1.58'],
+      ['Deficiência intelectual / física / múltipla',int(d.ce.di)+' / '+int(d.ce.fis)+' / '+int(d.ce.mult),'Sinopse Estatística 2025, tab. 1.58'],
+      ['Escolas da rede com educação especial',int(d.ce.esc),'Sinopse Estatística 2025, tab. 3.45'],
+      ['Referência: pessoas de 0 a 19 anos com TEA',int(d.total),'IBGE, Censo Demográfico 2022, SIDRA 10145']],[46,20,34],{right:[1]}));
+    c.push(p('As matrículas do Censo Escolar já compõem o público-alvo do AEE — todas as deficiências, TEA e altas habilidades — na rede do ente, dispensando os percentuais de rede e o fator de ampliação usados na estimativa populacional. Um estudante pode ter mais de um tipo registrado.',{size:18, before:60}));
+  } else {
+    c.push(h2('IV.1. Base populacional — Censo 2022'));
+    const sr = d.rec.reduce((a,x)=>a+x,0)||1;
+    c.push(tbl(['Faixa etária','Etapa de ensino','Pessoas com TEA','% no recorte','No recorte','Acompanhados'],
+      FAIXAS.map((f,k)=>[f.k, f.etapa, int(d.b[k]), num(S.f[k]*100,0)+'%', int(d.rec[k]), int(Math.round(d.acomp*d.rec[k]/sr))]).concat([[{__c:1,t:'Total',bold:true},'',{__c:1,t:int(d.total),bold:true},'',{__c:1,t:int(d.recorte),bold:true},{__c:1,t:int(d.acomp),bold:true}]]),
+      [16,32,14,12,12,14],{right:[2,3,4,5]}));
+  }
+  c.push(h2(d.censo ? 'IV.2. Das matrículas ao público atendido' : 'IV.2. Do total populacional ao público atendido'));
+  c.push(tbl(['Etapa','Educandos','Parâmetro aplicado'], funil(d).filter((x,k,a)=>ctx.cams.has('C') || k<a.length-1)
+    .map(x=>[x[0], /^Acompanhados/.test(x[0]) ? {__c:1,t:int(x[1]),bold:true} : int(x[1]), x[2]]),[40,16,44],{right:[1]}));
   c.push(h2('IV.3. Itens, quantidades e memória de cálculo'));
   c.push(tbl(['#','Item','Unidade','Qtd. (ano 1)','Memória de cálculo'], tabelaItens(K, L, [{v:x=>String(x.n)},{v:x=>x.desc},{v:x=>x.un},{v:x=>({__c:1,t:num(x.q),right:true})},{v:x=>x.memo}]), [5,33,13,11,38]));
   if(ctx.part.length){ c.push(h2('IV.4. Estimativa por município participante'));
@@ -538,6 +566,11 @@ async function gerarETP(ctx){
   c.push(h2('VI.4. Síntese do valor'));
   c.push(K.kv([['Valor do primeiro ano',brl(ctx.ano)],['Parcela não recorrente',brl(ctx.nr)],['Parcela recorrente anual',brl(ctx.ano-ctx.nr)],['Vigência considerada',ctx.vig+' meses'],['VALOR ESTIMADO PARA A VIGÊNCIA','**'+brl(ctx.total)+'**'],['Custo por educando/mês',brl(d.acomp?ctx.total/d.acomp/ctx.vig:0)]]));
   c.push(p('O detalhamento dos preços unitários poderá ter caráter sigiloso, nos termos do art. 24 da Lei nº 14.133/2021.',{size:18, before:80}));
+  if(ctx.gasto.emp>0){
+    c.push(h2('VI.5. Comparação com a despesa atual em Educação Especial'));
+    c.push(p('Segundo a Declaração de Contas Anuais enviada ao Tesouro Nacional (SICONFI, Anexo I-E), '+oEnte()+' empenhou **'+brl(ctx.gasto.emp)+'** na subfunção 12.367 — Educação Especial em '+ctx.gasto.anos.join(' e ')+', o equivalente a '+num(ctx.gasto.edu?ctx.gasto.emp/ctx.gasto.edu*100:0,1)+'% da despesa com a função Educação. O valor do primeiro ano da contratação ('+brl(ctx.ano)+') corresponde a **'+num(ctx.ano/ctx.gasto.emp*100,1)+'%** dessa despesa, o que demonstra a compatibilidade da contratação com a capacidade orçamentária já alocada ao público e reforça sua economicidade, por organizar e qualificar gasto já existente.'));
+    c.push(p('Parte da despesa com o público da educação especial pode estar classificada em outras subfunções (ensino fundamental, educação infantil), de modo que o gasto efetivo tende a ser maior que o registrado na subfunção 12.367.',{size:18}));
+  }
 
   c.push(...h1('VII — Descrição da solução como um todo','(art. 18, § 1º, VII)'));
   c.push(p('A solução é descrita em seu ciclo de vida completo, e não apenas no momento da entrega do software. O que o ente contrata é a coordenação do desenvolvimento de cada educando; a plataforma é o instrumento.'));
@@ -615,7 +648,7 @@ async function gerarTR(ctx){
 
   c.push(...h1('2. Da fundamentação da contratação','(art. 6º, XXIII, "b")'));
   c.push(p('A contratação fundamenta-se no dever legal de garantir acompanhamento integral aos educandos com transtornos de aprendizagem e ao público-alvo da educação especial (Lei nº 14.254/2021; Lei nº 13.146/2015, art. 28; Lei nº 12.764/2012; Lei nº 9.394/1996, arts. 58 a 60; Decreto nº 7.611/2011; Resolução CNE/CEB nº 4/2009).'));
-  c.push(p('O ETP demonstrou que o modelo atual não atende àquelas obrigações e dimensionou o público em **'+int(d.acomp)+' educandos** ('+ctx.label+', Censo 2022, '+ctx.recorteTxt+'). Foram descartadas fundamentadamente a manutenção da situação atual, o desenvolvimento interno, a ampliação do sistema de gestão escolar e a aquisição de licença isolada, sem serviço. A contratação consta do PCA sob o item '+(S.doc.pca.trim()||PRE())+'.'));
+  c.push(p('O ETP demonstrou que o modelo atual não atende àquelas obrigações e dimensionou o público em **'+int(d.acomp)+' educandos** ('+ctx.label+', '+(d.censo?'Censo Escolar 2025 — matrículas da educação especial na '+redeTxt():'Censo 2022, '+ctx.recorteTxt)+'). Foram descartadas fundamentadamente a manutenção da situação atual, o desenvolvimento interno, a ampliação do sistema de gestão escolar e a aquisição de licença isolada, sem serviço. A contratação consta do PCA sob o item '+(S.doc.pca.trim()||PRE())+'.'));
 
   c.push(...h1('3. Da descrição da solução como um todo','(art. 6º, XXIII, "c")'));
   const comp=[['Núcleo de integração e inteligência','Base única por educando; base estruturada de conhecimento pedagógico, clínico e legal; IA para recomendação de estratégias e geração assistida do plano.'],['Módulo Escola','Ciclo completo do PEI com homologação humana e controle de prazos legais.'],['Módulo Saúde','Acesso controlado de profissionais de saúde, com condutas, metas terapêuticas e devolutivas.'],['Módulo Família','Observações do cotidiano, evolução e orientação domiciliar.'],['Painel de governança','Indicadores agregados para a Secretaria e prestação de contas.'],['Serviços','Implantação faseada, integração, formação certificada por perfil, supervisão multiprofissional e suporte por níveis de serviço.']];

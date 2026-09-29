@@ -4,6 +4,8 @@
 Entradas:
   template.html                          layout + lógica (placeholders __X__)
   dados/tea_municipios_censo2022.json    [codIBGE, UF, nome, 0-4, 5-9, 10-14, 15-19]
+  dados/censo_escolar_2025.json          educação especial por município (INEP) — importar_censo_escolar.py
+  dados/siconfi_educacao_especial.json   gasto com Educação Especial por ente (Tesouro) — coleta_siconfi.py
   vendor/*.js                            Chart.js, jsPDF, jsPDF-AutoTable
   mail_endpoint.txt / mail_token.txt     (opcionais) Apps Script de envio de e-mail
 
@@ -58,6 +60,8 @@ def main():
                  "__MAIL_ENDPOINT__": endpoint, "__MAIL_TOKEN__": token}.items():
         html = html.replace(k, v)
     html = html.replace("__DATA__", dados)
+    html = html.replace("__CENSO__", ler_opcional("dados/censo_escolar_2025.json") or "{}")
+    html = html.replace("__SICONFI__", ler_opcional("dados/siconfi_educacao_especial.json") or "{}")
     html = html.replace("__CHARTJS__", lib("chart.umd.js"))
     html = html.replace("__JSPDF__", lib("jspdf.umd.min.js"))
     html = html.replace("__AUTOTABLE__", lib("jspdf.plugin.autotable.min.js"))

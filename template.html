@@ -249,6 +249,25 @@ details.prem summary{cursor:pointer;padding:12px 16px;font-weight:650;color:var(
 .rscroll.open{max-height:480px;overflow:auto}
 .rscroll.open thead th{position:sticky;top:0;background:#fff;z-index:1}
 
+/* base do público e quadro do Censo Escolar */
+.basesel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.bs{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:11px 14px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.bs b{display:block;font-size:14px;color:var(--navy)}
+.bs span{font-size:12px;color:var(--muted)}
+.bs.on{border-color:var(--teal);background:#F1FAF8;box-shadow:0 0 0 3px rgba(14,148,136,.14)}
+.cebox{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#FBFCFF;margin-bottom:6px}
+.cebox .cg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:8px 0 12px}
+.cebox .cs{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.cebox .cs b{display:block;font-size:19px;color:var(--navy);font-variant-numeric:tabular-nums}
+.cebox .cs span{font-size:11.5px;color:var(--muted)}
+.cebox .cs.hl{border-color:var(--teal);background:#F1FAF8}
+.cebox .cs.hl b{color:var(--teal)}
+.tipos .hb{display:grid;grid-template-columns:minmax(160px,1fr) 2fr 70px;gap:10px;align-items:center;font-size:12.5px;margin:4px 0}
+.tipos .bar{height:14px;background:var(--soft);border-radius:4px;overflow:hidden}
+.tipos .bar i{display:block;height:100%;background:var(--c4);border-radius:4px}
+.tipos .v{text-align:right;font-weight:650;font-variant-numeric:tabular-nums}
+.gasto{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px}
+@media (max-width:760px){ .basesel,.cebox .cg,.gasto{grid-template-columns:1fr 1fr} .tipos .hb{grid-template-columns:1fr 1.3fr 58px} }
 /* módulo de proposta em destaque */
 #proposta{background:linear-gradient(180deg,#FFF4EA 0%,#FDF8F3 55%,#F7F3FB 100%);border-top:4px solid var(--orange)}
 #proposta .sh{display:inline-block;background:var(--orange);color:#fff;padding:5px 12px;border-radius:99px;letter-spacing:.12em}
@@ -334,12 +353,12 @@ ul.clean li{margin:4px 0;font-size:13.5px}
   <h1>Um <em>serviço especializado</em> que conecta escola, saúde e família em torno de cada estudante com TEA</h1>
   <p class="lead">Painel de apoio à decisão para secretarias de educação e de saúde: dimensiona o público com transtorno do espectro autista por município e faixa etária, detalha o custo do serviço por estudante, mostra o valor do projeto para o ente público e elabora a proposta.</p>
   <div class="hkpis">
-    <div class="hk"><b class="tnum">1.060.019</b><span>pessoas com TEA de 0 a 19 anos no Brasil (Censo 2022)</span></div>
+    <div class="hk"><b class="tnum">1.298.637</b><span>estudantes com TEA matriculados na educação básica (INEP, Censo Escolar 2025)</span></div>
     <div class="hk"><b class="tnum">R$ 96,77</b><span>por estudante/mês — plataforma, implantação, formação e suporte</span></div>
     <div class="hk"><b class="tnum">R$ 409,41</b><span>por estudante/mês — programa integral, com cuidado clínico</span></div>
     <div class="hk"><b class="tnum">R$ 196,8 mi</b><span>em 2 contratos de consórcio (2026) — ambos compram serviço, não licença</span></div>
   </div>
-  <div class="tagline"><span>Lei nº 13.146/2015 (LBI)</span><span>Lei nº 14.254/2021</span><span>Lei nº 14.133/2021</span><span>FUNDEB · duplo cômputo AEE</span><span>Dados: IBGE Censo 2022, SIDRA 10145</span></div>
+  <div class="tagline"><span>Lei nº 13.146/2015 (LBI)</span><span>Lei nº 14.254/2021</span><span>Lei nº 14.133/2021</span><span>FUNDEB · duplo cômputo AEE</span><span>Dados: INEP Censo Escolar 2025 · IBGE Censo 2022 · SICONFI</span></div>
 </div></div>
 
 <!-- 01 PROBLEMA -->
@@ -348,7 +367,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
   <h2>O maior problema não é o diagnóstico. É a falta de coordenação do desenvolvimento da criança.</h2>
   <p class="lead2">Escola, clínica e família produzem informação valiosa sobre o mesmo estudante — e trabalham desconectadas. O plano educacional é feito em papel, o laudo não chega ao professor, e cada troca de escola faz o histórico recomeçar do zero.</p>
   <div class="grid4">
-    <div class="card stat o"><b class="tnum">2,5 mi</b><div class="l">de alunos na educação especial no Brasil</div><div class="s">TEAlliance, Pitch Deck 2026</div></div>
+    <div class="card stat o"><b class="tnum">2.458.159</b><div class="l">matrículas na educação especial em 2025 — alta de 82% desde 2021; 53% são de estudantes com TEA</div><div class="s">INEP, Censo Escolar 2025</div></div>
     <div class="card stat o"><b>1 em 4</b><div class="l">alunos com transtorno do neurodesenvolvimento ou deficiência conclui a educação básica</div><div class="s">TEAlliance, Pitch Deck 2026</div></div>
     <div class="card stat"><b class="tnum">1.060.019</b><div class="l">pessoas com diagnóstico de TEA de 0 a 19 anos, em 5.570 municípios</div><div class="s">IBGE, Censo 2022 — SIDRA 10145</div></div>
     <div class="card stat p"><b>0</b><div class="l">contratos públicos identificados de software isolado de gestão de PEI — o mercado público compra serviço</div><div class="s">Estudo de viabilidade G3, set/2026</div></div>
@@ -425,7 +444,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
 <section id="publico"><div class="wrap">
   <div class="sh">03 · Público-alvo</div>
   <h2>Quantos estudantes o serviço atende — por município e por faixa etária</h2>
-  <p class="lead2">Parte das pessoas com diagnóstico de TEA informado ao Censo 2022 (IBGE, SIDRA 10145) e aplica, etapa por etapa, os parâmetros do estudo de viabilidade. Escolha um município, monte um consórcio ou selecione um estado.</p>
+  <p class="lead2">Por padrão, parte das <b>matrículas reais da educação especial</b> na rede do ente, do Censo Escolar 2025 (INEP). A base alternativa é a estimativa do estudo de viabilidade, a partir das pessoas com diagnóstico de TEA do Censo Demográfico 2022 (IBGE). Escolha um município, monte um consórcio ou selecione um estado.</p>
 
   <div class="card">
     <div class="tabs" role="tablist">
@@ -458,7 +477,15 @@ ul.clean li{margin:4px 0;font-size:13.5px}
     </div>
     <div class="callout blue" id="capHint" style="display:none;margin:-6px 0 16px;font-size:13.5px"></div>
 
-    <h3>Faixa etária do público</h3>
+    <h3>Base do público</h3>
+    <div class="basesel">
+      <button class="bs" id="b-censo" onclick="setBase('censo')"><b>📚 Censo Escolar 2025 — matrículas reais</b><span>INEP · educação especial na rede do ente · recomendado</span></button>
+      <button class="bs" id="b-ibge" onclick="setBase('ibge')"><b>👥 IBGE 2022 — estimativa do estudo</b><span>Pessoas com TEA × % de rede × fator AEE</span></button>
+    </div>
+    <div id="ceBox"></div>
+
+    <h3 id="hFaixa" style="margin-top:22px">Faixa etária do público</h3>
+    <div class="note" id="faixaNote" style="margin:-4px 0 10px;display:none"></div>
     <div class="presets" id="presets"></div>
     <div class="row" id="custom" style="display:none"></div>
 
@@ -470,7 +497,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
       <div class="tscroll"><table id="tbFaixa"></table></div>
     </div>
 
-    <h3 style="margin-top:22px">Do total populacional ao público atendido</h3>
+    <h3 style="margin-top:22px" id="hFunil">Do total populacional ao público atendido</h3>
     <div class="funnel" id="funnel"></div>
     <details class="prem" id="prem"><summary>⚙️ Premissas do dimensionamento (editáveis)</summary><div class="pgrid" id="pgrid"></div>
       <div class="note" style="padding:0 16px 14px">Os parâmetros de rede, de ampliação e de estrutura escolar são provisórios e devem ser substituídos pelos dados do Censo Escolar e da Secretaria antes de uso externo. Dimensionamento inflado é a causa mais comum de impugnação e glosa.</div>
@@ -537,6 +564,12 @@ ul.clean li{margin:4px 0;font-size:13.5px}
       <div class="legend"><span><i style="background:var(--c1)"></i>Serviço recorrente</span><span><i style="background:var(--c2)"></i>Implantação e integração (uma vez)</span></div>
       <div class="chartbox" style="height:210px"><canvas id="chAnos" aria-label="Desembolso por ano"></canvas></div>
     </div>
+  </div>
+
+  <div class="card" style="margin-top:18px;border-left:4px solid var(--teal)" id="gastoCard">
+    <h3>O que o ente já gasta com educação especial</h3>
+    <div class="gasto" id="gastoGrid"></div>
+    <div class="note" id="gastoNote"></div>
   </div>
 
   <div class="grid2" style="margin-top:18px">
@@ -723,7 +756,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
 <section class="alt" id="ranking"><div class="wrap">
   <div class="sh">08 · Ranking de oportunidade</div>
   <h2>Onde está o público — municípios e estados</h2>
-  <p class="lead2">Ordenado pelo público com TEA no recorte etário selecionado; valor anual estimado no cenário integral (C) com as premissas atuais. Clique em uma linha para carregá-la, ou adicione municípios a um consórcio.</p>
+  <p class="lead2">Ordenado pelo público da base escolhida (matrículas da educação especial na rede, pelo Censo Escolar 2025, ou pessoas com TEA no recorte etário, pelo IBGE 2022); valor anual estimado no cenário integral (C) com as premissas atuais. Clique em uma linha para carregá-la, ou adicione municípios a um consórcio.</p>
   <div class="tabs"><button class="tab on" id="rk-mun" onclick="setRank('mun')">Municípios</button><button class="tab" id="rk-uf" onclick="setRank('uf')">Estados</button></div>
   <div class="card" style="margin-top:12px;padding:8px 10px">
     <div class="tscroll rscroll" id="rankWrap"><table class="rank"><thead id="rankHead"></thead><tbody id="rankBody"></tbody></table></div>
@@ -739,7 +772,9 @@ ul.clean li{margin:4px 0;font-size:13.5px}
     <div class="card">
       <h3>Dimensionamento</h3>
       <ol style="font-size:13.5px;padding-left:18px;margin:0">
-        <li>Base: pessoas com TEA diagnosticado por profissional de saúde, por faixa quinquenal (IBGE, Censo 2022, SIDRA 10145, variável 13267).</li>
+        <li><b>Base padrão — Censo Escolar 2025 (INEP):</b> matrículas da educação especial na rede do ente (Sinopse Estatística, tab. 1.56), estudantes com TEA (tab. 1.58) e escolas com educação especial (tab. 3.45). Público acompanhado = matrículas da rede × adesão; unidades escolares = escolas reais.</li>
+        <li><b>Base alternativa — estimativa do estudo:</b> pessoas com TEA diagnosticado por profissional de saúde, por faixa quinquenal (IBGE, Censo 2022, SIDRA 10145, variável 13267), com os passos abaixo.</li>
+        <li><b>Gasto atual:</b> despesa empenhada na subfunção 12.367 — Educação Especial (Tesouro Nacional, SICONFI, DCA Anexo I-E, exercício 2025; 2024 quando 2025 não foi entregue).</li>
         <li>O IBGE não publica idade simples: recortes escolares estimados por distribuição uniforme dentro da faixa (ex.: 4 a 18 = ⅕ de 0–4 + 5–9 + 10–14 + ⅘ de 15–19).</li>
         <li>Em rede pública do ente = recorte × percentual de rede (padrão 60%).</li>
         <li>Público-alvo do AEE = × fator de ampliação (padrão 1,6 — demais deficiências, TGD e altas habilidades).</li>
@@ -779,7 +814,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
 
 <div class="wrap foot">
   <b>G3 Health Service</b> · Inclusi.Via (TEAlliance) — inclusão escolar e coordenação do cuidado para estudantes com TEA.<br>
-  Contato: g3.healthservice@proton.me · Build __BUILD__ · Base: IBGE, Censo 2022 — 5.570 municípios.
+  Contato: g3.healthservice@proton.me · Build __BUILD__ · Bases: INEP, Censo Escolar 2025 · IBGE, Censo 2022 · Tesouro Nacional, SICONFI — 5.570 municípios.
 </div>
 
 <script>__CHARTJS__</script>
@@ -787,6 +822,8 @@ ul.clean li{margin:4px 0;font-size:13.5px}
 <script>__AUTOTABLE__</script>
 <script>
 const M = __DATA__; // [codIBGE, UF, nome, 0-4, 5-9, 10-14, 15-19]
+const CE = __CENSO__;    // Censo Escolar 2025 (INEP): {cod:[tot, federal, estadual, municipal, privada, TEA, intelectual, física, auditiva, visual, múltipla, AH/SD, escolas estaduais, escolas municipais, escolas total]}
+const SF = __SICONFI__;  // SICONFI/DCA: {cod:[exercício, Ed. Especial empenhado, liquidado, Educação empenhado]}
 const MAIL_ENDPOINT = "__MAIL_ENDPOINT__";
 const MAIL_TOKEN = "__MAIL_TOKEN__";
 const BUILD = "__BUILD__";
@@ -855,7 +892,7 @@ const CANAIS = [
   {id:'pmi', t:'Procedimento de Manifestação de Interesse ou consulta pública', s:'PMI (art. 81) ou consulta pública (art. 21): vias legítimas para provocar a demanda e depois disputá-la.'}];
 
 /* ---------- estado ---------- */
-const S = {tipo:'mun', mun:BY_COD['3518701'], cons:[], consNome:'', uf:'SP', preset:'escolar', f:[.2,1,1,.8], cen:'C', inc:{}, ovQ:{}, ovPU:{}, vig:12, canal:'direta', pane:1};
+const S = {tipo:'mun', mun:BY_COD['3518701'], cons:[], consNome:'', uf:'SP', base:'censo', preset:'escolar', f:[.2,1,1,.8], cen:'C', inc:{}, ovQ:{}, ovPU:{}, vig:12, canal:'direta', pane:1};
 ITENS.forEach(it => S.inc[it.id] = true);
 
 function selIdx(){
@@ -887,18 +924,55 @@ function enteOrgao(){
 }
 function brackets(idx){ const b=[0,0,0,0]; idx.forEach(i=>{ for(let k=0;k<4;k++) b[k]+=M[i][3+k]; }); return b; }
 
-function dims(b, entes){
+/* ---------- Censo Escolar 2025 (INEP) e SICONFI (Tesouro) ---------- */
+// rede do ente no Censo Escolar: municípios e consórcios → rede municipal; estados e DF → rede "estadual" (o INEP classifica a rede do DF como estadual)
+function redeKey(){ return (S.tipo==='uf' || isDF()) ? 'est' : 'mun'; }
+function ceInfo(idx, rk){
+  const s = new Array(15).fill(0); let n = 0;
+  idx.forEach(i=>{ const v = CE[M[i][0]]; if(v){ n++; for(let k=0;k<15;k++) s[k]+=v[k]; } });
+  if(!n) return null;
+  const rede = rk==='est' ? s[2] : s[3], esc = rk==='est' ? s[12] : s[13];
+  return {tot:s[0], fed:s[1], est:s[2], mun:s[3], priv:s[4], tea:s[5], di:s[6], fis:s[7], aud:s[8], vis:s[9], mult:s[10], ahsd:s[11],
+    rede, esc, rk, teaRede: s[0] ? Math.round(s[5]*rede/s[0]) : 0};
+}
+const UFCOD = {RO:'11',AC:'12',AM:'13',RR:'14',PA:'15',AP:'16',TO:'17',MA:'21',PI:'22',CE:'23',RN:'24',PB:'25',PE:'26',AL:'27',SE:'28',BA:'29',MG:'31',ES:'32',RJ:'33',SP:'35',PR:'41',SC:'42',RS:'43',MS:'50',MT:'51',GO:'52',DF:'53'};
+// gasto com Educação Especial (subfunção 12.367, empenhado) do ente — DCA/SICONFI
+function gastoEnte(){
+  const cods = S.tipo==='uf' || isDF() ? [UFCOD[S.tipo==='uf'?S.uf:'DF']] : selIdx().map(i=>M[i][0]);
+  let emp=0, edu=0, com=0, anos=new Set();
+  cods.forEach(c=>{ const v=SF[c]; if(v && v[0]){ emp+=v[1]; edu+=v[3]; anos.add(v[0]); if(v[1]>0) com++; } });
+  return {emp, edu, anos:[...anos].sort(), n:cods.length, com};
+}
+
+function dims(b, entes, ce){
   const rec = b.map((v,k)=>v*S.f[k]);
   const recorte = Math.round(rec.reduce((a,c)=>a+c,0));
-  const rede = Math.round(recorte*P.rede/100);
-  const aee = Math.round(rede*P.aee);
+  const censo = S.base==='censo' && !!ce;
+  // Censo Escolar: matrículas reais da educação especial na rede do ente (já incluem todas as deficiências) — sem % de rede nem fator AEE
+  const rede = censo ? ce.rede : Math.round(recorte*P.rede/100);
+  const aee = censo ? ce.rede : Math.round(rede*P.aee);
   const acomp = Math.round(aee*P.adesao/100);
   const clin = Math.round(acomp*P.clin/100);
   const familias = Math.round(acomp*P.familia/100);
-  const escolas = acomp>0 ? Math.max(entes, Math.round(acomp/P.alunosEsc)) : 0;
+  const escolas = acomp>0 ? Math.max(entes, censo && ce.esc ? ce.esc : Math.round(acomp/P.alunosEsc)) : 0;
   const profs = Math.round(escolas*P.profEsc);
-  return {b, rec, recorte, rede, aee, acomp, clin, familias, escolas, profs, entes, total:b.reduce((a,c)=>a+c,0)};
+  return {b, rec, recorte, rede, aee, acomp, clin, familias, escolas, profs, entes, total:b.reduce((a,c)=>a+c,0), censo, ce};
 }
+// etapas do dimensionamento (mesmo texto no painel, no PDF e no ETP)
+function funil(d){
+  if(d.censo) return [
+    ['Matrículas da educação especial — todas as redes', d.ce.tot, 'INEP, Censo Escolar 2025 — Sinopse Estatística, tabela 1.56'],
+    ['Na rede '+esfAdj()+' do ente — público do AEE', d.rede, 'Matrículas reais; incluem todas as deficiências, TEA e altas habilidades'],
+    ['Acompanhados pelo serviço', d.acomp, num(P.adesao,1)+'% de adesão efetiva'],
+    ['Recebem o pacote clínico', d.clin, num(P.clin,1)+'% do público acompanhado']];
+  return [
+    ['Pessoas com TEA no recorte etário', d.recorte, 'IBGE, Censo 2022 — distribuição uniforme na faixa'],
+    ['Em rede pública do ente', d.rede, num(P.rede,1)+'% — a confirmar no Censo Escolar'],
+    ['Ampliado para o público-alvo do AEE', d.aee, 'Fator '+num(P.aee,2)+' — demais deficiências, TGD e altas habilidades'],
+    ['Acompanhados pelo serviço', d.acomp, num(P.adesao,1)+'% de adesão efetiva'],
+    ['Recebem o pacote clínico', d.clin, num(P.clin,1)+'% do público acompanhado']];
+}
+function setBase(b){ S.base=b; resetOv(); update(); }
 function linhas(d, useOvQ){
   return ITENS.map(it => {
     const qa = it.q(d);
@@ -915,7 +989,8 @@ function valorVig(t, meses){ return r2(t.nr + t.r*meses/12); }
 
 function calc(){
   const idx = selIdx(), entes = nEntes();
-  const d = dims(brackets(idx), entes);
+  const ceAll = ceInfo(idx, redeKey());
+  const d = dims(brackets(idx), entes, ceAll);
   const ls = linhas(d, true);
   const inc = ls.filter(incluido);
   const tA = somar(ls.filter(l=>l.cam==='A')), tB = somar(ls.filter(l=>l.cam==='B')), tC = somar(ls.filter(l=>l.cam==='C'));
@@ -923,7 +998,7 @@ function calc(){
   const t = somar(inc);
   const total = valorVig(t, S.vig);
   const clinIncl = inc.some(l=>l.id==='cli');
-  return {idx, d, ls, inc, tA, tB, tC, cen, t, total, clinIncl};
+  return {idx, d, ls, inc, tA, tB, tC, cen, t, total, clinIncl, ceAll, gasto:gastoEnte()};
 }
 
 /* ---------- UI: seleção ---------- */
@@ -981,7 +1056,7 @@ function buildPresets(){
 function setPreset(id){ S.preset=id; const p=PRESETS.find(x=>x.id===id); if(p.f) S.f=p.f.slice(); buildPresets(); resetOv(); update(); }
 
 function buildPrem(){
-  $('pgrid').innerHTML = P_META.map(([k,l,mi,ma,st])=>`<div class="fld"><label>${l}</label><input type="number" min="${mi}" max="${ma}" step="${st}" value="${P[k]}" oninput="setP('${k}',this.value)"></div>`).join('');
+  $('pgrid').innerHTML = P_META.map(([k,l,mi,ma,st])=>`<div class="fld"><label>${l}</label><input type="number" data-k="${k}" min="${mi}" max="${ma}" step="${st}" value="${P[k]}" oninput="setP('${k}',this.value)"></div>`).join('');
 }
 function setP(k,v){ const x=parseFloat(String(v).replace(',','.')); if(!isNaN(x)&&x>=0){ P[k]=x; resetOv(); update(); } }
 
@@ -1062,19 +1137,42 @@ function update(){
   $('enteMeta').textContent = (S.tipo==='mun'&&S.mun!=null? 'IBGE '+M[S.mun][0]+' · ' : S.tipo!=='mun'? int(C.idx.length)+' município'+(C.idx.length!==1?'s':'')+' · ' : '') + int(d.total)+' pessoas com TEA de 0 a 19 anos · recorte '+(S.preset==='custom'?'personalizado':pr.t);
   $('enteAcomp').textContent = int(d.acomp);
   $('chips').innerHTML = S.tipo==='cons' ? S.cons.map(i=>`<span class="chip">${M[i][2]}/${M[i][1]}<button onclick="rmCons(${i})" aria-label="Remover">✕</button></span>`).join('') : '';
+  // base do público + Censo Escolar
+  const censo = d.censo, ce = C.ceAll;
+  $('b-censo').classList.toggle('on', S.base==='censo'); $('b-ibge').classList.toggle('on', S.base!=='censo');
+  if(ce){
+    const redeNome = redeKey()==='est' ? (isDF()?'rede distrital':'rede estadual') : 'rede municipal';
+    const tipos = [['Transtorno do Espectro Autista',ce.tea],['Deficiência intelectual',ce.di],['Deficiência física',ce.fis],['Deficiência auditiva e surdez',ce.aud],['Deficiência visual',ce.vis],['Deficiência múltipla',ce.mult],['Altas habilidades / superdotação',ce.ahsd]];
+    const mt = Math.max(1,...tipos.map(t=>t[1]));
+    $('ceBox').innerHTML = `<div class="cebox"><b style="color:var(--navy)">Censo Escolar 2025 — educação especial ${emEnte()}</b>
+      <div class="cg">
+        <div class="cs hl"><b>${int(ce.rede)}</b><span>matrículas na ${redeNome}${censo?' — base do cálculo':''}</span></div>
+        <div class="cs"><b>${int(ce.tot)}</b><span>todas as redes (mun. ${int(ce.mun)} · est. ${int(ce.est)} · priv. ${int(ce.priv)})</span></div>
+        <div class="cs"><b>${int(ce.tea)}</b><span>estudantes com TEA — ${num(ce.tot?ce.tea/ce.tot*100:0,0)}% da educação especial</span></div>
+        <div class="cs"><b>${int(ce.esc)}</b><span>escolas da ${redeNome} com educação especial</span></div>
+      </div>
+      <div class="tipos">${tipos.map(t=>`<div class="hb"><div>${t[0]}</div><div class="bar"><i style="width:${t[1]/mt*100}%"></i></div><div class="v">${int(t[1])}</div></div>`).join('')}</div>
+      <div class="note">Fonte: INEP, Sinopse Estatística da Educação Básica 2025 (tabelas 1.56, 1.58 e 3.45). Um estudante pode ter mais de um tipo registrado. Comparação: o IBGE 2022 registra ${int(d.total)} pessoas de 0 a 19 anos com diagnóstico de TEA ${emEnte()}.</div></div>`;
+  } else $('ceBox').innerHTML = '<div class="note">Sem dados do Censo Escolar para este ente.</div>';
+  $('hFaixa').textContent = censo ? 'Pessoas com TEA por faixa etária — IBGE 2022 (referência)' : 'Faixa etária do público';
+  $('faixaNote').style.display = censo ? '' : 'none';
+  $('faixaNote').textContent = 'Na base Censo Escolar, a faixa etária não altera o cálculo — o público são as matrículas da rede. O quadro abaixo mostra os diagnosticados pelo IBGE para comparação.';
+  $('presets').style.display = censo ? 'none' : ''; if(censo) $('custom').style.display='none';
+  $('hFunil').textContent = censo ? 'Das matrículas ao público atendido' : 'Do total populacional ao público atendido';
+  document.querySelectorAll('#pgrid input').forEach(inp=>{ const k=inp.dataset.k; const off = censo && (k==='rede'||k==='aee'||k==='alunosEsc'); inp.disabled=off; inp.closest('.fld').style.opacity=off?.45:1; });
   // faixa
   chFaixa.data.datasets[0].data = d.rec.map(v=>Math.round(v));
   chFaixa.data.datasets[1].data = d.b.map((v,k)=>Math.round(v-d.rec[k]));
   chFaixa.update();
-  let th='<thead><tr><th>Faixa etária</th><th class="n">TEA (Censo)</th><th class="n">% no recorte</th><th class="n">No recorte</th><th class="n">Acompanhados</th></tr></thead><tbody>';
+  let th='<thead><tr><th>Faixa etária</th><th class="n">TEA (IBGE)</th><th class="n">% no recorte</th><th class="n">No recorte</th>'+(censo?'':'<th class="n">Acompanhados</th>')+'</tr></thead><tbody>';
   FAIXAS.forEach((f,k)=>{ const a = d.recorte? d.acomp*d.rec[k]/d.rec.reduce((x,y)=>x+y,0) : 0;
-    th+=`<tr${S.f[k]===0?' class="off"':''}><td><b>${f.k}</b><small class="et">${f.etapa}</small></td><td class="n">${int(d.b[k])}</td><td class="n">${num(S.f[k]*100,0)}%</td><td class="n">${int(d.rec[k])}</td><td class="n"><b>${int(a||0)}</b></td></tr>`; });
-  th+=`<tr class="tot"><td>Total</td><td class="n">${int(d.total)}</td><td></td><td class="n">${int(d.recorte)}</td><td class="n">${int(d.acomp)}</td></tr></tbody>`;
+    th+=`<tr${S.f[k]===0?' class="off"':''}><td><b>${f.k}</b><small class="et">${f.etapa}</small></td><td class="n">${int(d.b[k])}</td><td class="n">${num(S.f[k]*100,0)}%</td><td class="n">${int(d.rec[k])}</td>${censo?'':`<td class="n"><b>${int(a||0)}</b></td>`}</tr>`; });
+  th+=`<tr class="tot"><td>Total</td><td class="n">${int(d.total)}</td><td></td><td class="n">${int(d.recorte)}</td>${censo?'':`<td class="n">${int(d.acomp)}</td>`}</tr></tbody>`;
   $('tbFaixa').innerHTML=th;
   // funil
-  const fun=[['Pessoas com TEA no recorte etário','Censo 2022, recorte estimado',d.recorte],['Em rede pública do ente',num(P.rede,1)+'% — a confirmar no Censo Escolar',d.rede],['Ampliado para o público do AEE','fator '+num(P.aee,2)+' — demais deficiências, TGD, altas habilidades',d.aee],['Acompanhados pelo serviço',num(P.adesao,1)+'% de adesão efetiva',d.acomp],['Recebem o pacote clínico',num(P.clin,1)+'% do público acompanhado',d.clin]];
-  const mx=Math.max(1,...fun.map(x=>x[2]));
-  $('funnel').innerHTML = fun.map((x,k)=>`<div class="fr"><div class="k">${x[0]}<small>${x[1]}</small></div><div class="bar"><i style="width:${Math.max(.5,x[2]/mx*100)}%;background:${k===4?'var(--c4)':k===3?'var(--c2)':'var(--c1)'}"></i></div><div class="v">${int(x[2])}</div></div>`).join('');
+  const fun = funil(d), nF = fun.length;
+  const mx=Math.max(1,...fun.map(x=>x[1]));
+  $('funnel').innerHTML = fun.map((x,k)=>`<div class="fr"><div class="k">${x[0]}<small>${x[2]}</small></div><div class="bar"><i style="width:${Math.max(.5,x[1]/mx*100)}%;background:${k===nF-1?'var(--c4)':k===nF-2?'var(--c2)':'var(--c1)'}"></i></div><div class="v">${int(x[1])}</div></div>`).join('');
 
   // quadro por estudante
   const ac=Math.max(1,d.acomp), cliU=pacoteTotal(), cliPu = S.ovPU.cli!=null?S.ovPU.cli:cliU;
@@ -1124,6 +1222,19 @@ function update(){
   const bmx = Math.max(...bm.map(x=>x[1]));
   $('bench').innerHTML = bm.map(x=>`<div class="hb ${x[2]?'us':''}"><div>${x[0]}</div><div class="bar"><i style="width:${x[1]/bmx*100}%"></i></div><div class="v">${brl(x[1])}</div></div>`).join('');
 
+  // gasto atual (SICONFI)
+  const G = C.gasto;
+  if(G.emp>0){
+    const pct = C.t.ano/G.emp*100, porMat = d.rede ? G.emp/d.rede : 0, anoTxt = G.anos.join(' e ');
+    $('gastoGrid').innerHTML = `<div class="card flat stat t"><b>${brlK(G.emp)}</b><div class="l">empenhados em Educação Especial (subfunção 12.367) em ${anoTxt}</div></div>
+      <div class="card flat stat"><b>${num(G.edu?G.emp/G.edu*100:0,1)}%</b><div class="l">da despesa total com Educação do ente</div></div>
+      <div class="card flat stat"><b>${porMat?brlK(porMat):'—'}</b><div class="l">por matrícula da educação especial na rede, ao ano</div></div>
+      <div class="card flat stat o"><b>${num(pct,1)}%</b><div class="l">é quanto o escopo da proposta (1º ano, ${brlK(C.t.ano)}) representa desse gasto</div></div>`;
+    $('gastoNote').textContent = 'Fonte: Tesouro Nacional, SICONFI — Declaração de Contas Anuais, Anexo I-E, despesas empenhadas'+(G.n>1?' (soma de '+G.com+' de '+G.n+' municípios com registro)':'')+'. Entes classificam parte dessa despesa em outras subfunções (ensino fundamental, educação infantil), então o gasto real com o público tende a ser maior.';
+  } else {
+    $('gastoGrid').innerHTML = '<div class="card flat" style="grid-column:1/-1">Não há despesa registrada na subfunção 12.367 — Educação Especial nas contas anuais disponíveis deste ente (SICONFI). O ente pode classificar essa despesa em outras subfunções ou não ter entregue a declaração.</div>';
+    $('gastoNote').textContent = '';
+  }
   // proposta
   $('pEnte').textContent = label; $('pEnteMeta').textContent = int(d.acomp)+' estudantes acompanhados · '+int(d.clin)+' com pacote clínico · '+int(d.escolas)+' unidades escolares (estimativa)';
   $('pScen').innerHTML = ['A','B','C','P'].map(k=>`<label class="opt ${S.cen===k?'on':''}"><input type="radio" name="cen" ${S.cen===k?'checked':''} onchange="setCen('${k}')"><div><b>${k==='P'?'Personalizado':'Cenário '+k+' — '+CAM[k]}${k==='C'?' · recomendado':''}</b><span>${k==='A'?'Plataforma Inclusi.Via + serviços habilitadores (implantação, formação, supervisão, suporte).':k==='B'?'Cenário A + avaliação pedagógica de habilidades com laboratórios itinerantes.':k==='C'?'Cenário B + pacote de atendimento clínico multiprofissional (rubrica da Saúde).':'Itens ligados/desligados individualmente na composição detalhada.'} ${k!=='P'?'<b style="display:inline;color:var(--ink)">'+brl(C.cen[k].ano)+'/ano</b>':''}</span></div></label>`).join('');
@@ -1158,19 +1269,21 @@ function setPane(n){ S.pane=n; document.querySelectorAll('.ptab').forEach(b=>b.c
 /* ---------- ranking ---------- */
 let rankMode='mun', rankOpen=false, rankT=null;
 function renderRankDeb(){ clearTimeout(rankT); rankT=setTimeout(renderRank,120); }
-function valC(b, entes){ const d=dims(b,entes); return {d, v:somar(linhas(d,false)).ano}; }
+function valC(b, entes, ce){ const d=dims(b,entes,ce); return {d, v:somar(linhas(d,false)).ano}; }
 function renderRank(){
   const lim = rankOpen ? (rankMode==='mun'?200:27) : 10;
+  const censo = S.base==='censo', base = r => censo ? r.d.rede : r.d.recorte;
   let rows;
   if(rankMode==='mun'){
-    rows = M.map((m,i)=>{ const r=valC([m[3],m[4],m[5],m[6]],1); return {i, nome:m[2], uf:m[1], rec:r.d.recorte, ac:r.d.acomp, v:r.v}; });
+    rows = M.map((m,i)=>{ const r=valC([m[3],m[4],m[5],m[6]],1,ceInfo([i], m[1]==='DF'?'est':'mun')); return {i, nome:m[2], uf:m[1], rec:base(r), ac:r.d.acomp, v:r.v}; });
   } else {
-    const agg={}; M.forEach(m=>{ const a=agg[m[1]]||(agg[m[1]]={b:[0,0,0,0],n:0}); for(let k=0;k<4;k++) a.b[k]+=m[3+k]; a.n++; });
-    rows = Object.keys(agg).map(u=>{ const r=valC(agg[u].b,1); return {uf:u, nome:UFN[u][0], n:agg[u].n, rec:r.d.recorte, ac:r.d.acomp, v:r.v}; });
+    const agg={}; M.forEach((m,i)=>{ const a=agg[m[1]]||(agg[m[1]]={b:[0,0,0,0],n:0,idx:[]}); for(let k=0;k<4;k++) a.b[k]+=m[3+k]; a.n++; a.idx.push(i); });
+    rows = Object.keys(agg).map(u=>{ const r=valC(agg[u].b,1,ceInfo(agg[u].idx,'est')); return {uf:u, nome:UFN[u][0], n:agg[u].n, rec:base(r), ac:r.d.acomp, v:r.v}; });
   }
   rows.sort((a,b)=>b.rec-a.rec);
   const tot = rows.length; rows = rows.slice(0,lim);
-  $('rankHead').innerHTML = rankMode==='mun' ? '<tr><th>#</th><th>Município</th><th class="n">TEA no recorte</th><th class="n">Acompanhados</th><th class="n">Valor anual (C)</th><th></th></tr>' : '<tr><th>#</th><th>Estado</th><th class="n">Municípios</th><th class="n">TEA no recorte</th><th class="n">Acompanhados</th><th class="n">Valor anual (C)</th></tr>';
+  const colBase = censo ? 'Ed. especial na rede' : 'TEA no recorte';
+  $('rankHead').innerHTML = rankMode==='mun' ? '<tr><th>#</th><th>Município</th><th class="n">'+colBase+'</th><th class="n">Acompanhados</th><th class="n">Valor anual (C)</th><th></th></tr>' : '<tr><th>#</th><th>Estado</th><th class="n">Municípios</th><th class="n">'+colBase+'</th><th class="n">Acompanhados</th><th class="n">Valor anual (C)</th></tr>';
   $('rankBody').innerHTML = rows.map((r,k)=> rankMode==='mun'
     ? `<tr onclick="loadMun(${r.i})"><td>${k+1}</td><td><b>${r.nome}</b> <span class="note">/${r.uf}</span></td><td class="n">${int(r.rec)}</td><td class="n">${int(r.ac)}</td><td class="n">${brlK(r.v)}</td><td class="n"><button class="mini" onclick="event.stopPropagation();addCons(${r.i})">+ consórcio</button></td></tr>`
     : `<tr onclick="loadUF('${r.uf}')"><td>${k+1}</td><td><b>${r.nome}</b></td><td class="n">${int(r.n)}</td><td class="n">${int(r.rec)}</td><td class="n">${int(r.ac)}</td><td class="n">${brlK(r.v)}</td></tr>`).join('');
@@ -1254,10 +1367,10 @@ function montarPDF(){
   par(emp.replace(/ — CNPJ/,', inscrita no CNPJ sob o nº').replace(/nº (\d)/,'nº $1')+', por seu representante legal, apresenta a presente proposta técnica e comercial, nas condições a seguir descritas.');
 
   secao('1. Resumo da proposta');
-  kv([['Ente público', label], ['Órgão', $('destOrg').value.trim()||enteOrgao()], ['Escopo', cenTxt], ['Público-alvo', recorteTxt],
+  kv([['Ente público', label], ['Órgão', $('destOrg').value.trim()||enteOrgao()], ['Escopo', cenTxt], ['Base do público', d.censo ? 'INEP, Censo Escolar 2025 — matrículas da educação especial na rede '+esfAdj() : 'IBGE, Censo 2022 — '+recorteTxt],
     ['Estudantes acompanhados', int(d.acomp)], ['Com pacote clínico', C.clinIncl?int(d.clin):'Não contratado'], ['Unidades escolares (estimativa)', int(d.escolas)],
     ['Vigência', S.vig+' '+(S.vig===1?'mês':'meses')], ['Valor do primeiro ano', brl(C.t.ano)], [B('VALOR TOTAL DO PROJETO'), B(brl(C.total))],
-    ['Custo por estudante/mês', brl(est)], ['Canal de contratação', CANAIS.find(c=>c.id===S.canal).t]]);
+    ['Custo por estudante/mês', brl(est)], ...(C.gasto.emp>0?[['Gasto atual com Educação Especial', brl(C.gasto.emp)+' em '+C.gasto.anos.join(' e ')+' (SICONFI, subfunção 12.367)'], ['Escopo (1º ano) sobre o gasto atual', num(C.t.ano/C.gasto.emp*100,1)+'%']]:[]), ['Canal de contratação', CANAIS.find(c=>c.id===S.canal).t]]);
 
   secao('2. Objeto');
   const camTxt = {A:'plataforma Inclusi.Via e serviços habilitadores (implantação e parametrização, integração com sistemas legados, formação continuada da rede, supervisão e mentoria multiprofissional, suporte técnico e sustentação)', B:'avaliação pedagógica de habilidades, com laboratórios itinerantes', C:'pacote de atendimento clínico multiprofissional'};
@@ -1274,15 +1387,22 @@ function montarPDF(){
     ['Formação','Capacitação da rede em turmas de até 20, com trilhas por perfil.']], {columnStyles:{0:{fontStyle:'bold', cellWidth:110}}});
 
   secao('3. Público atendido');
-  const sr = d.rec.reduce((x,z)=>x+z,0)||1;
-  tabela(['Faixa etária','Etapa de ensino','TEA (Censo 2022)','% no recorte','No recorte','Acompanhados'],
-    FAIXAS.map((f,k)=>[f.k, f.etapa, R(int(d.b[k])), R(num(S.f[k]*100,0)+'%'), R(int(d.rec[k])), R(int(Math.round(d.acomp*d.rec[k]/sr)))]).concat([[B('Total'),'',BR(int(d.total)),'',BR(int(d.recorte)),BR(int(d.acomp))]]));
-  tabela(['Etapa do dimensionamento','Estudantes','Parâmetro aplicado'], [
-    ['Pessoas com TEA no recorte etário', R(int(d.recorte)), 'IBGE, Censo 2022 — SIDRA 10145; distribuição uniforme na faixa'],
-    ['Em rede pública do ente', R(int(d.rede)), num(P.rede,1)+'% — a confirmar no Censo Escolar'],
-    ['Ampliado para o público-alvo do AEE', R(int(d.aee)), 'Fator '+num(P.aee,2)+' — demais deficiências, TGD e altas habilidades'],
-    ['Com adesão efetiva ao programa', BR(int(d.acomp)), num(P.adesao,1)+'% — recusa familiar e perda de seguimento'],
-    ['Que recebem o pacote clínico', R(C.clinIncl?int(d.clin):'—'), num(P.clin,1)+'% do público acompanhado']], {columnStyles:{1:{cellWidth:62}}});
+  const ceP = C.ceAll;
+  if(d.censo && ceP){
+    tabela(['Indicador — INEP, Censo Escolar 2025','Quantidade'], [
+      ['Matrículas da educação especial — todas as redes', R(int(ceP.tot))],
+      ['Rede municipal', R(int(ceP.mun))], ['Rede estadual'+(isDF()?' (rede pública do DF)':''), R(int(ceP.est))], ['Rede privada', R(int(ceP.priv))],
+      ['Estudantes com TEA — todas as redes', R(int(ceP.tea))],
+      [B('Matrículas na rede '+esfAdj()+' do ente (base do cálculo)'), BR(int(ceP.rede))],
+      ['Escolas da rede '+esfAdj()+' com educação especial', R(int(ceP.esc))],
+      ['Referência: pessoas de 0 a 19 anos com TEA (IBGE, Censo 2022)', R(int(d.total))]], {columnStyles:{1:{cellWidth:90}}});
+  } else {
+    const sr = d.rec.reduce((x,z)=>x+z,0)||1;
+    tabela(['Faixa etária','Etapa de ensino','TEA (Censo 2022)','% no recorte','No recorte','Acompanhados'],
+      FAIXAS.map((f,k)=>[f.k, f.etapa, R(int(d.b[k])), R(num(S.f[k]*100,0)+'%'), R(int(d.rec[k])), R(int(Math.round(d.acomp*d.rec[k]/sr)))]).concat([[B('Total'),'',BR(int(d.total)),'',BR(int(d.recorte)),BR(int(d.acomp))]]));
+  }
+  tabela(['Etapa do dimensionamento','Estudantes','Parâmetro aplicado'],
+    funil(d).filter((x,k,a)=>C.clinIncl || k<a.length-1).map(x=>[x[0], /^Acompanhados/.test(x[0])?BR(int(x[1])):R(int(x[1])), x[2]]), {columnStyles:{1:{cellWidth:62}}});
 
   secao('4. Composição de custos');
   subsecao('4.1. Itens do serviço — primeiro ano');
@@ -1337,8 +1457,8 @@ function montarPDF(){
   kv([['Escopo', cenTxt+' ('+C.inc.length+' itens)'], ['Vigência', V+' '+(V===1?'mês':'meses')], ['Valor total do projeto', brl(C.total)], ['Valor do primeiro ano', brl(C.t.ano)], ['Canal de contratação', CANAIS.find(c=>c.id===S.canal).t], ['Medição e pagamento', $('pgto').value], ['Reajuste', $('reaj').value], ['Validade da proposta', (+$('validade').value||60)+' dias a partir da emissão'], ['Data-base dos preços','Setembro de 2026']]);
 
   secao('9. Premissas e ressalvas');
-  ['Base populacional: IBGE, Censo 2022 (SIDRA 10145, variável 13267) — pessoas com diagnóstico de TEA informado por profissional de saúde, por faixa quinquenal; recortes escolares estimados por distribuição uniforme dentro de cada faixa.',
-   'Os parâmetros de estrutura da rede (unidades escolares, profissionais, percentual em rede pública, fator de ampliação) são provisórios e serão substituídos pelos dados do Censo Escolar e da Secretaria na fase de plano de trabalho; as quantidades serão ajustadas mantidos os preços unitários.',
+  [(d.censo ? 'Base do público: INEP, Censo Escolar 2025 (Sinopse Estatística, tabelas 1.56, 1.58 e 3.45) — matrículas da educação especial na rede do ente e escolas com educação especial; o Censo Demográfico 2022 (IBGE) serve de referência.' : 'Base populacional: IBGE, Censo 2022 (SIDRA 10145, variável 13267) — pessoas com diagnóstico de TEA informado por profissional de saúde, por faixa quinquenal; recortes escolares estimados por distribuição uniforme dentro de cada faixa.'),
+   (d.censo ? 'A taxa de adesão e os parâmetros de estrutura (profissionais de saúde, participantes da formação, horas de supervisão) são estimativas e serão confirmados no plano de trabalho; as quantidades serão ajustadas mantidos os preços unitários.' : 'Os parâmetros de estrutura da rede (unidades escolares, profissionais, percentual em rede pública, fator de ampliação) são provisórios e serão substituídos pelos dados do Censo Escolar e da Secretaria na fase de plano de trabalho; as quantidades serão ajustadas mantidos os preços unitários.'),
    'Preços com âncora pública derivam da ARP nº 045/2026 do CIMINAS; os demais são propostos e sujeitos à pesquisa de preços nos termos do art. 23 da Lei nº 14.133/2021.',
    'A avaliação é pedagógica, de habilidades (leitura, escrita, numeramento e atenção): sinaliza necessidade de aprofundamento e encaminha ao profissional habilitado, sem nomear diagnóstico.',
    'Excluída a rubrica de medicação à base de canabidiol, por não ser incorporada ao SUS para TEA, não ter registro na ANVISA nos produtos usualmente prescritos e estar fora das indicações da Resolução CFM nº 2.324/2022. A plataforma registra a medicação prescrita, sem custeio pelo contrato.',
