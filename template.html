@@ -1128,10 +1128,8 @@ function montarPDF(){
   /* ===== Página 1 — capa ===== */
   const bands=90, capH=372;
   for(let i=0;i<bands;i++){ const t=i/(bands-1); doc.setFillColor(Math.round(16+(52-16)*t), Math.round(27+(38-27)*t), Math.round(76+(120-76)*t)); doc.rect(0, capH*i/bands, PW, capH/bands+1, 'F'); }
-  doc.setGState(new doc.GState({opacity:.10})); doc.setDrawColor(255,255,255); doc.setLineWidth(.5);
-  for(let gx=0; gx<PW; gx+=26) doc.line(gx,0,gx,capH); for(let gy=0; gy<capH; gy+=26) doc.line(0,gy,PW,gy);
-  doc.setGState(new doc.GState({opacity:1}));
-  doc.setGState(new doc.GState({opacity:.35})); doc.setFillColor(242,154,74); doc.circle(PW-20, capH-20, 128, 'F'); doc.setGState(new doc.GState({opacity:1}));
+  // sem grade nem transparência: impressoras e alguns leitores ignoram opacidade e imprimiam linhas brancas sobre o texto
+  doc.setFillColor(112,72,112); doc.circle(PW-20, capH-20, 128, 'F');
   doc.setFillColor(...OR); doc.circle(PW-20, capH-20, 95, 'F');
   doc.setFillColor(255,255,255); doc.rect(0, capH, PW, PH-capH, 'F'); // recorta o círculo na borda da capa
   doc.setFillColor(...OR); doc.rect(0, capH, PW, 3, 'F');
