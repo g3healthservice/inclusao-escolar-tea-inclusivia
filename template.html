@@ -249,6 +249,30 @@ details.prem summary{cursor:pointer;padding:12px 16px;font-weight:650;color:var(
 .rscroll.open{max-height:480px;overflow:auto}
 .rscroll.open thead th{position:sticky;top:0;background:#fff;z-index:1}
 
+/* módulo de proposta em destaque */
+#proposta{background:linear-gradient(180deg,#FFF4EA 0%,#FDF8F3 55%,#F7F3FB 100%);border-top:4px solid var(--orange)}
+#proposta .sh{display:inline-block;background:var(--orange);color:#fff;padding:5px 12px;border-radius:99px;letter-spacing:.12em}
+#proposta h2{margin-top:10px}
+#proposta .prop>.card{border:1.5px solid #F2C9A6;box-shadow:0 2px 4px rgba(224,101,26,.06),0 10px 30px rgba(20,34,90,.08)}
+#proposta .ptabs{background:#FFF1E4;border:1px solid #F6D3B5;border-radius:14px;padding:6px;gap:6px}
+#proposta .ptab{background:#fff;border:1.5px solid #F6D3B5;color:#8A4A1C;font-weight:650}
+#proposta .ptab i{background:var(--orange);color:#fff}
+#proposta .ptab:hover{border-color:var(--orange)}
+#proposta .ptab.on{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 3px 10px rgba(20,34,90,.25)}
+#proposta .ptab.on i{background:#F6A868;color:var(--navy)}
+#proposta .fld label{color:var(--navy);font-weight:750;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+#proposta input[type=text],#proposta input[type=number],#proposta input[type=email],#proposta select{background:#F5F7FF;border:1.5px solid #B9C3E6;color:var(--ink);font-weight:500}
+#proposta input:focus,#proposta select:focus{background:#fff;border-color:var(--orange);outline:3px solid rgba(224,101,26,.22)}
+#proposta h3{display:flex;align-items:center;gap:8px}
+#proposta h3:before{content:"";width:4px;height:18px;border-radius:2px;background:var(--orange)}
+#proposta .opt{border-width:1.5px;border-left-width:6px}
+#proposta #pScen .opt:nth-child(1){border-left-color:var(--c1)}
+#proposta #pScen .opt:nth-child(2){border-left-color:var(--c3)}
+#proposta #pScen .opt:nth-child(3){border-left-color:var(--c4)}
+#proposta #pScen .opt:nth-child(4){border-left-color:#8A90AE}
+#proposta #pCanal .opt{border-left-color:#B9C3E6}
+#proposta .opt.on{border-color:var(--orange);border-left-color:var(--orange);background:#FFF6EE;box-shadow:0 0 0 3px rgba(224,101,26,.12)}
+#proposta .sum{border:1.5px solid var(--navy)}
 .chain{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .ch{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 14px 12px;box-shadow:var(--sh)}
 .ch i{font-style:normal;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;font-size:12.5px;font-weight:700;margin-bottom:8px}
@@ -551,7 +575,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
 <section class="alt" id="proposta"><div class="wrap">
   <div class="sh">06 · Elaboração da proposta</div>
   <h2>Monte a proposta de serviço para o ente</h2>
-  <p class="lead2">Quatro passos: escopo, condições de contratação, partes e emissão. O resumo ao lado se atualiza a cada escolha; o PDF sai com capa, objeto, público, custos detalhados, cronograma físico-financeiro, fontes de custeio e assinaturas.</p>
+  <p class="lead2">Quatro passos: escopo, condições de contratação, partes e emissão. O resumo ao lado se atualiza a cada escolha; o PDF sai no padrão de edital, com objeto, público, custos detalhados, cronograma físico-financeiro, fontes de custeio e assinaturas.</p>
 
   <div class="prop">
     <div class="card">
