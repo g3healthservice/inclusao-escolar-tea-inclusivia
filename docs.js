@@ -34,9 +34,10 @@ const CANAL_MODO = {direta:'direta', licit:'srp', cons:'srpcons', pmi:'srp'};
 function docModo(){ return S.doc.modo || (S.tipo==='cons' ? 'srpcons' : CANAL_MODO[S.canal] || 'srp'); }
 function docDem(){ return S.doc.dem || ((LAST && LAST.inc.some(l=>l.cam==='C')) ? 'conj' : 'edu'); }
 
-function esferaTxt(){ return S.tipo==='cons' ? 'Intermunicipal — consórcio público' : S.tipo==='uf' ? (S.uf==='DF'?'Distrital':'Estadual') : 'Municipal'; }
+function esferaTxt(){ return isDF() ? 'Distrital' : S.tipo==='cons' ? 'Intermunicipal — consórcio público' : S.tipo==='uf' ? (S.uf==='DF'?'Distrital':'Estadual') : 'Municipal'; }
 function orgaoDemandante(){
   const dem = docDem();
+  if(isDF()) return 'Governo do Distrito Federal — '+(dem==='edu'?'Secretaria de Estado de Educação do Distrito Federal':dem==='sau'?'Secretaria de Estado de Saúde do Distrito Federal':'Secretarias de Estado de Educação e de Saúde do Distrito Federal');
   if(S.tipo==='mun'){ const m=M[S.mun]; const sec = dem==='edu'?'Secretaria Municipal de Educação':dem==='sau'?'Secretaria Municipal de Saúde':'Secretarias Municipais de Educação e de Saúde';
     return 'Prefeitura Municipal de '+m[2]+'/'+m[1]+' — '+sec; }
   if(S.tipo==='cons') return (S.consNome.trim()||'Consórcio público intermunicipal')+' — órgão gerenciador, em nome dos municípios consorciados';
@@ -44,7 +45,7 @@ function orgaoDemandante(){
   if(S.uf==='DF') return 'Governo do Distrito Federal — '+sec.replace('de Estado da','de Estado de');
   const u=UFN[S.uf]; return 'Governo do Estado '+u[1]+' '+u[0]+' — '+sec;
 }
-function redeTxt(){ return S.tipo==='uf' ? 'rede estadual de ensino' : S.tipo==='cons' ? 'redes municipais de ensino dos municípios consorciados' : 'rede municipal de ensino'; }
+function redeTxt(){ return isDF() ? 'rede pública de ensino do Distrito Federal' : S.tipo==='uf' ? 'rede estadual de ensino' : S.tipo==='cons' ? 'redes municipais de ensino dos municípios consorciados' : 'rede municipal de ensino'; }
 const MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
 function dataExt(){ const t=new Date(); return MESES[t.getMonth()]+' de '+t.getFullYear(); }
 const PRE = t => '[PREENCHER'+(t?' — '+t:'')+']';
@@ -192,7 +193,7 @@ async function gerarXlsx(ctx){
   put(w1,'A18','RECORTE ADOTADO NESTA MEMÓRIA — '+ctx.recorteTxt,{bold:true,tot:true}); put(w1,'B18','Soma das faixas × % da coluna D',{tot:true}); put(w1,'C18',fx('ROUND(SUMPRODUCT(B8:B11,D8:D11),0)',d.recorte),{fmt:'int',bold:true,tot:true});
   title(w1,'A20','C. PARÂMETROS DE COBERTURA (editáveis)');
   hdr(w1,21,['Parâmetro','Valor','Observação']);
-  const pc = [['% do público em rede pública '+(S.tipo==='uf'?'estadual':'municipal'),P.rede/100,'0.0%','A confirmar no Censo Escolar. Redes municipais costumam concentrar a educação infantil e o EF I; o EF II e o ensino médio são frequentemente estaduais.'],
+  const pc = [['% do público em rede pública '+(isDF()?'distrital':S.tipo==='uf'?'estadual':'municipal'),P.rede/100,'0.0%','A confirmar no Censo Escolar. Redes municipais costumam concentrar a educação infantil e o EF I; o EF II e o ensino médio são frequentemente estaduais.'],
     ['Fator de ampliação para demais públicos do AEE',P.aee,'fat','TEA é apenas parte do público-alvo da educação especial. Fator 1,0 = só TEA. Calibrar pelo Censo Escolar local.'],
     ['Taxa de adesão efetiva ao programa',P.adesao/100,'0.0%','Nem todo elegível adere. Considera recusa familiar e perda de seguimento.'],
     ['% do público que recebe o pacote clínico',P.clin/100,'0.0%','Parâmetro de política. Nem todo aluno com PEI demanda acompanhamento clínico intensivo.'],
@@ -442,7 +443,7 @@ async function gerarETP(ctx){
     cadeiaTxt(ctx,'ETP')]));
 
   c.push(...h1('I — Descrição da necessidade pública','(art. 18, § 1º, I)'), h2('I.1. O problema a ser resolvido'));
-  c.push(p('Segundo o Censo Demográfico 2022 (IBGE, SIDRA 10145), '+ctx.label+' registra **'+int(d.total)+' pessoas de 0 a 19 anos com diagnóstico de transtorno do espectro autista** informado por profissional de saúde, das quais '+int(d.recorte)+' no recorte etário de '+ctx.recorteTxt+'. Aplicados os parâmetros de rede pública, de ampliação para o público-alvo do AEE e de adesão detalhados no item IV, estima-se em **'+int(d.acomp)+' educandos** o público a ser acompanhado na '+redeTxt()+'.'));
+  c.push(p('Segundo o Censo Demográfico 2022 (IBGE, SIDRA 10145), '+oEnte()+' registra **'+int(d.total)+' pessoas de 0 a 19 anos com diagnóstico de transtorno do espectro autista** informado por profissional de saúde, das quais '+int(d.recorte)+' no recorte etário de '+ctx.recorteTxt+'. Aplicados os parâmetros de rede pública, de ampliação para o público-alvo do AEE e de adesão detalhados no item IV, estima-se em **'+int(d.acomp)+' educandos** o público a ser acompanhado na '+redeTxt()+'.'));
   c.push(p('A '+redeTxt()+' atende '+PRE('nº')+' matrículas na educação básica, das quais '+PRE('nº')+' na educação especial (Censo Escolar '+PRE('ano')+'). O atendimento a esse público hoje se dá de forma fragmentada: a escola registra avaliações e planos em documentos físicos ou planilhas isoladas; a rede de saúde produz laudos e relatórios terapêuticos que raramente chegam ao professor; e a família, que detém a observação mais contínua do desenvolvimento, não dispõe de canal estruturado para contribuir nem para acompanhar. O resultado é conhecido e mensurável:'));
   ['Plano Educacional Individualizado inexistente, desatualizado ou meramente formal, elaborado sem a informação clínica disponível e sem revisão periódica documentada.',
    'Retrabalho e descontinuidade terapêutica — a intervenção realizada no consultório não se reflete na rotina escolar, e o professor não é informado de mudanças no quadro clínico do educando.',
@@ -463,7 +464,7 @@ async function gerarETP(ctx){
   c.push(gap(), box('Síntese da necessidade',['A Administração necessita de infraestrutura digital única que integre as informações de educação, saúde e família em torno de cada educando, gere e mantenha o Plano Educacional Individualizado, permita execução coordenada entre professores, terapeutas e responsáveis e produza indicadores objetivos e auditáveis de evolução'+(ctx.cams.has('C')?', articulada a oferta regular de atendimento multiprofissional':'')+' — cumprindo obrigação legal expressa e reduzindo risco jurídico e retrabalho.'],'EEF0F8'));
 
   c.push(...h1('II — Previsão no Plano de Contratações Anual','(art. 18, § 1º, II)'));
-  c.push(p('A contratação encontra-se prevista no Plano de Contratações Anual — PCA '+(S.doc.pca.trim()||PRE('exercício e nº do item'))+', alinhada ao Plano '+(S.tipo==='uf'?'Estadual':'Municipal')+' de Educação e às metas de inclusão escolar nele estabelecidas. Caso não conste do PCA vigente, deverá ser promovida sua inclusão antes da deflagração do procedimento.'));
+  c.push(p('A contratação encontra-se prevista no Plano de Contratações Anual — PCA '+(S.doc.pca.trim()||PRE('exercício e nº do item'))+', alinhada ao Plano '+(isDF()?'Distrital':S.tipo==='uf'?'Estadual':'Municipal')+' de Educação e às metas de inclusão escolar nele estabelecidas. Caso não conste do PCA vigente, deverá ser promovida sua inclusão antes da deflagração do procedimento.'));
 
   c.push(...h1('III — Requisitos da contratação','(art. 18, § 1º, III)'), h2('III.1. Requisitos de negócio'));
   ['Solução em nuvem (SaaS), sem necessidade de instalação de servidores ou de infraestrutura própria pela Administração.',

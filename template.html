@@ -432,6 +432,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
       <div><div class="mt" id="enteTipo">Município</div><div class="nm" id="enteNome">—</div><div class="mt" id="enteMeta">—</div></div>
       <div class="vv"><b class="tnum" id="enteAcomp">—</b><span>estudantes acompanhados pelo serviço</span></div>
     </div>
+    <div class="callout blue" id="capHint" style="display:none;margin:-6px 0 16px;font-size:13.5px"></div>
 
     <h3>Faixa etária do público</h3>
     <div class="presets" id="presets"></div>
@@ -536,11 +537,11 @@ ul.clean li{margin:4px 0;font-size:13.5px}
       <thead><tr><th>Fonte</th><th>Aplicação</th><th>Base</th></tr></thead>
       <tbody>
         <tr><td><b>FUNDEB</b></td><td>Matrículas da educação especial em AEE admitem duplo cômputo e ponderação diferenciada.</td><td>Lei nº 14.113/2020 · Decreto nº 7.611/2011</td></tr>
-        <tr><td><b>Salário-Educação</b></td><td>Custeio de ações de manutenção e desenvolvimento do ensino.</td><td>Quota municipal</td></tr>
+        <tr><td><b>Salário-Educação</b></td><td>Custeio de ações de manutenção e desenvolvimento do ensino.</td><td>Quota <span class="esf">municipal</span></td></tr>
         <tr><td><b>Recursos próprios — MDE</b></td><td>Percentual constitucional mínimo aplicado em manutenção e desenvolvimento do ensino.</td><td>Art. 212 da Constituição</td></tr>
         <tr><td><b>Emendas parlamentares</b></td><td>Programas de educação inclusiva e de saúde da criança.</td><td>Individuais e de bancada</td></tr>
         <tr><td><b>Programas do FNDE</b></td><td>Apoio técnico e financeiro ao AEE e às salas de recursos multifuncionais.</td><td>Decreto nº 7.611/2011</td></tr>
-        <tr><td><b>Bloco de custeio da Saúde</b></td><td>Componente clínico, quando prestado pela rede municipal de saúde ou conveniada.</td><td>Rubrica apartada da Educação</td></tr>
+        <tr><td><b>Bloco de custeio da Saúde</b></td><td>Componente clínico, quando prestado pela rede <span class="esf">municipal</span> de saúde ou conveniada.</td><td>Rubrica apartada da Educação</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -824,7 +825,7 @@ const ITENS = [
   {id:'lab', cam:'B', g:'ava', tipo:'srv', nome:'Locação de laboratório itinerante', un:'Serviço', pu:2542.89, rec:true, q:d=>Math.ceil(d.escolas/P.escLab), anc:'Âncora: ARP 045/2026 CIMINAS'},
   {id:'cli', cam:'C', g:'cli', tipo:'srv', nome:'Pacote de atendimento clínico multiprofissional', un:'Estudante/ano', pu:null, rec:true, q:d=>d.clin}];
 const CANAIS = [
-  {id:'direta', t:'Piloto municipal por contratação direta', s:'Mais simples e rápido; gera o atestado de capacidade técnica e o caso de referência. Sugerido: 3 a 6 meses.'},
+  {id:'direta', t:'Piloto por contratação direta', s:'Mais simples e rápido; gera o atestado de capacidade técnica e o caso de referência. Sugerido: 3 a 6 meses.'},
   {id:'licit', t:'Licitação do ente — pregão eletrônico ou registro de preços', s:'Contratação própria do município ou estado, nos termos da Lei nº 14.133/2021.'},
   {id:'cons', t:'Registro de preços por consórcio público intermunicipal', s:'Canal de escala: um certame alcança dezenas de municípios e admite adesão de não participantes.'},
   {id:'pmi', t:'Procedimento de Manifestação de Interesse ou consulta pública', s:'PMI (art. 81) ou consulta pública (art. 21): vias legítimas para provocar a demanda e depois disputá-la.'}];
@@ -839,12 +840,22 @@ function selIdx(){
   return M.map((m,i)=>m[1]===S.uf?i:-1).filter(i=>i>=0);
 }
 function nEntes(){ return S.tipo==='cons' ? S.cons.length : (selIdx().length?1:0); }
+// Capitais (IBGE). Brasília é o único caso em que o ente não é município: o DF não tem prefeitura (CF, art. 32, § 1º).
+const CAPITAIS = new Set(['1200401','2704302','1600303','1302603','2927408','2304400','5300108','3205309','5208707','2111300','5103403','5002704','3106200','1501402','2507507','4106902','2611606','2211001','3304557','2408102','4314902','1100205','1400100','4205407','3550308','2800308','1721000']);
+function isDF(){ return (S.tipo==='mun' && S.mun!=null && M[S.mun][1]==='DF') || (S.tipo==='uf' && S.uf==='DF'); }
+function esfAdj(){ return isDF() ? 'distrital' : S.tipo==='uf' ? 'estadual' : 'municipal'; }
+// preposição/artigo corretos: "em Guarujá/SP", mas "no Distrito Federal", "no Estado de Goiás", "no Consórcio…"
+function emEnte(){ return S.tipo==='mun' && !isDF() ? 'em '+enteLabel() : 'no '+enteLabel(); }
+function oEnte(){ return S.tipo==='mun' && !isDF() ? enteLabel() : 'o '+enteLabel(); }
+function isCapital(){ return S.tipo==='mun' && S.mun!=null && CAPITAIS.has(M[S.mun][0]) && !isDF(); }
 function enteLabel(){
+  if(S.tipo==='mun' && isDF()) return 'Distrito Federal (Brasília)';
   if(S.tipo==='mun'){ const m=M[S.mun]; return m? m[2]+'/'+m[1] : '—'; }
   if(S.tipo==='cons') return S.consNome.trim() || (S.cons.length? 'Consórcio de '+S.cons.length+' município'+(S.cons.length>1?'s':'') : 'Consórcio (adicione municípios)');
   const u=UFN[S.uf]; return S.uf==='DF' ? 'Distrito Federal' : 'Estado '+u[1]+' '+u[0];
 }
 function enteOrgao(){
+  if(isDF()) return 'Governo do Distrito Federal — Secretarias de Estado de Educação e de Saúde do Distrito Federal';
   if(S.tipo==='mun'){ const m=M[S.mun]; return m? 'Prefeitura Municipal de '+m[2]+'/'+m[1]+' — Secretarias Municipais de Educação e de Saúde' : ''; }
   if(S.tipo==='cons') return (S.consNome.trim()||'Consórcio público intermunicipal')+' — municípios consorciados';
   if(S.uf==='DF') return 'Governo do Distrito Federal — Secretarias de Estado de Educação e de Saúde';
@@ -1015,7 +1026,13 @@ function update(){
   const C = calc(); LAST=C; const d=C.d;
   const label = enteLabel();
   // ente
-  $('enteTipo').textContent = S.tipo==='mun'?'Município':S.tipo==='cons'?'Consórcio público':'Estado';
+  $('enteTipo').textContent = isDF() ? 'Distrito Federal — ente distrital' : isCapital() ? 'Município · capital de estado' : S.tipo==='mun'?'Município':S.tipo==='cons'?'Consórcio público':'Estado';
+  document.querySelectorAll('.esf').forEach(e=>e.textContent=esfAdj());
+  const hint = $('capHint');
+  if(isDF()){ hint.style.display=''; hint.innerHTML = '<b>Brasília não é município.</b> O Distrito Federal não tem prefeitura e acumula as competências de estado e de município (CF, art. 32, § 1º). A proposta e os documentos são dirigidos ao <b>Governo do Distrito Federal</b> — Secretarias de Estado de Educação e de Saúde do DF.'; }
+  else if(isCapital()){ const u=M[S.mun][1], nu=UFN[u]; hint.style.display='';
+    hint.innerHTML = '<b>'+M[S.mun][2]+' é capital, mas o ente é o município</b>: a rede municipal é contratada pela Prefeitura e pelas Secretarias Municipais. Para propor ao Governo do Estado '+nu[1]+' '+nu[0]+' (Secretarias de Estado, rede estadual), mude o escopo: <button class="btn ghost" style="padding:5px 10px;font-size:12.5px;margin-left:6px" onclick="S.uf=\''+u+'\';S.ufTouched=true;setTipo(\'uf\')">Direcionar ao Governo do Estado →</button>'; }
+  else hint.style.display='none';
   $('enteNome').textContent = label;
   const pr = PRESETS.find(p=>p.id===S.preset);
   $('enteMeta').textContent = (S.tipo==='mun'&&S.mun!=null? 'IBGE '+M[S.mun][0]+' · ' : S.tipo!=='mun'? int(C.idx.length)+' município'+(C.idx.length!==1?'s':'')+' · ' : '') + int(d.total)+' pessoas com TEA de 0 a 19 anos · recorte '+(S.preset==='custom'?'personalizado':pr.t);
@@ -1221,7 +1238,7 @@ function montarPDF(){
   secao('2. Objeto');
   const camTxt = {A:'plataforma Inclusi.Via e serviços habilitadores (implantação e parametrização, integração com sistemas legados, formação continuada da rede, supervisão e mentoria multiprofissional, suporte técnico e sustentação)', B:'avaliação pedagógica de habilidades, com laboratórios itinerantes', C:'pacote de atendimento clínico multiprofissional'};
   const camsIn = ['A','B','C'].filter(k=>C.inc.some(l=>l.cam===k));
-  par('Prestação de serviço técnico-pedagógico especializado de apoio à inclusão escolar e à coordenação do cuidado de estudantes com transtorno do espectro autista (TEA) e demais público-alvo do Atendimento Educacional Especializado (AEE), em '+label+', compreendendo: '+camsIn.map(k=>camTxt[k]).join('; ')+'.');
+  par('Prestação de serviço técnico-pedagógico especializado de apoio à inclusão escolar e à coordenação do cuidado de estudantes com transtorno do espectro autista (TEA) e demais público-alvo do Atendimento Educacional Especializado (AEE), '+emEnte()+', compreendendo: '+camsIn.map(k=>camTxt[k]).join('; ')+'.');
   par('A plataforma é o instrumento; o objeto é o serviço. A contratada responde pela operação contínua junto à rede, com medição mensal do que foi efetivamente prestado — licenças ativas, unidades implantadas, turmas formadas, horas técnicas e atendimentos realizados — e por indicadores de cobertura, tempestividade e evolução.');
   subsecao('2.1. Etapas do serviço');
   tabela(['Etapa','Descrição'], [
@@ -1290,7 +1307,7 @@ function montarPDF(){
   par('Medição e pagamento: '+$('pgto').value+'. Parcela recorrente estimada de '+brl(C.t.r/12)+' por mês. Reajuste: '+$('reaj').value+'.');
 
   secao('7. Fontes de custeio');
-  tabela(['Fonte','Aplicação','Base'], [['FUNDEB','Matrículas da educação especial em AEE admitem duplo cômputo e ponderação diferenciada.','Lei nº 14.113/2020; Decreto nº 7.611/2011'],['Salário-Educação','Custeio de ações de manutenção e desenvolvimento do ensino.','Quota municipal'],['Recursos próprios — MDE','Percentual constitucional mínimo em manutenção e desenvolvimento do ensino.','Art. 212 da Constituição'],['Emendas parlamentares','Programas de educação inclusiva e de saúde da criança.','Individuais e de bancada'],['Programas do FNDE','Apoio ao AEE e às salas de recursos multifuncionais.','Decreto nº 7.611/2011'],['Bloco de custeio da Saúde','Componente clínico, prestado pela rede municipal de saúde ou conveniada.','Rubrica apartada da Educação']], {columnStyles:{0:{fontStyle:'bold', cellWidth:105}}});
+  tabela(['Fonte','Aplicação','Base'], [['FUNDEB','Matrículas da educação especial em AEE admitem duplo cômputo e ponderação diferenciada.','Lei nº 14.113/2020; Decreto nº 7.611/2011'],['Salário-Educação','Custeio de ações de manutenção e desenvolvimento do ensino.','Quota '+esfAdj()],['Recursos próprios — MDE','Percentual constitucional mínimo em manutenção e desenvolvimento do ensino.','Art. 212 da Constituição'],['Emendas parlamentares','Programas de educação inclusiva e de saúde da criança.','Individuais e de bancada'],['Programas do FNDE','Apoio ao AEE e às salas de recursos multifuncionais.','Decreto nº 7.611/2011'],['Bloco de custeio da Saúde','Componente clínico, prestado pela rede '+esfAdj()+' de saúde ou conveniada.','Rubrica apartada da Educação']], {columnStyles:{0:{fontStyle:'bold', cellWidth:105}}});
 
   secao('8. Condições comerciais');
   kv([['Escopo', cenTxt+' ('+C.inc.length+' itens)'], ['Vigência', V+' '+(V===1?'mês':'meses')], ['Valor total do projeto', brl(C.total)], ['Valor do primeiro ano', brl(C.t.ano)], ['Canal de contratação', CANAIS.find(c=>c.id===S.canal).t], ['Medição e pagamento', $('pgto').value], ['Reajuste', $('reaj').value], ['Validade da proposta', (+$('validade').value||60)+' dias a partir da emissão'], ['Data-base dos preços','Setembro de 2026']]);
