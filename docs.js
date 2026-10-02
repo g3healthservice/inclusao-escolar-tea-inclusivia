@@ -74,7 +74,13 @@ const MEDICAO = {
   sus:'Mensal, condicionada ao relatório de serviços e à apuração dos níveis de serviço.',
   ava:'Mensal (1/12 do valor anual), proporcional aos educandos com avaliação habilitada.',
   lab:'Por serviço realizado, mediante relatório de aplicação validado.',
-  cli:'Por atendimento realizado, comprovado por registro no módulo de saúde e confirmação do responsável legal.'};
+  cli:'Por atendimento realizado, comprovado por registro no módulo de saúde e confirmação do responsável legal.',
+  tpl:'idem', tead:'Mensal (1/12 do valor anual), por educador ativo na trilha EAD, com relatório de frequência e conclusão.',
+  timr:'Por participante que concluiu a imersão, mediante lista de presença e certificado.',
+  tae:'Mensal, por estudante com reunião de psicopedagogo realizada e PEI revisado no mês.',
+  tpar:'Mensal, por família com participação registrada nas atividades do mês.',
+  tkit:'Por kit entregue, mediante termo de recebimento por unidade escolar.',
+  tvaar:'Mensal, mediante relatório de atividades e produtos entregues.'};
 function memo(l, d){
   const aj = l.q!==l.qa ? ' Quantidade ajustada manualmente para '+num(l.q)+' (cálculo-padrão: '+num(l.qa)+').' : '';
   const nEq = Math.ceil(d.acomp/P.alunosEquipe);
@@ -90,7 +96,14 @@ function memo(l, d){
     sup:num(P.horasEsc)+' h/ano por unidade escolar (≈ '+num(d.escolas*P.horasEsc/12,0)+' h/mês).',
     sus:'12 meses × '+nEq+' equipe'+(nEq>1?'s':'')+' de sustentação (1 a cada '+int(P.alunosEquipe)+' educandos).',
     ava:'Igual ao nº de educandos acompanhados.',
-    lab:'1 laboratório para cada '+num(P.escLab)+' unidades escolares.'};
+    lab:'1 laboratório para cada '+num(P.escLab)+' unidades escolares.',
+    tpl:int(d.acomp)+' educandos acompanhados — licença por estudante.',
+    tead:int(d.escolas)+' unidades × '+num(P.eadEsc)+' educadores na formação EAD.',
+    timr:'Mínimo de '+int(P.multMin)+' participantes ou 1 por unidade escolar, o que for maior.',
+    tae:num(P.aeePct,0)+'% dos '+int(d.acomp)+' educandos acompanhados; complemento à licença da plataforma.',
+    tpar:int(d.familias)+' famílias = '+num(P.familia,1)+'% dos educandos acompanhados (fator de irmandade).',
+    tkit:'1 kit por educando acompanhado, entregue no 1º ano.',
+    tvaar:'12 meses × '+int(d.entes)+' ente(s).'};
   return (m[l.id]||'')+aj;
 }
 function itensDoc(C){
@@ -101,7 +114,7 @@ function itensDoc(C){
       PAC.forEach(x=>{ if(!(x.n>0 && x.v>0)) return; const pu=r2(x.v*fat), q=l.q*x.n;
         out.push({id:'cli', cam:'C', rec:true, tipo:'srv', desc:(/Neuro|Psiq/.test(x.s)?'Consulta em ':'Sessão de ')+x.s.toLowerCase().replace('neurologista','neurologia').replace('psiquiatra','psiquiatria')+' ao educando do público-alvo',
           un:/Neuro|Psiq/.test(x.s)?'Consulta':'Sessão', q, pu, tot:r2(q*pu), memo:int(l.q)+' educandos com pacote clínico × '+x.n+' atendimentos/ano ('+x.o.toLowerCase()+').'}); });
-    } else out.push({id:l.id, cam:l.cam, rec:l.rec, tipo:l.tipo, desc:DESC[l.id], un:l.un, q:l.q, pu:l.pu, tot:l.tot, memo:memo(l, C.d)});
+    } else out.push({id:l.id, cam:l.cam, rec:l.rec, tipo:l.tipo, desc:DESC[l.id]||l.nome.replace(/ \(opcional\)$/,''), un:l.un, q:l.q, pu:l.pu, tot:l.tot, memo:memo(l, C.d)});
   });
   out.forEach((x,i)=>x.n=i+1);
   return out;
@@ -111,13 +124,15 @@ function montarLotes(C){
   const mk = (nome, itens, o) => { const ano=r2(itens.reduce((a,x)=>a+x.tot,0)), nr=r2(itens.filter(x=>!x.rec).reduce((a,x)=>a+x.tot,0));
     return Object.assign({nome, itens, ano, nr, vig:r2(nr+(ano-nr)*vig/12)}, o); };
   const TIC = '3.3.90.40 — Serviços de Tecnologia da Informação e Comunicação — Pessoa Jurídica';
-  const A=it.filter(x=>x.cam==='A'), B=it.filter(x=>x.cam==='B'), Cc=it.filter(x=>x.cam==='C');
+  const A=it.filter(x=>x.cam==='A'), B=it.filter(x=>x.cam==='B'), D=it.filter(x=>x.cam==='D'), V=it.filter(x=>x.cam==='V'), Cc=it.filter(x=>x.cam==='C');
   const L=[];
-  if(S.doc.lotes==='unico' || [A,B,Cc].filter(a=>a.length).length<2){
+  if(S.doc.lotes==='unico' || [A,B,D,V,Cc].filter(a=>a.length).length<2){
     L.push(mk('Solução integrada de inclusão escolar e coordenação do cuidado', it, {rub:Cc.length?(A.length||B.length?'Educação e Saúde':'Saúde'):'Educação', nat:Cc.length&&(A.length||B.length)?TIC+'; 3.3.90.39 — Outros Serviços de Terceiros — PJ (parcela clínica)':Cc.length?'3.3.90.39 — Outros Serviços de Terceiros — Pessoa Jurídica':TIC,
       natServ:'Serviço comum, de natureza continuada, sem dedicação exclusiva de mão de obra', dem:Cc.length&&!(A.length||B.length)?'Saúde':'Educação'}));
   } else {
-    if(A.length) L.push(mk('Solução tecnológica de gestão do PEI e coordenação intersetorial, com serviços habilitadores', A, {rub:'Educação', nat:TIC, natServ:'Serviço comum de tecnologia da informação, de natureza continuada, sem dedicação exclusiva de mão de obra', dem:'Educação'}));
+    if(A.length) L.push(mk(isTEA()?'Plataforma Inclusi.Via e formação da rede':'Solução tecnológica de gestão do PEI e coordenação intersetorial, com serviços habilitadores', A, {rub:'Educação', nat:TIC, natServ:'Serviço comum de tecnologia da informação, de natureza continuada, sem dedicação exclusiva de mão de obra', dem:'Educação'}));
+    if(D.length) L.push(mk('Acompanhamento pedagógico e familiar — AEE sob demanda, treinamento parental e material de apoio', D, {rub:'Educação', nat:'3.3.90.39 — Outros Serviços de Terceiros — PJ; 3.3.90.32 — Material de distribuição gratuita (kit)', natServ:'Serviço comum de natureza continuada, sem dedicação exclusiva de mão de obra, com fornecimento de material de apoio', dem:'Educação'}));
+    if(V.length) L.push(mk('Consultoria educacional — condicionalidades do VAAR/FUNDEB', V, {rub:'Educação', nat:'3.3.90.35 — Serviços de Consultoria', natServ:'Serviço técnico especializado de consultoria, de natureza continuada', dem:'Educação'}));
     if(B.length) L.push(mk('Avaliação pedagógica de habilidades, com laboratórios itinerantes', B, {rub:'Educação', nat:TIC, natServ:'Serviço comum, de natureza continuada, sem dedicação exclusiva de mão de obra, sem finalidade diagnóstica', dem:'Educação'}));
     if(Cc.length) L.push(mk('Atendimento multiprofissional em saúde ao público-alvo', Cc, {rub:'Saúde', nat:'3.3.90.39 — Outros Serviços de Terceiros — Pessoa Jurídica', natServ:'Serviço de saúde de natureza continuada, prestado por profissionais legalmente habilitados', dem:'Saúde'}));
   }
@@ -132,8 +147,11 @@ function participantes(){
 function objetoPartes(L){
   const cams = new Set(L.flatMap(x=>x.itens.map(i=>i.cam)));
   const p=[];
-  if(cams.has('A')) p.push('plataforma tecnológica de gestão, coordenação e monitoramento do Plano Educacional Individualizado (PEI) e do Atendimento Educacional Especializado (AEE), com inteligência artificial e articulação intersetorial entre educação, saúde e família, com licenciamento em nuvem, implantação, integração com sistemas legados, formação continuada, supervisão técnica de casos e suporte');
+  if(cams.has('A') && isTEA()) p.push('plataforma tecnológica de gestão da inclusão escolar e do Plano Educacional Individualizado (PEI), com licenciamento em nuvem por estudante, formação EAD em educação inclusiva e imersões presenciais de formação de multiplicadores');
+  else if(cams.has('A')) p.push('plataforma tecnológica de gestão, coordenação e monitoramento do Plano Educacional Individualizado (PEI) e do Atendimento Educacional Especializado (AEE), com inteligência artificial e articulação intersetorial entre educação, saúde e família, com licenciamento em nuvem, implantação, integração com sistemas legados, formação continuada, supervisão técnica de casos e suporte');
   if(cams.has('B')) p.push('avaliação pedagógica de habilidades, com laboratórios itinerantes, sem finalidade diagnóstica');
+  if(cams.has('D')) p.push('acompanhamento pedagógico e familiar, compreendendo atendimento educacional especializado sob demanda com psicopedagogo, treinamento parental e material de apoio impresso');
+  if(cams.has('V')) p.push('consultoria educacional voltada ao cumprimento das condicionalidades da complementação VAAR do FUNDEB');
   if(cams.has('C')) p.push('atendimento multiprofissional em saúde (neurologia, psiquiatria, fonoaudiologia, psicologia e psicopedagogia) ao público-alvo');
   return p;
 }
@@ -167,7 +185,7 @@ async function gerarXlsx(ctx){
   const fx = (formula, result) => ({formula, result});
   const title = (ws, a, t) => put(ws, a, t, {bold:true, size:12});
   const hdr = (ws, r, arr) => arr.forEach((t,i)=>put(ws, String.fromCharCode(65+i)+r, t, {hdr:true, bold:true, size:12, b:true}));
-  const P1="'1. Parametros'!", P2="'2. Dimensionamento'!", P3="'3. Plataforma'!", P4="'4. Cuidado clinico'!";
+  const P1="'1. Parametros'!", P2="'2. Dimensionamento'!", P3=isTEA()?"'3. Itens TEAlliance'!":"'3. Plataforma'!", P4="'4. Cuidado clinico'!";
   const L = C.ls; const byId = id => L.find(l=>l.id===id);
   const inc = id => incluido(byId(id)) ? 1 : 0;
   const idx = selIdx(), nM = idx.length, mR0 = 5, mR1 = 4+nM;
@@ -229,6 +247,12 @@ async function gerarXlsx(ctx){
   put(w1,'A60','Matrículas da educação especial na rede '+esfAdj()+' do ente',{bold:true}); put(w1,'B60',fx(`SUM('8. Municipios'!${est8?'K':'J'}${mR0}:${est8?'K':'J'}${mR1})`,ceX.rede),{fmt:'int',bold:true}); put(w1,'C60','Sinopse Estatística 2025, tabela 1.56 — base do cálculo quando B58 = CENSO');
   put(w1,'A61','Estudantes com TEA — todas as redes'); put(w1,'B61',fx(`SUM('8. Municipios'!L${mR0}:L${mR1})`,ceX.tea),{fmt:'int'}); put(w1,'C61','Sinopse Estatística 2025, tabela 1.58');
   put(w1,'A62','Escolas da rede '+esfAdj()+' com educação especial'); put(w1,'B62',fx(`SUM('8. Municipios'!${est8?'N':'M'}${mR0}:${est8?'N':'M'}${mR1})`,ceX.esc),{fmt:'int'}); put(w1,'C62','Sinopse Estatística 2025, tabela 3.45 — referência para a célula B30');
+  title(w1,'A64','H. TABELA DE PREÇOS'+(isTEA()?' — TEALLIANCE 2026 (preço de venda ao ente)':' — ESTUDO DE VIABILIDADE'));
+  hdr(w1,65,['Parâmetro','Valor','Observação']);
+  put(w1,'A66','Acréscimo para o setor público'); put(w1,'B66',P.markup/100,{inp:true,fmt:'0%'}); put(w1,'C66','Aplicado sobre os preços da tabela TEAlliance 2026 (aba 3).',{wrap:true});
+  put(w1,'A67','Estudantes com AEE sob demanda (% dos acompanhados)'); put(w1,'B67',P.aeePct/100,{inp:true,fmt:'0%'}); put(w1,'C67','O AEE é cobrado como complemento à licença da plataforma.',{wrap:true});
+  put(w1,'A68','Educadores na formação EAD por unidade escolar'); put(w1,'B68',P.eadEsc,{inp:true,fmt:'int'}); put(w1,'C68','Formação EAD por educador.');
+  put(w1,'A69','Mínimo de participantes nas imersões presenciais'); put(w1,'B69',P.multMin,{inp:true,fmt:'int'}); put(w1,'C69','A tabela TEAlliance exige no mínimo 65.');
 
   /* ---- 2. Dimensionamento ---- */
   const w2 = wb.addWorksheet('2. Dimensionamento', {properties:{tabColor:{argb:'FF3A4FA8'}}});
@@ -257,7 +281,9 @@ async function gerarXlsx(ctx){
   put(w2,'A25',(uf0==='DF'?'Distrito Federal':'Estado '+UFN[uf0][1]+' '+UFN[uf0][0])+' — 0 a 19 anos'); put(w2,'B25',ufT,{fmt:'int'}); put(w2,'C25',int(ufN)+' municípios');
   put(w2,'A26','Brasil — 0 a 19 anos'); put(w2,'B26',1060019,{fmt:'int'}); put(w2,'C26','5.570 municípios');
 
-  /* ---- 3. Plataforma ---- */
+  /* ---- 3. Plataforma (estudo) ou Itens TEAlliance ---- */
+  let R5;
+  if(!isTEA()){
   const w3 = wb.addWorksheet('3. Plataforma', {properties:{tabColor:{argb:'FFE0651A'}}});
   w3.columns=[{width:44},{width:18},{width:14},{width:17},{width:18},{width:44},{width:13}];
   title(w3,'A1','CUSTO ANUAL DA SOLUÇÃO TECNOLÓGICA E DOS SERVIÇOS HABILITADORES');
@@ -279,6 +305,34 @@ async function gerarXlsx(ctx){
   hdr(w3,19,['Item','Unidade','Quantidade','Preço unitário (R$)','Total anual (R$)','Âncora de preço','Na proposta (1=sim)']);
   itemRow(w3,20,'ava'); itemRow(w3,21,'lab');
   put(w3,'A22','TOTAL ANUAL — MÓDULO DE AVALIAÇÃO',{tot:true,bold:true}); put(w3,'E22',fx('SUM(E20:E21)',C.tB.ano),{tot:true,bold:true,fmt:'money'});
+
+    R5 = {A:P3+'$E$15', B:P3+'$E$22', nrA:`${P3}$E$10+${P3}$E$11`, nrB:'0',
+      sumInc:`SUMPRODUCT(${P3}E5:E14,${P3}G5:G14)+SUMPRODUCT(${P3}E20:E21,${P3}G20:G21)+${P4}D16*${P4}F16`, nrInc:`${P3}E10*${P3}G10+${P3}E11*${P3}G11`,
+      labA:'Plataforma, implantação, formação e suporte', labB:'Módulo opcional de avaliação gamificada', descB:'Cenário A mais o módulo de avaliação e laboratórios.', nrTxt:'implantação e integração'};
+  } else {
+    const w3 = wb.addWorksheet('3. Itens TEAlliance', {properties:{tabColor:{argb:'FFE0651A'}}});
+    w3.columns=[{width:52},{width:16},{width:13},{width:17},{width:17},{width:18},{width:12},{width:10},{width:12},{width:40}];
+    title(w3,'A1','ITENS E PREÇOS — TABELA TEALLIANCE 2026 (preço de venda ao ente) COM ACRÉSCIMO PARA O SETOR PÚBLICO');
+    put(w3,'A2','Preço da tabela em AMARELO (anual = mensal × 12). O acréscimo vem da aba 1, célula B66. Coluna G: 1 = item integra a proposta. O cuidado clínico está na aba 4.');
+    hdr(w3,4,['Item','Unidade','Quantidade','Preço tabela (R$/ano)','Preço com acréscimo','Total anual (R$)','Na proposta (1=sim)','Camada','Recorrente (1=sim)','Observação']);
+    const qT = {tpl:P2+'$B$8', tead:`ROUND(${P1}$B$30*${P1}$B$68,0)`, timr:`MAX(${P1}$B$69,${P1}$B$30)`, tae:`ROUND(${P2}$B$8*${P1}$B$67,0)`, tpar:`ROUND(${P2}$B$8*${P1}$B$26,0)`, tkit:P2+'$B$8', tvaar:`12*${P1}$B$38`};
+    const its = ITENS.filter(it=>it.id!=='cli'); const r1=5, rN=r1+its.length-1;
+    its.forEach((it,k)=>{ const r=r1+k, l=byId(it.id), ov=S.ovQ[it.id]!=null;
+      put(w3,'A'+r,it.nome,{wrap:true}); put(w3,'B'+r,it.un);
+      put(w3,'C'+r, ov ? l.q : fx(qT[it.id], l.qa), ov ? {inp:true,ov:true,fmt:'int',note:'Ajustado manualmente no painel. Cálculo-padrão: '+num(l.qa)} : {fmt:'int'});
+      put(w3,'D'+r, S.ovPU[it.id]!=null ? r2(S.ovPU[it.id]/(1+P.markup/100)) : it.base, {inp:true,fmt:'money'});
+      put(w3,'E'+r, fx(`ROUND(D${r}*(1+${P1}$B$66),2)`, l.pu), {fmt:'money'});
+      put(w3,'F'+r, fx(`C${r}*E${r}`, l.tot), {fmt:'money'});
+      put(w3,'G'+r, inc(it.id), {inp:true,fmt:'0'}); put(w3,'H'+r, it.cam); put(w3,'I'+r, it.rec?1:0, {fmt:'0'});
+      put(w3,'J'+r, ({tpl:'R$ 82/mês por estudante.', tead:'R$ 87/mês por educador.', timr:'R$ 441/mês por participante; mínimo de 65.', tae:'R$ 218 − R$ 82 da plataforma = R$ 136/mês: sem dupla cobrança.', tpar:'R$ 141/mês por familiar.', tkit:'R$ 550 por kit, entrega única (a confirmar).', tvaar:'R$ 27.664,25/mês; opcional, fora dos cenários A, B e C.'})[it.id]||'', {wrap:true}); });
+    const rt=rN+2, sumC = cam => `SUMIF(H${r1}:H${rN},"${cam}",F${r1}:F${rN})`, nrC = cam => `SUMIFS(F${r1}:F${rN},H${r1}:H${rN},"${cam}",I${r1}:I${rN},0)`;
+    const lin = [['TOTAL — camada A (plataforma e formação)',sumC('A'),C.tA.ano],['TOTAL — camada D (acompanhamento pedagógico e familiar)',sumC('D'),C.tB.ano],['TOTAL — consultoria VAAR (opcional)',sumC('V'),C.ls.filter(l=>l.cam==='V').reduce((a,l)=>a+l.tot,0)],
+      ['Não recorrente — camada A',nrC('A'),somar(C.ls.filter(l=>l.cam==='A')).nr],['Não recorrente — camada D (kit)',nrC('D'),somar(C.ls.filter(l=>l.cam==='D')).nr]];
+    lin.forEach((x,k)=>{ const r=rt+k; put(w3,'A'+r,x[0],{tot:true,bold:true}); put(w3,'F'+r,fx(x[1],x[2]),{tot:true,bold:true,fmt:'money'}); });
+    R5 = {A:P3+'$F$'+rt, B:P3+'$F$'+(rt+1), nrA:P3+'$F$'+(rt+3), nrB:P3+'$F$'+(rt+4),
+      sumInc:`SUMPRODUCT(${P3}F${r1}:F${rN},${P3}G${r1}:G${rN})+${P4}D16*${P4}F16`, nrInc:`SUMPRODUCT(${P3}F${r1}:F${rN},${P3}G${r1}:G${rN},1-${P3}I${r1}:I${rN})`,
+      labA:'Plataforma e formação da rede', labB:'Acompanhamento pedagógico e familiar', descB:'Cenário A mais AEE sob demanda, treinamento parental e kit.', nrTxt:'kit de material'};
+  }
 
   /* ---- 4. Cuidado clínico ---- */
   const w4 = wb.addWorksheet('4. Cuidado clinico', {properties:{tabColor:{argb:'FF0E9488'}}});
@@ -305,23 +359,23 @@ async function gerarXlsx(ctx){
   title(w5,'A1','CONSOLIDAÇÃO E CENÁRIOS — '+ctx.label.toUpperCase());
   hdr(w5,3,['Bloco','Total anual (R$)','% do programa','Por aluno atendido (R$/ano)']);
   const tot = C.cen.C.ano||1, ac = d.acomp||1;
-  [['Plataforma, implantação, formação e suporte',P3+'$E$15',C.tA.ano],['Módulo opcional de avaliação gamificada',P3+'$E$22',C.tB.ano],['Cuidado clínico — atendimento profissional',P4+'$D$16',C.tC.ano]]
+  [[R5.labA,R5.A,C.tA.ano],[R5.labB,R5.B,C.tB.ano],['Cuidado clínico — atendimento profissional',P4+'$D$16',C.tC.ano]]
     .forEach((x,i)=>{ const r=4+i; put(w5,'A'+r,x[0]); put(w5,'B'+r,fx(x[1],x[2]),{fmt:'money'}); put(w5,'C'+r,fx(`IFERROR(B${r}/$B$7,0)`,x[2]/tot),{fmt:'0.0%'}); put(w5,'D'+r,fx(`IFERROR(B${r}/${P2}$B$8,0)`,x[2]/ac),{fmt:'money'}); });
   put(w5,'A7','TOTAL DO PROGRAMA INTEGRAL',{tot:true,bold:true}); put(w5,'B7',fx('SUM(B4:B6)',C.cen.C.ano),{tot:true,bold:true,fmt:'money'}); put(w5,'C7',fx('SUM(C4:C6)',1),{tot:true,bold:true,fmt:'0.0%'}); put(w5,'D7',fx(`IFERROR(B7/${P2}$B$8,0)`,C.cen.C.ano/ac),{tot:true,bold:true,fmt:'money'});
   title(w5,'A9','CENÁRIOS DE ESCOPO');
   hdr(w5,10,['Cenário','Composição','Total anual (R$)','Por aluno (R$/ano)']);
-  [['A — Coordenação','Somente plataforma de PEI, implantação, formação e suporte.',P3+'$E$15',C.cen.A.ano],['B — Coordenação e avaliação','Cenário A mais o módulo de avaliação e laboratórios.',P3+'$E$15+'+P3+'$E$22',C.cen.B.ano],['C — Programa integral (recomendado)','Cenário B mais o atendimento clínico profissional.',P3+'$E$15+'+P3+'$E$22+'+P4+'$D$16',C.cen.C.ano]]
+  [['A — Coordenação',R5.labA+'.',R5.A,C.cen.A.ano],['B — '+CAM.B,R5.descB,R5.A+'+'+R5.B,C.cen.B.ano],['C — Programa integral (recomendado)','Cenário B mais o atendimento clínico profissional.',R5.A+'+'+R5.B+'+'+P4+'$D$16',C.cen.C.ano]]
     .forEach((x,i)=>{ const r=11+i; put(w5,'A'+r,x[0]); put(w5,'B'+r,x[1],{wrap:true}); put(w5,'C'+r,fx(x[2],x[3]),{fmt:'money'}); put(w5,'D'+r,fx(`IFERROR(C${r}/${P2}$B$8,0)`,x[3]/ac),{fmt:'money'}); });
   title(w5,'A15','CONTRATO DE 5 ANOS (serviço contínuo, arts. 106 e 107 da Lei 14.133/2021)');
   hdr(w5,16,['Cenário','Ano 1','Anos 2 a 5 (cada)','Total 5 anos']);
-  ['A — Coordenação','B — Coordenação e avaliação','C — Programa integral (recomendado)'].forEach((t,i)=>{ const r=17+i, k='ABC'[i], cz=C.cen[k];
-    put(w5,'A'+r,t); put(w5,'B'+r,fx('C'+(11+i),cz.ano),{fmt:'money'}); put(w5,'C'+r,fx(`C${11+i}-${P3}$E$10-${P3}$E$11`,cz.r),{fmt:'money'}); put(w5,'D'+r,fx(`B${r}+C${r}*4`,cz.nr+cz.r*5),{fmt:'money'}); });
-  put(w5,'A20','Nos anos 2 a 5 excluem-se implantação e integração, que são despesas não recorrentes. Valores a preços de setembro de 2026, sem reajuste.',{it:true});
+  ['A — Coordenação','B — '+CAM.B,'C — Programa integral (recomendado)'].forEach((t,i)=>{ const r=17+i, k='ABC'[i], cz=C.cen[k];
+    put(w5,'A'+r,t); put(w5,'B'+r,fx('C'+(11+i),cz.ano),{fmt:'money'}); put(w5,'C'+r,fx(`C${11+i}-${R5.nrA}`+(i>0?`-${R5.nrB}`:''),cz.r),{fmt:'money'}); put(w5,'D'+r,fx(`B${r}+C${r}*4`,cz.nr+cz.r*5),{fmt:'money'}); });
+  put(w5,'A20','Nos anos 2 a 5 excluem-se as despesas não recorrentes ('+R5.nrTxt+'). Valores a preços de setembro de 2026, sem reajuste.',{it:true});
   title(w5,'A22','PROPOSTA — ESCOPO E VIGÊNCIA ADOTADOS');
   hdr(w5,23,['Componente','Valor','Cálculo']);
-  const sumInc = `SUMPRODUCT(${P3}E5:E14,${P3}G5:G14)+SUMPRODUCT(${P3}E20:E21,${P3}G20:G21)+${P4}D16*${P4}F16`;
+  const sumInc = R5.sumInc;
   [['Valor anual do escopo (1º ano)',sumInc,C.t.ano,'Soma dos itens marcados com 1'],
-   ['Parcela não recorrente (implantação e integração)',`${P3}E10*${P3}G10+${P3}E11*${P3}G11`,C.t.nr,'Somente no 1º ano'],
+   ['Parcela não recorrente ('+R5.nrTxt+')',R5.nrInc,C.t.nr,'Somente no 1º ano'],
    ['Parcela recorrente anual','B24-B25',C.t.r,'Repete-se a cada 12 meses'],
    ['Vigência (meses)',P1+'B52',S.vig,'Aba 1, célula B52'],
    ['VALOR TOTAL DO PROJETO','B25+B26*B27/12',C.total,'Não recorrente + recorrente × vigência/12'],
@@ -522,6 +576,9 @@ async function gerarETP(ctx){
   if(ctx.cams.has('B')){ c.push(h2('III.5. Requisitos específicos da avaliação pedagógica')); ['Instrumento de avaliação pedagógica de habilidades — leitura, escrita, numeramento e atenção — com resultado de natureza pedagógica.','Vedação à emissão de hipótese diagnóstica ou à nomeação de condição de saúde: o instrumento sinaliza necessidade de aprofundamento e encaminha ao profissional habilitado, o que mantém a solução fora do regime de software como dispositivo médico (RDC ANVISA nº 657/2022 e nº 751/2022).','Importação estruturada dos resultados pela plataforma de gestão do PEI.'].forEach(t=>c.push(bl(t))); }
   if(ctx.cams.has('C')){ c.push(h2('III.'+(ctx.cams.has('B')?6:5)+'. Requisitos específicos do atendimento multiprofissional')); ['Profissionais legalmente habilitados, com registro ativo no conselho de classe (CRM, com Registro de Qualificação de Especialista em neurologia ou psiquiatria; CRFa; CRP) e formação comprovada em psicopedagogia.','Estabelecimentos cadastrados no CNES; teleatendimento admitido nos termos da Lei nº 14.510/2022.','Registro de cada atendimento no módulo de saúde da plataforma, com devolutiva ao plano educacional.','Periodicidade de referência: 3 consultas/ano de neurologia e de psiquiatria e 12 sessões/ano de fonoaudiologia, psicologia e psicopedagogia, ajustável por nível de suporte.'].forEach(t=>c.push(bl(t))); }
 
+  { let nr = 5 + (ctx.cams.has('B')?1:0) + (ctx.cams.has('C')?1:0);
+    if(ctx.cams.has('D')){ c.push(h2('III.'+(nr++)+'. Requisitos específicos do acompanhamento pedagógico e familiar')); ['AEE sob demanda: reunião mensal de psicopedagogo com a equipe escolar para revisão das estratégias educacionais e do PEI de cada educando atendido, registrada na plataforma.','Treinamento parental em acolhimento familiar, manejo comportamental (prevenção e manejo de crises), desenvolvimento neuropsicomotor e sinais de alerta, e suporte pedagógico no ambiente familiar.','Material de apoio impresso para educando, família e professor, incluindo jogos lúdicos, entregue por unidade escolar mediante termo de recebimento.'].forEach(t=>c.push(bl(t))); }
+    if(ctx.cams.has('V')){ c.push(h2('III.'+(nr++)+'. Requisitos específicos da consultoria VAAR')); ['Diagnóstico das condicionalidades da complementação VAAR do FUNDEB aplicáveis ao ente e plano de ação para seu cumprimento.','Relatórios mensais de atividades e produtos, vinculados aos indicadores de atendimento e de melhoria de aprendizagem com redução das desigualdades.'].forEach(t=>c.push(bl(t))); } }
   c.push(...h1('IV — Estimativa das quantidades','(art. 18, § 1º, IV)'));
   c.push(p('As quantidades foram dimensionadas pelo público efetivamente atendido pela educação especial, e não pela matrícula total — critério tecnicamente mais defensável, que reduz o valor global e evita questionamento por superdimensionamento. A memória completa, com fórmulas, integra este ETP como **Anexo I — Memória de cálculo**.'));
   if(d.censo){
@@ -580,6 +637,7 @@ async function gerarETP(ctx){
   c.push(h2('VI.2. Parâmetro público de referência — ARP nº 045/2026 (CIMINAS)'));
   c.push(K.kv([['Origem','Concorrência Eletrônica nº 004/2026, firmada em 27/08/2026'],['Licença de plataforma de avaliação','R$ 750,97 por aluno/ano'],['Implementação por unidade educacional','R$ 1.162,49 por unidade'],['Treinamento (turma de até 20)','R$ 3.520,84 por turma'],['Locação de laboratório itinerante','R$ 2.542,89 por serviço'],['Valor total registrado','R$ 80.400.000,00']]));
   c.push(p('O objeto da ARP 045/2026 não é idêntico: é útil para a ordem de grandeza dos itens de implantação, formação e avaliação, e não deve ser transposto diretamente para o licenciamento de gestão de PEI, dimensionado aqui por educando com PEI ativo.',{size:18, before:80}));
+  if(isTEA()) c.push(p('Nesta minuta, os preços unitários seguem a tabela de preços TEAlliance 2026 (preço de venda ao ente), com acréscimo de '+num(P.markup,0)+'% para o setor público. O AEE sob demanda é cobrado como complemento à licença da plataforma, sem dupla cobrança, e o kit de material é entrega única no primeiro ano.'));
   c.push(h2('VI.3. Planilha de formação do valor estimado'));
   c.push(tbl(['#','Item','Unidade','Qtd.','Unitário','Total anual'], tabelaItens(K, L, [{v:x=>String(x.n)},{v:x=>x.desc+(x.rec?'':' *')},{v:x=>x.un},{v:x=>({__c:1,t:num(x.q),right:true})},{v:x=>({__c:1,t:brl(x.pu),right:true})},{v:x=>({__c:1,t:brl(x.tot),right:true}),sum:lt=>brl(lt.ano)}]), [5,37,13,10,15,20]));
   c.push(p('* Item não recorrente: incide apenas no primeiro ano.',{size:17, before:60}));
@@ -596,6 +654,8 @@ async function gerarETP(ctx){
   c.push(p('A solução é descrita em seu ciclo de vida completo, e não apenas no momento da entrega do software. O que o ente contrata é a coordenação do desenvolvimento de cada educando; a plataforma é o instrumento.'));
   const comp = [['Núcleo de integração e inteligência','Base única por educando; cruzamento com base estruturada de conhecimento pedagógico, clínico e legal; IA para identificar necessidades, recomendar estratégias e gerar proposta de plano.'],['Módulo Escola','Ciclo completo do PEI: elaboração assistida, homologação humana, execução, revisão periódica e encerramento, com controle de prazos legais.'],['Módulo Saúde','Acesso controlado de profissionais da rede de saúde e conveniada, com registro de condutas, metas terapêuticas e devolutivas.'],['Módulo Família','Registro de observações do cotidiano, acompanhamento da evolução e orientação sobre estratégias domiciliares.'],['Painel de governança','Indicadores agregados para a Secretaria: cobertura de PEI, tempestividade, revisão no prazo, evolução.'],['Formação continuada','Trilhas por perfil (regente, AEE, coordenação, gestão, saúde), turmas de até 20, carga horária certificada.'],['Supervisão e suporte','Mentoria multiprofissional de casos e central de atendimento com níveis de serviço.']];
   if(ctx.cams.has('B')) comp.push(['Avaliação pedagógica','Avaliação gamificada de habilidades aplicada com laboratórios itinerantes; resultados importados para o PEI; sem finalidade diagnóstica.']);
+  if(ctx.cams.has('D')) comp.push(['Acompanhamento pedagógico e familiar','AEE sob demanda com reunião mensal de psicopedagogo e revisão do PEI; treinamento parental; kit de material de apoio impresso.']);
+  if(ctx.cams.has('V')) comp.push(['Consultoria VAAR','Apoio ao cumprimento das condicionalidades da complementação VAAR do FUNDEB.']);
   if(ctx.cams.has('C')) comp.push(['Atendimento multiprofissional','Neurologia, psiquiatria, fonoaudiologia, psicologia e psicopedagogia, com registro no módulo de saúde e devolutiva à escola.']);
   c.push(tbl(['Componente','Descrição funcional'], comp, [26,74], {zebra:true}));
   c.push(h2('VII.2. Escopo excluído — medicação'), p('Não integra o objeto o fornecimento de medicação à base de canabidiol: não incorporado ao SUS para TEA, sem registro na ANVISA dos produtos usualmente prescritos (logo, sem preço CMED de referência) e fora das indicações da Resolução CFM nº 2.324/2022. A plataforma registra a medicação prescrita, função legítima de coordenação do cuidado, sem custeio pelo contrato.'));
@@ -682,6 +742,8 @@ async function gerarTR(ctx){
   c.push(...h1('3. Da descrição da solução como um todo','(art. 6º, XXIII, "c")'));
   const comp=[['Núcleo de integração e inteligência','Base única por educando; base estruturada de conhecimento pedagógico, clínico e legal; IA para recomendação de estratégias e geração assistida do plano.'],['Módulo Escola','Ciclo completo do PEI com homologação humana e controle de prazos legais.'],['Módulo Saúde','Acesso controlado de profissionais de saúde, com condutas, metas terapêuticas e devolutivas.'],['Módulo Família','Observações do cotidiano, evolução e orientação domiciliar.'],['Painel de governança','Indicadores agregados para a Secretaria e prestação de contas.'],['Serviços','Implantação faseada, integração, formação certificada por perfil, supervisão multiprofissional e suporte por níveis de serviço.']];
   if(ctx.cams.has('B')) comp.push(['Avaliação pedagógica','Avaliação gamificada de habilidades, com laboratórios itinerantes e resultados importados para o PEI, sem finalidade diagnóstica.']);
+  if(ctx.cams.has('D')) comp.push(['Acompanhamento pedagógico e familiar','AEE sob demanda com psicopedagogo, treinamento parental e kit de material de apoio.']);
+  if(ctx.cams.has('V')) comp.push(['Consultoria VAAR','Plano de ação e acompanhamento das condicionalidades do VAAR/FUNDEB.']);
   if(ctx.cams.has('C')) comp.push(['Atendimento multiprofissional','Consultas e sessões por profissionais habilitados, reguladas a partir do plano e registradas no módulo de saúde.']);
   c.push(tbl(['Componente','Entrega'], comp, [28,72], {zebra:true}));
 
@@ -695,14 +757,16 @@ async function gerarTR(ctx){
   let sec=4;
   if(ctx.cams.has('B')){ c.push(h2('4.'+(sec++)+'. Requisitos específicos — avaliação pedagógica')); ['Avaliação de leitura, escrita, numeramento e atenção, com resultado de natureza pedagógica.','Vedado emitir hipótese diagnóstica ou nomear condição de saúde; o resultado sinaliza aprofundamento e encaminha ao profissional habilitado.','Laboratórios itinerantes com equipamentos e mediação, na razão de um para cada '+num(P.escLab)+' unidades escolares.','Consentimento parental prévio e integração dos resultados ao PEI (RF-17).'].forEach(t=>c.push(bl(t))); }
   if(ctx.cams.has('C')){ c.push(h2('4.'+(sec++)+'. Requisitos específicos — atendimento multiprofissional')); ['Profissionais com registro ativo no conselho de classe (CRM com RQE em neurologia ou psiquiatria; CRFa; CRP) e formação comprovada em psicopedagogia.','Estabelecimentos no CNES; teleatendimento admitido nos termos da Lei nº 14.510/2022, quando clinicamente adequado.','Atendimento a partir de encaminhamento regulado, vinculado ao PEI do educando.','Registro de cada atendimento no módulo de saúde, com devolutiva à escola.','Periodicidade de referência: '+PAC.map(x=>x.s.toLowerCase()+' '+x.n+'/ano').join('; ')+'; estratificável por nível de suporte.'].forEach(t=>c.push(bl(t))); }
+  if(ctx.cams.has('D')){ c.push(h2('4.'+(sec++)+'. Requisitos específicos — acompanhamento pedagógico e familiar')); ['Psicopedagogo com formação comprovada para as reuniões mensais de AEE sob demanda, com registro na plataforma.','Treinamento parental conduzido por profissionais com formação em análise do comportamento ou áreas afins, com registro de participação.','Kit de material impresso entregue por unidade escolar, com termo de recebimento.'].forEach(t=>c.push(bl(t))); }
   c.push(h2('4.'+sec+'. Vedações'));
   ['Uso dos dados para finalidade diversa da execução, inclusive treinamento de IA para terceiros, salvo anonimização irreversível e autorização expressa.','Transferência internacional de dados sem autorização e sem observância dos arts. 33 a 36 da LGPD.','Subcontratação do licenciamento e da operação da plataforma (parcela principal); parcelas acessórias até '+PRE('%')+', com autorização prévia (art. 122).','Cobrança de qualquer valor de famílias, educandos ou servidores.','Fornecimento de medicação pelo contrato.'].forEach(t=>c.push(bl(t)));
 
   c.push(...h1('5. Do modelo de execução do objeto','(art. 6º, XXIII, "e")'));
   c.push(p('Regime de empreitada por preço unitário, iniciando-se com a ordem de serviço e desenvolvendo-se em fases:'));
   const fases=[['1 — Planejamento','Reunião inicial; plano de implantação; matriz LGPD; RIPD; cronograma físico.','Até 30 dias da ordem de serviço'],['2 — Provisionamento','Ambientes de produção e homologação; SSO; perfis.','Até 15 dias do aceite da fase 1'],['3 — Integração','Integração com sistemas legados; carga inicial validada.','Até 45 dias do aceite da fase 2'],['4 — Implantação por lote','Parametrização por unidade; habilitação de usuários; termo de aceite.', (ctx.escolas && ctx.escolas.some(x=>x.esp>0)) ? lotesResumo(ctx.escolas).map(x=>'Lote '+x.l+': '+int(x.n)+' unidades').join('; ')+' (Anexo II do ETP)' : 'Lotes de até '+PRE()+' unidades'],['5 — Capacitação','Turmas de até 20 por perfil, com avaliação e certificação.','Concomitante à fase 4'],['6 — Operação assistida','Ajustes, suporte reforçado e mentoria de casos.','90 dias após cada lote']];
-  if(ctx.cams.has('B')) fases.push(['7 — Avaliação pedagógica','Aplicação com laboratórios itinerantes; importação dos resultados ao PEI.','Ciclos semestrais']);
-  if(ctx.cams.has('C')) fases.push([(ctx.cams.has('B')?'8':'7')+' — Atendimento multiprofissional','Início dos atendimentos regulados a partir dos PEIs homologados.','A partir do 3º mês']);
+  let nfa=7; if(ctx.cams.has('D')) fases.push([(nfa++)+' — Acompanhamento pedagógico e familiar','Reuniões mensais de AEE sob demanda, ciclos de treinamento parental e entrega dos kits por unidade.','A partir do 2º mês']);
+  if(ctx.cams.has('B')) fases.push([(nfa++)+' — Avaliação pedagógica','Aplicação com laboratórios itinerantes; importação dos resultados ao PEI.','Ciclos semestrais']);
+  if(ctx.cams.has('C')) fases.push([(nfa++)+' — Atendimento multiprofissional','Início dos atendimentos regulados a partir dos PEIs homologados.','A partir do 3º mês']);
   fases.push(['Operação plena','Uso regular; SLA; relatórios mensais.','Até o término da vigência'],['Encerramento','Exportação integral; transferência de conhecimento; eliminação segura dos dados.','Últimos 60 dias']);
   c.push(tbl(['Fase','Atividades','Prazo'], fases, [24,50,26], {zebra:true}));
   c.push(h2('5.2. Formação continuada'), p('Turmas de até 20 participantes, com carga mínima de 20 horas; trilhas para professor regente, AEE, coordenação, gestão, saúde e orientação às famílias; conteúdo mínimo: marco legal da inclusão, fundamentos do PEI, operação da plataforma, uso da informação clínica no planejamento, proteção de dados e uso responsável de IA; certificado individual.'));
