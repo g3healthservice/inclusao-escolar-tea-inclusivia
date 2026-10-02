@@ -11,6 +11,8 @@ Entradas:
   mail_endpoint.txt / mail_token.txt     (opcionais) Apps Script de envio de e-mail
 
 Atualizar a base: python3 gerar_dashboard.py --xlsx ~/Downloads/autismo_municipios_censo2022.xlsx
+Versão paralela (beta, modo aplicativo): python3 gerar_dashboard.py --v2   -> beta/index.html
+  aplica a camada v2/ (v2.css, v2-shell.html, v2.js) sobre o mesmo template — a plataforma atual não muda.
 """
 import argparse, json, os, sys
 from datetime import datetime
@@ -41,11 +43,33 @@ def importar_xlsx(caminho):
     print(f"Base importada: {len(data)} municípios, {sum(sum(d[3:]) for d in data):,} pessoas com TEA 0-19")
 
 
+def aplicar_v2(html):
+    """Camada de design v2 sobre o template: menu lateral por etapas, barra de resumo e tema escuro opcional."""
+    def troca(a, b, n=1):
+        nonlocal html
+        assert html.count(a) == n, f"âncora v2 não encontrada (ou repetida): {a[:60]!r}"
+        html = html.replace(a, b)
+    troca('<html lang="pt-BR">', '<html lang="pt-BR" data-theme="light">')
+    troca('<title>Inclusi.Via', '<title>[Beta] Inclusi.Via')
+    troca('<meta property="og:url" content="__SITE_URL__">', '<meta property="og:url" content="__SITE_URL__beta/">')
+    troca('</head>', '<script>try{var t=localStorage.getItem("inclusivia_theme");if(t==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>\n'
+          '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+          '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">\n'
+          '<style>\n' + ler("v2/v2.css") + '</style>\n</head>')
+    troca('<body>', '<body class="v2">\n' + ler("v2/v2-shell.html"))
+    # o mapa de escolas é servido na raiz do site; a beta fica em /beta/
+    troca("fetch('escolas/'", "fetch('../escolas/'")
+    troca('init();\n</script>', 'init();\n</script>\n<script>\n' + ler("v2/v2.js").replace("</script", "<\\/script") + '</script>')
+    return html
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--xlsx", help="reimporta a planilha do Censo antes de gerar")
-    ap.add_argument("--out", default="index.html")
+    ap.add_argument("--out", default=None)
+    ap.add_argument("--v2", action="store_true", help="gera a versão paralela (modo aplicativo) em beta/index.html")
     a = ap.parse_args()
+    a.out = a.out or ("beta/index.html" if a.v2 else "index.html")
     if a.xlsx:
         importar_xlsx(os.path.expanduser(a.xlsx))
 
@@ -56,6 +80,8 @@ def main():
 
     docs = ler("docs.js").replace("__XLSX_STATIC__", ler("dados/xlsx_estatico.json"))
     html = ler("template.html").replace("__DOCSJS__", docs)
+    if a.v2:
+        html = aplicar_v2(html)
     # dados e libs por último: não podem ter seus conteúdos reinterpretados como placeholder
     for k, v in {"__SITE_URL__": SITE_URL, "__BUILD__": build,
                  "__MAIL_ENDPOINT__": endpoint, "__MAIL_TOKEN__": token}.items():
@@ -71,6 +97,7 @@ def main():
     html = html.replace("__AUTOTABLE__", lib("jspdf.plugin.autotable.min.js"))
 
     out = os.path.join(BASE, a.out)
+    os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"OK {out} ({len(html)/1024:.0f} KB) · build {build} · e-mail: {'CONFIGURADO' if endpoint else 'mailto (sem endpoint)'}")
