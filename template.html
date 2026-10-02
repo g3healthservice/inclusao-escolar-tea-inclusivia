@@ -289,6 +289,21 @@ details.prem summary{cursor:pointer;padding:12px 16px;font-weight:650;color:var(
 .lote.l1{background:#DDF3F0;color:#0B6F66} .lote.l2{background:#FFF1E4;color:#A8470C} .lote.l3{background:var(--soft);color:var(--muted)}
 .nao{color:#A8470C;font-weight:600}
 @media (max-width:760px){ .emk{grid-template-columns:1fr 1fr} .ente .vvs{gap:14px} .ente .vv.fam{padding-left:14px} }
+.mods{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.mod{background:#fff;border:1px solid var(--line);border-left:6px solid var(--mc,#ccc);border-radius:0 12px 12px 0;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:6px 12px}
+.mod.off{opacity:.55}
+.mod .mt{display:flex;gap:10px;align-items:center}
+.mod .mn{display:grid;place-items:center;min-width:28px;height:28px;border-radius:8px;background:var(--mc,#ccc);color:#14225A;font-weight:800;font-size:14px}
+.mod h4{margin:0;font-size:14.5px;color:var(--navy);line-height:1.25}
+.mod .inc{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin:0}
+.mod .pr{grid-column:1/-1;display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:8px}
+.mod .pr .u b{font-size:17px;color:var(--navy)} .mod .pr .u span{font-size:12px;color:var(--muted)}
+.mod .pr .t{text-align:right} .mod .pr .t b{font-size:16px;color:var(--ink)} .mod .pr .t span{display:block;font-size:12px;color:var(--muted)}
+.mod .tag{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--soft);color:var(--muted);margin-left:6px;vertical-align:1px}
+.tecbox{margin-top:22px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.tecbox>summary{cursor:pointer;padding:13px 16px;font-weight:650;color:var(--navy);font-size:14px}
+.tecin{padding:0 16px 16px}
+@media (max-width:760px){ .mods{grid-template-columns:1fr} }
 /* módulo de proposta em destaque */
 #proposta{background:linear-gradient(180deg,#FFF4EA 0%,#FDF8F3 55%,#F7F3FB 100%);border-top:4px solid var(--orange)}
 #proposta .sh{display:inline-block;background:var(--orange);color:#fff;padding:5px 12px;border-radius:99px;letter-spacing:.12em}
@@ -555,8 +570,20 @@ ul.clean li{margin:4px 0;font-size:13.5px}
     <button class="bs" id="tb-estudo" onclick="setTabela('estudo')"><b>📐 Tabela do estudo de viabilidade</b><span>Âncoras da ARP 045/2026 (CIMINAS) e preços propostos</span></button>
     <button class="bs" id="tb-tea" onclick="setTabela('tea')"><b>🏷️ Tabela TEAlliance 2026 <span id="tbMk">+30%</span> setor público</b><span>Preço de venda ao ente, com AEE sob demanda, treinamento parental e kit</span></button>
   </div>
-  <p class="lead2">Atenção ao denominador de cada linha: a plataforma e a avaliação incidem sobre todos os acompanhados; o cuidado clínico, apenas sobre quem o recebe.</p>
+  <p class="lead2">O programa é organizado em módulos. Cada módulo tem um preço por pessoa — por educador, por estudante ou por família — e pode ser ligado ou desligado. O total do programa é a soma dos módulos ligados.</p>
 
+  <div class="mods" id="mods"></div>
+
+  <div class="card" style="margin-top:18px">
+    <h3>Preço total do programa</h3>
+    <div class="tscroll"><table class="qd" id="tbMods"></table></div>
+    <div class="note" id="modsNote"></div>
+  </div>
+
+  <details class="tecbox" id="tecBox">
+    <summary>🔧 Detalhamento técnico — cenários prontos, custo por estudante, itens editáveis e composição do pacote clínico</summary>
+    <div class="tecin">
+    <p class="lead2" style="margin-top:6px">Atenção ao denominador de cada linha: a plataforma e o acompanhamento incidem sobre todos os acompanhados; a medicina, apenas sobre quem a recebe.</p>
   <div class="grid2 g32">
     <div class="card">
       <h3>Custo por estudante</h3>
@@ -582,10 +609,12 @@ ul.clean li{margin:4px 0;font-size:13.5px}
   </div>
 
   <div class="card" style="margin-top:18px">
-    <h3>Pacote de atendimento clínico por estudante/ano</h3>
+    <h3>Módulo Medicina — composição do pacote clínico por estudante/ano</h3>
     <div class="tscroll"><table class="itab" id="tbPac"></table></div>
     <div class="callout teal">Recomenda-se estratificar o pacote por nível de suporte do TEA (1, 2 e 3): um pacote único superestima o custo dos casos leves e subestima o dos graves. Ajuste as sessões acima para simular faixas de intensidade.</div>
   </div>
+    </div>
+  </details>
 </div></section>
 
 <!-- 05 VALOR -->
@@ -1103,13 +1132,16 @@ function exportarMapa(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download='Escolas_'+slug(enteLabel())+'.csv'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1500);
 }
 function linhas(d, useOvQ){
-  return ITENS.map(it => {
+  const ls = ITENS.map(it => {
     const qa = it.q(d);
     const q = (useOvQ && S.ovQ[it.id]!=null) ? S.ovQ[it.id] : qa;
     const pa = it.id==='cli' ? pacoteTotal() : (typeof it.pu==='function' ? it.pu() : it.pu);
     const pu = S.ovPU[it.id]!=null ? S.ovPU[it.id] : pa;
     return {...it, qa, q, pa, pu, tot:r2(q*pu)};
   });
+  // módulo 3 desligado com o AEE ligado: a plataforma fica só para os estudantes com AEE (módulo 4 inclui a plataforma)
+  if(useOvQ && isTEA() && S.modSemPlat && S.cen==='P' && S.inc.tae){ const p=ls.find(l=>l.id==='tpl'), a=ls.find(l=>l.id==='tae'); if(p&&a){ p.q=a.q; p.tot=r2(p.q*p.pu); } }
+  return ls;
 }
 // A = coordenação; B = A + avaliação (estudo) ou acompanhamento D (TEAlliance); C = B + clínico. V (VAAR) só no personalizado.
 const CEN_CAM = {A:['A'], B:['A','B','D'], C:['A','B','C','D']};
@@ -1213,14 +1245,75 @@ function toggleItem(id,on){
   if(S.cen!=='P'){ ITENS.forEach(it=>S.inc[it.id]=CEN_CAM[S.cen].includes(it.cam)); S.cen='P'; }
   S.inc[id]=on; update();
 }
-function setCen(c){ S.cen=c; if(c!=='P') ITENS.forEach(it=>S.inc[it.id]=CEN_CAM[c].includes(it.cam)); update(); }
+function setCen(c){ S.cen=c; S.modSemPlat=false; if(c!=='P') ITENS.forEach(it=>S.inc[it.id]=CEN_CAM[c].includes(it.cam)); update(); }
 function setTabela(t){
-  S.tabela=t; ITENS = t==='tea' ? ITENS_TEA : ITENS_ESTUDO;
+  S.tabela=t; S.modSemPlat=false; ITENS = t==='tea' ? ITENS_TEA : ITENS_ESTUDO;
   CAM.B = t==='tea' ? 'Coordenação e acompanhamento' : 'Coordenação e avaliação';
   S.ovQ={}; S.ovPU={}; ITENS.forEach(it=>S.inc[it.id]=S.cen==='P'?true:CEN_CAM[S.cen].includes(it.cam));
   buildItens(); update();
 }
 const isTEA = () => S.tabela==='tea';
+
+/* ---------- módulos (apresentação no formato da tabela TEAlliance) ---------- */
+const MODS_TEA = [
+  {n:1, cor:'#BFD9F2', ids:['tead'], nome:'Formações EAD — educação continuada em inclusão', un:'por educador', qn:'educadores', inc:'Acompanhante escolar (360 h), profissional de apoio escolar (180 h), pós-graduação em análise do comportamento, comunidade com especialistas, aulas síncronas e assíncronas, certificado reconhecido pelo MEC.'},
+  {n:2, cor:'#4FC3E8', ids:['timr'], nome:'Imersões presenciais — formação de multiplicadores', un:'por participante', qn:'participantes', inc:'Manejo comportamental (prevenção e manejo de crises), adaptações pedagógicas e uso da plataforma Inclusi.Via. Mínimo de 65 participantes.'},
+  {n:3, cor:'#F6C9A8', ids:['tpl'], nome:'Plataforma de gestão da inclusão — Inclusi.Via', un:'por estudante', qn:'estudantes', inc:'Os 6 documentos exigidos pela legislação (estudo de caso, API, PDI, PIC, PAEE, PEI), estudo de caso colaborativo, biblioteca própria, plano de aula adaptado e painel de evolução.'},
+  {n:4, cor:'#D9B8E8', ids:['tae'], nome:'AEE sob demanda — com plataforma Inclusi.Via', un:'por estudante', qn:'estudantes', inc:'Tudo o que está no módulo 3, mais reunião mensal com psicopedagogo para revisão das estratégias educacionais e do PEI.'},
+  {n:5, cor:'#A8DDB5', ids:['tvaar'], nome:'Consultoria educacional — VAAR', un:'valor fechado por ente', qn:'meses', inc:'Apoio ao cumprimento das condicionalidades da complementação VAAR do FUNDEB. Serviço opcional.', opc:true},
+  {n:6, cor:'#F5C242', ids:['tpar'], nome:'Treinamento parental', un:'por família', qn:'famílias', inc:'Acolhimento familiar, manejo comportamental, desenvolvimento neuropsicomotor e sinais de alerta, suporte pedagógico no ambiente familiar.'},
+  {n:7, cor:'#F4A06A', ids:['tkit'], nome:'Material de apoio educacional impresso', un:'por kit, entrega única', qn:'kits', inc:'Material básico e customizado para estudante, família e professor, e jogos lúdicos para TEA.', unico:true},
+  {n:8, cor:'#7FD3C7', ids:['cli'], nome:'Medicina — atendimento clínico multiprofissional', un:'por estudante atendido', qn:'estudantes', inc:'Neurologia e psiquiatria (3 consultas/ano cada), fonoaudiologia, psicologia e psicopedagogia (12 sessões/ano cada), presencial ou teleconsulta. Rubrica da Saúde.'}];
+const MODS_EST = [
+  {n:1, cor:'#F6C9A8', ids:['esc','edu','sau','fam','pai'], nome:'Plataforma Inclusi.Via — licenças', un:'por estudante (média)', qn:'estudantes', inc:'Módulos Escola, Saúde e Família, licença por estudante com PEI ativo e painel de governança da Secretaria.'},
+  {n:2, cor:'#BFD9F2', ids:['imp','int'], nome:'Implantação e integração', un:'por estudante (média, só no 1º ano)', qn:'estudantes', inc:'Parametrização por unidade escolar e integração com sistemas legados (gestão escolar, Educacenso, saúde).', unico:true},
+  {n:3, cor:'#4FC3E8', ids:['for','sup','sus'], nome:'Formação, supervisão e suporte', un:'por estudante (média)', qn:'estudantes', inc:'Formação continuada em turmas de até 20, supervisão e mentoria multiprofissional de casos, suporte técnico e sustentação.'},
+  {n:4, cor:'#D9B8E8', ids:['ava','lab'], nome:'Avaliação pedagógica de habilidades', un:'por estudante (média)', qn:'estudantes', inc:'Plataforma de avaliação gamificada e laboratórios itinerantes, sem finalidade diagnóstica.'},
+  {n:5, cor:'#7FD3C7', ids:['cli'], nome:'Medicina — atendimento clínico multiprofissional', un:'por estudante atendido', qn:'estudantes', inc:'Neurologia e psiquiatria (3 consultas/ano cada), fonoaudiologia, psicologia e psicopedagogia (12 sessões/ano cada), presencial ou teleconsulta. Rubrica da Saúde.'}];
+function modulos(C){
+  const by = id => C.ls.find(l=>l.id===id), d = C.d;
+  return (isTEA() ? MODS_TEA : MODS_EST).map(m=>{
+    const L = m.ids.map(by).filter(Boolean), on = L.some(l=>incluido(l));
+    let qtd, unit, tot;
+    if(isTEA()){
+      const tpl=by('tpl'), tae=by('tae'), aeeOn=incluido(tae);
+      if(m.n===3){ qtd = Math.max(0, tpl.q - (aeeOn ? tae.q : 0)); unit = tpl.pu; tot = incluido(tpl) ? r2(qtd*unit) : 0; }
+      else if(m.n===4){ qtd = tae.q; unit = r2(tpl.pu + tae.pu); tot = aeeOn ? r2(qtd*unit) : 0; }
+      else { const l=L[0]; const mensal = l.un==='Mês'; qtd = mensal ? l.q/12 : l.q; unit = mensal ? l.pu*12 : l.pu; tot = on ? l.tot : 0; }
+    } else {
+      tot = r2(L.filter(incluido).reduce((a,l)=>a+l.tot,0)); qtd = m.ids.includes('cli') ? d.clin : d.acomp;
+      unit = qtd ? (on ? tot : L.reduce((a,l)=>a+l.tot,0))/qtd : 0;
+    }
+    const on3 = isTEA() && m.n===3 ? (incluido(by('tpl')) && !S.modSemPlat) : on;
+    const noM4 = isTEA() && m.n===3 && on3 && qtd===0 && incluido(by('tae'));
+    return {...m, on:on3, qtd, unit, tot, mes: unit/12, totMes: tot/12, noM4};
+  });
+}
+function modToggle(n, on){
+  const m = (isTEA()?MODS_TEA:MODS_EST).find(x=>x.n===n);
+  if(S.cen!=='P'){ ITENS.forEach(it=>S.inc[it.id]=CEN_CAM[S.cen].includes(it.cam)); S.cen='P'; }
+  if(isTEA() && n===4){ S.inc.tae=on; if(on) S.inc.tpl=true; }   // o AEE sob demanda inclui a plataforma
+  else if(isTEA() && n===3 && !on && S.inc.tae){ S.inc.tpl=true; S.modSemPlat=true; } // mantém a plataforma só dos estudantes com AEE
+  else m.ids.forEach(id=>S.inc[id]=on);
+  if(isTEA() && n===3) S.modSemPlat = !on && !!S.inc.tae;
+  update();
+}
+function renderModulos(C){
+  const MS = modulos(C), d = C.d;
+  $('mods').innerHTML = MS.map(m=>{
+    const unitTxt = m.unico ? brl(m.unit)+'<span> '+m.un+'</span>' : brl(m.mes)+'<span>/mês '+m.un+' · '+brl(m.unit)+'/ano</span>';
+    return `<div class="mod ${m.on?'':'off'}" style="--mc:${m.cor}">
+      <div class="mt"><span class="mn">${m.n}</span><h4>${m.nome}${m.opc?'<span class="tag">opcional</span>':''}</h4></div>
+      <label class="sw" title="${m.on?'Desligar':'Ligar'} módulo"><input type="checkbox" ${m.on?'checked':''} onchange="modToggle(${m.n},this.checked)"><span></span></label>
+      <p class="inc">${m.inc}</p>
+      <div class="pr"><div class="u"><b>${unitTxt}</b></div><div class="t">${m.noM4?'<b>incluída no módulo 4</b><span>todos os estudantes têm AEE</span>':`<b>${m.on?brl(m.tot)+'/ano':'—'}</b><span>${m.on?int(m.qtd)+' '+(m.qtd===1&&m.qn==='meses'?'ente':m.qn==='meses'?'entes':m.qn)+(m.unico?' · 1º ano':''):'desligado'}</span>`}</div></div></div>`; }).join('');
+  const ligados = MS.filter(m=>m.on && m.tot>0), totAno = ligados.reduce((a,m)=>a+m.tot,0), ac = Math.max(1,d.acomp);
+  $('tbMods').innerHTML = '<thead><tr><th>Módulo</th><th class="n">R$/mês</th><th class="n">R$/ano</th></tr></thead><tbody>'+
+    ligados.map(m=>`<tr><td><span class="mn" style="display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:${m.cor};font-weight:800;font-size:12px;margin-right:8px">${m.n}</span>${m.nome}${m.unico?' <span class="note" style="display:inline">(1º ano)</span>':''}</td><td class="n">${brl(m.totMes)}</td><td class="n">${brl(m.tot)}</td></tr>`).join('')+
+    `<tr class="tot"><td>Total do programa (1º ano)</td><td class="n">${brl(totAno/12)}</td><td class="n">${brl(totAno)}</td></tr>`+
+    `<tr class="hl"><td><b>Total por estudante acompanhado</b> <span class="note" style="display:inline">(${int(d.acomp)} estudantes)</span></td><td class="n"><b>${brl(totAno/12/ac)}</b></td><td class="n"><b>${brl(totAno/ac)}</b></td></tr></tbody>`;
+  $('modsNote').textContent = (isTEA() ? 'Preços da tabela TEAlliance 2026 com acréscimo de '+num(P.markup,0)+'% para o setor público; o módulo de Medicina mantém o valor do pacote clínico. O AEE sob demanda (módulo 4) já inclui a plataforma: os estudantes com AEE não pagam o módulo 3. ' : 'Preços do estudo de viabilidade; o preço por estudante dos módulos é a média do grupo de itens. ') + 'Valores do 1º ano; nos anos seguintes saem os itens de entrega única.';
+}
 function buildPac(){
   let h='<thead><tr><th>Serviço</th><th class="n">Por atendimento (R$)</th><th class="n">Por ano</th><th class="n">Total/estudante</th><th>Observação</th></tr></thead><tbody>';
   PAC.forEach((x,k)=>{ h+=`<tr><td><b>${x.s}</b></td><td class="n"><input type="number" min="0" step="10" value="${x.v}" oninput="PAC[${k}].v=+this.value||0;update()"></td><td class="n"><input type="number" min="0" step="1" value="${x.n}" oninput="PAC[${k}].n=+this.value||0;update()"></td><td class="n" id="pac-${k}"></td><td>${x.o}</td></tr>`; });
@@ -1360,6 +1453,7 @@ function update(){
   const bmx = Math.max(...bm.map(x=>x[1]));
   $('bench').innerHTML = bm.map(x=>`<div class="hb ${x[2]?'us':''}"><div>${x[0]}</div><div class="bar"><i style="width:${x[1]/bmx*100}%"></i></div><div class="v">${brl(x[1])}</div></div>`).join('');
 
+  renderModulos(C);
   $('tb-estudo').classList.toggle('on', !isTEA()); $('tb-tea').classList.toggle('on', isTEA()); $('tbMk').textContent = '+'+num(P.markup,0)+'%';
   // gasto atual (SICONFI)
   const G = C.gasto;
@@ -1393,7 +1487,7 @@ function update(){
   $('sEnte').textContent = label; $('sCen').textContent = S.cen==='P'?'Personalizado':CAM[S.cen];
   $('sAcomp').textContent = int(d.acomp); $('sFam').textContent = int(d.familias); $('sClin').textContent = C.clinIncl? int(d.clin) : '—';
   $('sAno').textContent = brl(C.t.ano); $('sEst').textContent = brl(est);
-  $('sLy').innerHTML = Object.keys(GRUPOS).filter(k=>ITENS.some(it=>it.g===k)).map(k=>{ const v=C.ls.filter(l=>l.g===k&&incluido(l)).reduce((a,l)=>a+l.tot,0); return `<div class="${v>0?'':'off'}"><span><span class="dot" style="background:${GRUPOS[k].c}"></span>${GRUPOS[k].n}</span><b>${v>0?brlK(v):'—'}</b></div>`; }).join('');
+  $('sLy').innerHTML = modulos(C).map(m=>`<div class="${m.on&&m.tot>0?'':'off'}"><span><span class="dot" style="background:${m.cor}"></span>${m.n}. ${m.nome.split(' — ')[0]}</span><b>${m.on&&m.tot>0?brlK(m.tot):'—'}</b></div>`).join('');
   // pill
   $('pillEnte').textContent = label; $('pillVal').textContent = brlK(C.total);
   // hash
@@ -1553,7 +1647,16 @@ function montarPDF(){
   }
 
   secao('4. Composição de custos');
-  subsecao('4.1. Itens do serviço — primeiro ano');
+  subsecao('4.1. Resumo por módulo');
+  { const MS = modulos(C).filter(m=>m.on && m.tot>0), tA = MS.reduce((a,m)=>a+m.tot,0);
+    tabela(['Módulo','Preço unitário','Quantidade','R$/mês','R$/ano'],
+      MS.map(m=>[m.n+'. '+m.nome, (m.unico ? brl(m.unit)+' '+m.un : brl(m.mes)+'/mês '+m.un), R(int(m.qtd)+' '+m.qn), R(brl(m.totMes)), R(brl(m.tot))])
+        .concat([[{content:'Total do programa (1º ano)', colSpan:3, styles:{fontStyle:'bold'}}, BR(brl(tA/12)), BR(brl(tA))],
+                 [{content:'Total por estudante acompanhado ('+int(d.acomp)+' estudantes)', colSpan:3, styles:{fontStyle:'bold'}}, BR(brl(tA/12/d.acomp)), BR(brl(tA/d.acomp))]]),
+      {columnStyles:{0:{cellWidth:150}}});
+    if(isTEA()) par('O módulo 4 (AEE sob demanda) já inclui a plataforma: os estudantes com AEE não pagam o módulo 3. Itens de entrega única incidem só no 1º ano.', {fs:FT, simples:true});
+  }
+  subsecao('4.2. Itens do serviço — primeiro ano');
   const gT={plat:'PLATAFORMA INCLUSI.VIA — LICENÇAS', hab:isTEA()?'FORMAÇÃO DA REDE':'SERVIÇOS HABILITADORES', ava:'AVALIAÇÃO PEDAGÓGICA', acp:'ACOMPANHAMENTO PEDAGÓGICO E FAMILIAR', vaar:'CONSULTORIA EDUCACIONAL VAAR', cli:'CUIDADO CLÍNICO (RUBRICA DA SAÚDE)'};
   const body=[]; let gg=null;
   C.inc.forEach(l=>{ if(l.g!==gg){ gg=l.g; body.push([{content:gT[gg], colSpan:5, styles:{fontStyle:'bold'}}]); }
@@ -1561,18 +1664,18 @@ function montarPDF(){
   body.push([{content:'Total do primeiro ano', colSpan:4, styles:{fontStyle:'bold'}}, BR(brl(C.t.ano))]);
   tabela(['Item','Unidade','Qtd.','Unitário','Total anual'], body, {columnStyles:{0:{cellWidth:175}}});
   y -= 4; par('* Item não recorrente: incide apenas no primeiro ano. Os demais itens se repetem a cada 12 meses de vigência.', {fs:FT, simples:true});
-  subsecao('4.2. Custo por estudante');
+  subsecao('4.3. Custo por estudante');
   const ac=d.acomp, cliPu=(C.ls.find(l=>l.id==='cli')||{}).pu;
   const q=[]; if(camsIn.includes('A')) q.push([isTEA()?'Plataforma e formação da rede':'Plataforma, implantação, formação e suporte', R(brl(C.tA.ano/ac)), R(brl(C.tA.ano/ac/12)), int(ac)+' — todos os acompanhados']);
   if(camsIn.includes('B')||camsIn.includes('D')) q.push([isTEA()?'Acompanhamento pedagógico e familiar':'Módulo de avaliação pedagógica', R(brl(C.tB.ano/ac)), R(brl(C.tB.ano/ac/12)), int(ac)+' — todos os acompanhados']);
   if(camsIn.includes('C')) q.push(['Pacote de atendimento clínico', R(brl(cliPu)), R(brl(cliPu/12)), int(d.clin)+' — apenas os que recebem']);
   q.push([B('Custo médio do escopo contratado'), BR(brl(C.t.ano/ac)), BR(brl(C.t.ano/ac/12)), int(ac)+' — média sobre o total']);
   tabela(['Componente','Por estudante/ano','Por estudante/mês','Aplicado a'], q);
-  if(camsIn.includes('C')){ subsecao('4.3. Pacote clínico por estudante/ano');
+  if(camsIn.includes('C')){ subsecao('4.4. Módulo Medicina — pacote clínico por estudante/ano');
     tabela(['Serviço','Por atendimento','Atendimentos/ano','Total/estudante','Observação'], PAC.map(x=>[x.s, R(brl(x.v)), R(String(x.n)), R(brl(x.v*x.n)), x.o]).concat([[B('Total'),'',BR(String(PAC.reduce((a,x)=>a+x.n,0))),BR(brl(pacoteTotal())),brl(pacoteTotal()/12)+' por mês']])); }
   const sau = C.inc.filter(l=>l.cam==='C').reduce((a,l)=>a+vv(l),0), edu=C.total-sau;
   const srv = C.inc.filter(l=>l.tipo==='srv').reduce((a,l)=>a+vv(l),0), lic=C.total-srv, pc=v=>num(v/(C.total||1)*100,0)+'%';
-  subsecao('4.'+(camsIn.includes('C')?4:3)+'. Distribuição do valor total do projeto');
+  subsecao('4.'+(camsIn.includes('C')?5:4)+'. Distribuição do valor total do projeto');
   tabela(['Critério','Parcela','Valor','%'], [['Rubrica orçamentária','Educação',R(brl(edu)),R(pc(edu))],['','Saúde',R(brl(sau)),R(pc(sau))],['Natureza','Licenças de uso',R(brl(lic)),R(pc(lic))],['','Serviços prestados',R(brl(srv)),R(pc(srv))]]);
 
   secao('5. Cronograma de execução — '+S.vig+' '+(S.vig===1?'mês':'meses'));
