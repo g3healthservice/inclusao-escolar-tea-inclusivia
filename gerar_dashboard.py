@@ -60,6 +60,8 @@ def main():
     for k, v in {"__SITE_URL__": SITE_URL, "__BUILD__": build,
                  "__MAIL_ENDPOINT__": endpoint, "__MAIL_TOKEN__": token}.items():
         html = html.replace(k, v)
+    import base64
+    html = html.replace("__BRAINLOGO__", "data:image/png;base64," + base64.b64encode(open(os.path.join(BASE, "brain-logo.png"), "rb").read()).decode())
     html = html.replace("__DATA__", dados)
     html = html.replace("__CENSO__", ler_opcional("dados/censo_escolar_2025.json") or "{}")
     html = html.replace("__SICONFI__", ler_opcional("dados/siconfi_educacao_especial.json") or "{}")

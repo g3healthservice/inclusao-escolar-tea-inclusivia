@@ -171,7 +171,7 @@ function ctxDoc(){
 async function gerarXlsx(ctx){
   await carregar('xlsx');
   const E = window.ExcelJS, {C, d} = ctx;
-  const wb = new E.Workbook(); wb.creator='G3 Health Service'; wb.created=new Date(); wb.calcProperties.fullCalcOnLoad = true;
+  const wb = new E.Workbook(); wb.creator='Brain Group'; wb.created=new Date(); wb.calcProperties.fullCalcOnLoad = true;
   const F='Times New Roman';
   const FM = {int:'#,##0;\\(#,##0\\);\\-', money:'#,##0.00;\\(#,##0.00\\);\\-', pct:'0.0%', fat:'0.00', dec:'#,##0.0;\\(#,##0.0\\);\\-'};
   const thin = {style:'thin', color:{argb:'FFBFBFBF'}};
@@ -197,7 +197,7 @@ async function gerarXlsx(ctx){
   title(w1,'A1','MODELO DE VIABILIDADE — PLATAFORMA DE INCLUSÃO ESCOLAR E CUIDADO CLÍNICO');
   put(w1,'A2','Ente: '+ctx.label+' — esfera '+ctx.esfera.toLowerCase()+(S.tipo!=='mun'?' ('+nM+' municípios, ver aba 8)':' (IBGE '+M[S.mun][0]+')')+'. Anexo I do ETP — Ref. '+ctx.ref+'.');
   put(w1,'A3','LEGENDA: células AMARELAS com texto AZUL são os parâmetros editáveis. Células pretas são fórmulas — não editar. Células LARANJA foram ajustadas manualmente no painel.');
-  put(w1,'A4','Elaboração: gerado pelo painel Inclusi.Via (G3 Health Service) em '+new Date().toLocaleDateString('pt-BR')+'. Data-base dos preços: setembro de 2026.');
+  put(w1,'A4','Elaboração: gerado pelo painel Inclusi.Via (Brain Group) em '+new Date().toLocaleDateString('pt-BR')+'. Data-base dos preços: setembro de 2026.');
   title(w1,'A6','A. POPULAÇÃO-ALVO — CENSO 2022 (dado oficial, não editar)');
   hdr(w1,7,['Faixa etária','Pessoas com TEA — '+ctx.label,'Fonte','% no recorte adotado']);
   FAIXAS.forEach((f,k)=>{ const r=8+k, col=String.fromCharCode(68+k);
@@ -475,7 +475,7 @@ function docKit(ctx, sigla){
   const assinaturas = () => [gap(240), p(PRE('Local')+', '+PRE('data')+'.',{align:AlignmentType.RIGHT}), gap(480),
     centro('_______________________________________'), centro('Equipe de Planejamento da Contratação',{bold:true}), centro(PRE('Nome / matrícula / cargo'),{after:480}),
     centro('_______________________________________'), centro('Autoridade competente — aprovação',{bold:true}), centro(PRE('Nome / cargo'))];
-  const documento = (titulo, children) => new X.Document({creator:'G3 Health Service', title:titulo, description:'Minuta — Ref. '+ctx.ref,
+  const documento = (titulo, children) => new X.Document({creator:'Brain Group', title:titulo, description:'Minuta — Ref. '+ctx.ref,
     styles:{default:{document:{run:{font:E.fonte, size:hp(E.corpo), color:'000000'}, paragraph:{spacing:{line:LINE}}},
       heading1:{run:{font:E.fonte, size:hp(E.corpo), bold:true, color:'000000'}}, heading2:{run:{font:E.fonte, size:hp(E.corpo), bold:true, color:'000000'}}}},
     sections:[{properties:{page:{margin:{top:cm(E.margem.sup), left:cm(E.margem.esq), bottom:cm(E.margem.inf), right:cm(E.margem.dir), header:cm(1.25), footer:cm(1.0)}}},
@@ -495,7 +495,7 @@ function docKit(ctx, sigla){
 function paresCapa(ctx, fundamento, extra){
   const pares = [['FUNDAMENTO', fundamento], ['ÓRGÃO DEMANDANTE', ctx.orgao], ['ESFERA', ctx.esfera], ['TIPO DE CONTRATAÇÃO', MODOS[ctx.modo].t],
     ['PROCESSO ADMINISTRATIVO', S.doc.proc.trim()||PRE()], ['REFERÊNCIA', ctx.ref], ...(extra||[]), ['DATA', ctx.data.charAt(0).toUpperCase()+ctx.data.slice(1)]];
-  if(S.doc.g3){ pares.push(['ELABORAÇÃO TÉCNICA','G3 Health Service Ltda. — CNPJ 31.652.744/0001-14']); pares.push(['SOLUÇÃO DE REFERÊNCIA','TEAlliance — ecossistema Inclusi.Via (Core, School, Clinic e Family)']); }
+  if(S.doc.g3){ pares.push(['ELABORAÇÃO TÉCNICA','Brain27 Participações Ltda. (Brain Group) — CNPJ 29.696.080/0001-43']); pares.push(['SOLUÇÃO DE REFERÊNCIA','TEAlliance — ecossistema Inclusi.Via (Core, School, Clinic e Family)']); }
   else pares.push(['ELABORAÇÃO', 'Equipe de Planejamento da Contratação — '+PRE('nomes e matrículas')]);
   return pares;
 }
@@ -851,7 +851,7 @@ async function baixarDoc(tipo){
       st.textContent='Montando o pacote (ETP, memória de cálculo, TR e proposta)…';
       await carregar('zip'); const z = new JSZip();
       for(const k of ['etp','xlsx','tr','pdf']) z.file(nomes[k], await gera[k]());
-      z.file('LEIA-ME.txt', 'Pacote documental da contratação — '+ctx.label+'\r\nReferência: '+ctx.ref+'\r\nGerado em '+new Date().toLocaleString('pt-BR')+' pelo painel Inclusi.Via (G3 Health Service)\r\n\r\n'+
+      z.file('LEIA-ME.txt', 'Pacote documental da contratação — '+ctx.label+'\r\nReferência: '+ctx.ref+'\r\nGerado em '+new Date().toLocaleString('pt-BR')+' pelo painel Inclusi.Via (Brain Group)\r\n\r\n'+
         '1) ETP — Estudo Técnico Preliminar (art. 18 da Lei 14.133/2021): por que contratar, quanto e como.\r\n'+
         '2) Anexo I do ETP — Memória de cálculo com fórmulas vivas. Células amarelas são editáveis.\r\n'+
         '3) TR — Termo de Referência (art. 6º, XXIII): objeto, requisitos, execução, medição e pagamento.\r\n'+
