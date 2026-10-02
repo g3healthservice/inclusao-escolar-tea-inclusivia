@@ -1653,7 +1653,7 @@ function montarPDF(){
       MS.map(m=>[m.n+'. '+m.nome, (m.unico ? brl(m.unit)+' '+m.un : brl(m.mes)+'/mês '+m.un), R(int(m.qtd)+' '+m.qn), R(brl(m.totMes)), R(brl(m.tot))])
         .concat([[{content:'Total do programa (1º ano)', colSpan:3, styles:{fontStyle:'bold'}}, BR(brl(tA/12)), BR(brl(tA))],
                  [{content:'Total por estudante acompanhado ('+int(d.acomp)+' estudantes)', colSpan:3, styles:{fontStyle:'bold'}}, BR(brl(tA/12/d.acomp)), BR(brl(tA/d.acomp))]]),
-      {columnStyles:{0:{cellWidth:150}}});
+      {columnStyles:{0:{cellWidth:118}, 1:{cellWidth:100}, 2:{cellWidth:62}, 3:{cellWidth:82, overflow:'visible'}, 4:{cellWidth:91, overflow:'visible'}}});
     if(isTEA()) par('O módulo 4 (AEE sob demanda) já inclui a plataforma: os estudantes com AEE não pagam o módulo 3. Itens de entrega única incidem só no 1º ano.', {fs:FT, simples:true});
   }
   subsecao('4.2. Itens do serviço — primeiro ano');
