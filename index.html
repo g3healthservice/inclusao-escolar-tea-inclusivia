@@ -571,7 +571,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
   <h2>Quanto custa, por estudante e no total</h2>
   <div class="basesel" style="margin-bottom:14px">
     <button class="bs" id="tb-estudo" onclick="setTabela('estudo')"><b>📐 Tabela do estudo de viabilidade</b><span>Âncoras da ARP 045/2026 (CIMINAS) e preços propostos</span></button>
-    <button class="bs" id="tb-tea" onclick="setTabela('tea')"><b>🏷️ Tabela TEAlliance 2026 <span id="tbMk">+30%</span> setor público</b><span>Preço de venda ao ente, com AEE sob demanda, treinamento parental e kit</span></button>
+    <button class="bs" id="tb-tea" onclick="setTabela('tea')"><b>🏷️ Tabela TEAlliance 2026</b><span>Preço de venda ao ente público, com AEE sob demanda, treinamento parental e kit</span></button>
   </div>
   <p class="lead2">O programa é organizado em módulos. Cada módulo tem um preço por pessoa — por educador, por estudante ou por família — e pode ser ligado ou desligado. O total do programa é a soma dos módulos ligados.</p>
 
@@ -868,7 +868,7 @@ ul.clean li{margin:4px 0;font-size:13.5px}
         <li>Preços com âncora pública derivam da ARP nº 045/2026 do CIMINAS (licença de avaliação R$ 750,97; laboratório itinerante R$ 2.542,89). Os demais são propostos e devem ser validados por pesquisa de preços (art. 23 da Lei nº 14.133/2021).</li>
         <li>Pacote clínico com valores unitários informados pelo contratante: 3 consultas/ano de neurologia e psiquiatria; 12 sessões/ano de fono, psicologia e psicopedagogia.</li>
         <li>Implantação e integração são não recorrentes; os demais itens se repetem a cada 12 meses.</li>
-        <li><b>Tabela TEAlliance 2026:</b> preço de venda ao ente da TEAlliance (via Instituto Renascer), com acréscimo de 30% para o setor público, editável nas premissas. O AEE sob demanda entra como complemento à licença da plataforma (R$ 218 − R$ 82 por mês), sem dupla cobrança; o kit de material é entrega única no 1º ano (a confirmar); a consultoria VAAR é opcional e só entra no escopo personalizado. A Brain Group atua na consultoria.</li>
+        <li><b>Tabela TEAlliance 2026:</b> preço de venda ao ente público da TEAlliance (via Instituto Renascer). O AEE sob demanda entra como complemento à licença da plataforma, sem dupla cobrança; o kit de material é entrega única no 1º ano (a confirmar); a consultoria VAAR é opcional e só entra no escopo personalizado. A Brain Group atua na consultoria.</li>
         <li>Preços de setembro de 2026, sem reajuste. Validação: o caso Guarujá reproduz exatamente os valores do estudo (R$ 1.503.747,20 / R$ 2.514.396,70 / R$ 6.362.196,70 ao ano).</li>
       </ul>
     </div>
@@ -1356,12 +1356,12 @@ const PRESETS = [
   {id:'medio', t:'15 a 17 anos', s:'Ensino médio', f:[0,0,0,.6]},
   {id:'todas', t:'0 a 19 anos', s:'Todas as faixas do Censo', f:[1,1,1,1]},
   {id:'custom', t:'Personalizado', s:'% de cada faixa', f:null}];
-const DEF_P = {rede:60, aee:1.6, adesao:85, clin:45, familia:90, alunosEsc:21.6, profEsc:1, partEsc:15, horasEsc:8, escLab:4, pontos:4, alunosEquipe:1500, markup:30, aeePct:100, eadEsc:2, multMin:65};
+const DEF_P = {rede:60, aee:1.6, adesao:85, clin:45, familia:90, alunosEsc:21.6, profEsc:1, partEsc:15, horasEsc:8, escLab:4, pontos:4, alunosEquipe:1500, aeePct:100, eadEsc:2, multMin:65};
 const P_META = [
   ['rede','Em rede pública do ente (%)',1,100,1],['aee','Fator de ampliação p/ público do AEE (×)',1,3,.1],['adesao','Adesão efetiva ao programa (%)',1,100,1],['clin','Recebem pacote clínico (%)',0,100,1],
   ['familia','Famílias ativas no módulo (%)',0,100,1],['alunosEsc','Estudantes acompanhados por unidade escolar',1,500,.1],['profEsc','Profissionais de saúde por unidade',0,10,.1],['partEsc','Participantes da formação por unidade',1,60,1],
   ['horasEsc','Horas de supervisão por unidade/ano',0,100,1],['escLab','Unidades por laboratório itinerante',1,50,1],['pontos','Pontos de integração por ente',0,20,1],['alunosEquipe','Estudantes por equipe de suporte',100,20000,100],
-  ['markup','TEAlliance: acréscimo setor público (%)',0,200,1],['aeePct','TEAlliance: estudantes com AEE sob demanda (%)',0,100,1],['eadEsc','TEAlliance: educadores na formação EAD por unidade',0,50,1],['multMin','TEAlliance: mínimo de multiplicadores',0,500,1]];
+  ['aeePct','TEAlliance: estudantes com AEE sob demanda (%)',0,100,1],['eadEsc','TEAlliance: educadores na formação EAD por unidade',0,50,1],['multMin','TEAlliance: mínimo de multiplicadores',0,500,1]];
 let P = {...DEF_P};
 const PAC_DEF = [
   {s:'Neurologista', v:400, n:3, o:'Presencial ou teleconsulta'},
@@ -1388,17 +1388,17 @@ const ITENS_ESTUDO = [
   {id:'ava', cam:'B', g:'ava', tipo:'lic', nome:'Licença de plataforma de avaliação pedagógica gamificada', un:'Estudante/ano', pu:750.97, rec:true, q:d=>d.acomp, anc:'Âncora: ARP 045/2026 CIMINAS'},
   {id:'lab', cam:'B', g:'ava', tipo:'srv', nome:'Locação de laboratório itinerante', un:'Serviço', pu:2542.89, rec:true, q:d=>Math.ceil(d.escolas/P.escLab), anc:'Âncora: ARP 045/2026 CIMINAS'},
   {id:'cli', cam:'C', g:'cli', tipo:'srv', nome:'Pacote de atendimento clínico multiprofissional', un:'Estudante/ano', pu:null, rec:true, q:d=>d.clin}];
-// Tabela TEAlliance 2026 (preço de venda ao ente) + acréscimo para o setor público (P.markup). Base anual = preço mensal da tabela × 12.
-const tp = base => r2(base*(1+P.markup/100));
-const TEA_ANC = 'Tabela TEAlliance 2026 + acréscimo setor público';
+// Tabela TEAlliance 2026 — preço final de venda ao ente por item (R$/ano; kit por unidade; VAAR por mês).
+const PRECO_TEA = {"tpl": 1279.2, "tead": 1357.2, "timr": 6879.6, "tae": 2121.6, "tpar": 2199.6, "tkit": 715.0, "tvaar": 35963.53};
+const TEA_ANC = 'Tabela TEAlliance 2026';
 const ITENS_TEA = [
-  {id:'tpl', cam:'A', g:'plat', tipo:'lic', nome:'Plataforma Inclusi.Via — licença por estudante (6 documentos legais, estudo de caso, PEI, painel de evolução)', un:'Estudante/ano', base:984, pu:()=>tp(984), rec:true, q:d=>d.acomp, anc:TEA_ANC},
-  {id:'tead', cam:'A', g:'hab', tipo:'srv', nome:'Formação EAD — educação continuada em inclusão (acompanhante escolar, apoio escolar, pós-graduação)', un:'Educador/ano', base:1044, pu:()=>tp(1044), rec:true, q:d=>d.acomp?Math.round(d.escolas*P.eadEsc):0, anc:TEA_ANC},
-  {id:'timr', cam:'A', g:'hab', tipo:'srv', nome:'Imersões presenciais — formação de multiplicadores (manejo, adaptações, plataforma)', un:'Participante/ano', base:5292, pu:()=>tp(5292), rec:true, q:d=>d.acomp?Math.max(P.multMin, d.escolas):0, anc:TEA_ANC+' · mínimo de 65 participantes'},
-  {id:'tae', cam:'D', g:'acp', tipo:'srv', nome:'AEE sob demanda — reunião mensal com psicopedagogo e revisão do PEI (complemento à plataforma)', un:'Estudante/ano', base:1632, pu:()=>tp(1632), rec:true, q:d=>Math.round(d.acomp*P.aeePct/100), anc:TEA_ANC+' · R$ 218 − R$ 82 da plataforma, sem dupla cobrança'},
-  {id:'tpar', cam:'D', g:'acp', tipo:'srv', nome:'Treinamento parental — acolhimento, manejo comportamental, desenvolvimento e suporte pedagógico em casa', un:'Família/ano', base:1692, pu:()=>tp(1692), rec:true, q:d=>d.familias, anc:TEA_ANC},
-  {id:'tkit', cam:'D', g:'acp', tipo:'lic', nome:'Kit de material de apoio impresso (estudante, família e professor) e jogos lúdicos', un:'Kit', base:550, pu:()=>tp(550), rec:false, q:d=>d.acomp, anc:TEA_ANC+' · entrega única no 1º ano (a confirmar)'},
-  {id:'tvaar', cam:'V', g:'vaar', tipo:'srv', nome:'Consultoria educacional — VAAR/FUNDEB (opcional)', un:'Mês', base:27664.25, pu:()=>tp(27664.25), rec:true, q:d=>d.acomp?12*d.entes:0, anc:TEA_ANC+' · só no escopo personalizado'},
+  {id:'tpl', cam:'A', g:'plat', tipo:'lic', nome:'Plataforma Inclusi.Via — licença por estudante (6 documentos legais, estudo de caso, PEI, painel de evolução)', un:'Estudante/ano', pu:PRECO_TEA.tpl, rec:true, q:d=>d.acomp, anc:TEA_ANC},
+  {id:'tead', cam:'A', g:'hab', tipo:'srv', nome:'Formação EAD — educação continuada em inclusão (acompanhante escolar, apoio escolar, pós-graduação)', un:'Educador/ano', pu:PRECO_TEA.tead, rec:true, q:d=>d.acomp?Math.round(d.escolas*P.eadEsc):0, anc:TEA_ANC},
+  {id:'timr', cam:'A', g:'hab', tipo:'srv', nome:'Imersões presenciais — formação de multiplicadores (manejo, adaptações, plataforma)', un:'Participante/ano', pu:PRECO_TEA.timr, rec:true, q:d=>d.acomp?Math.max(P.multMin, d.escolas):0, anc:TEA_ANC+' · mínimo de 65 participantes'},
+  {id:'tae', cam:'D', g:'acp', tipo:'srv', nome:'AEE sob demanda — reunião mensal com psicopedagogo e revisão do PEI (complemento à plataforma)', un:'Estudante/ano', pu:PRECO_TEA.tae, rec:true, q:d=>Math.round(d.acomp*P.aeePct/100), anc:TEA_ANC+' · complemento à licença da plataforma, sem dupla cobrança'},
+  {id:'tpar', cam:'D', g:'acp', tipo:'srv', nome:'Treinamento parental — acolhimento, manejo comportamental, desenvolvimento e suporte pedagógico em casa', un:'Família/ano', pu:PRECO_TEA.tpar, rec:true, q:d=>d.familias, anc:TEA_ANC},
+  {id:'tkit', cam:'D', g:'acp', tipo:'lic', nome:'Kit de material de apoio impresso (estudante, família e professor) e jogos lúdicos', un:'Kit', pu:PRECO_TEA.tkit, rec:false, q:d=>d.acomp, anc:TEA_ANC+' · entrega única no 1º ano (a confirmar)'},
+  {id:'tvaar', cam:'V', g:'vaar', tipo:'srv', nome:'Consultoria educacional — VAAR/FUNDEB (opcional)', un:'Mês', pu:PRECO_TEA.tvaar, rec:true, q:d=>d.acomp?12*d.entes:0, anc:TEA_ANC+' · só no escopo personalizado'},
   {id:'cli', cam:'C', g:'cli', tipo:'srv', nome:'Pacote de atendimento clínico multiprofissional', un:'Estudante/ano', pu:null, rec:true, q:d=>d.clin}];
 let ITENS = ITENS_ESTUDO;
 const CANAIS = [
@@ -1736,7 +1736,7 @@ function renderModulos(C){
     ligados.map(m=>`<tr><td><span class="mn" style="display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:${m.cor};font-weight:800;font-size:12px;margin-right:8px">${m.n}</span>${m.nome}${m.unico?' <span class="note" style="display:inline">(1º ano)</span>':''}</td><td class="n">${brl(m.totMes)}</td><td class="n">${brl(m.tot)}</td></tr>`).join('')+
     `<tr class="tot"><td>Total do programa (1º ano)</td><td class="n">${brl(totAno/12)}</td><td class="n">${brl(totAno)}</td></tr>`+
     `<tr class="hl"><td><b>Total por estudante acompanhado</b> <span class="note" style="display:inline">(${int(d.acomp)} estudantes)</span></td><td class="n"><b>${brl(totAno/12/ac)}</b></td><td class="n"><b>${brl(totAno/ac)}</b></td></tr></tbody>`;
-  $('modsNote').textContent = (isTEA() ? 'Preços da tabela TEAlliance 2026 com acréscimo de '+num(P.markup,0)+'% para o setor público; o módulo de Medicina mantém o valor do pacote clínico. O AEE sob demanda (módulo 4) já inclui a plataforma: os estudantes com AEE não pagam o módulo 3. ' : 'Preços do estudo de viabilidade; o preço por estudante dos módulos é a média do grupo de itens. ') + 'Valores do 1º ano; nos anos seguintes saem os itens de entrega única.';
+  $('modsNote').textContent = (isTEA() ? 'Preços da tabela TEAlliance 2026 (venda ao ente público); o módulo de Medicina segue o valor do pacote clínico. O AEE sob demanda (módulo 4) já inclui a plataforma: os estudantes com AEE não pagam o módulo 3. ' : 'Preços do estudo de viabilidade; o preço por estudante dos módulos é a média do grupo de itens. ') + 'Valores do 1º ano; nos anos seguintes saem os itens de entrega única.';
 }
 function buildPac(){
   let h='<thead><tr><th>Serviço</th><th class="n">Por atendimento (R$)</th><th class="n">Por ano</th><th class="n">Total/estudante</th><th>Observação</th></tr></thead><tbody>';
@@ -1878,7 +1878,7 @@ function update(){
   $('bench').innerHTML = bm.map(x=>`<div class="hb ${x[2]?'us':''}"><div>${x[0]}</div><div class="bar"><i style="width:${x[1]/bmx*100}%"></i></div><div class="v">${brl(x[1])}</div></div>`).join('');
 
   renderModulos(C);
-  $('tb-estudo').classList.toggle('on', !isTEA()); $('tb-tea').classList.toggle('on', isTEA()); $('tbMk').textContent = '+'+num(P.markup,0)+'%';
+  $('tb-estudo').classList.toggle('on', !isTEA()); $('tb-tea').classList.toggle('on', isTEA());
   // gasto atual (SICONFI)
   const G = C.gasto;
   if(G.emp>0){
@@ -2024,7 +2024,7 @@ function montarPDF(){
   par(emp.replace(/ — CNPJ/,', inscrita no CNPJ sob o nº').replace(/nº (\d)/,'nº $1')+', por seu representante legal, apresenta a presente proposta técnica e comercial, nas condições a seguir descritas.');
 
   secao('1. Resumo da proposta');
-  kv([['Ente público', label], ['Órgão', $('destOrg').value.trim()||enteOrgao()], ['Escopo', cenTxt], ['Tabela de preços', isTEA()?'TEAlliance 2026, com acréscimo de '+num(P.markup,0)+'% para o setor público':'Estudo de viabilidade (âncoras da ARP nº 045/2026 do CIMINAS)'], ['Base do público', d.censo ? 'INEP, Censo Escolar 2025 — matrículas da educação especial na rede '+esfAdj() : 'IBGE, Censo 2022 — '+recorteTxt],
+  kv([['Ente público', label], ['Órgão', $('destOrg').value.trim()||enteOrgao()], ['Escopo', cenTxt], ['Tabela de preços', isTEA()?'TEAlliance 2026 — preço de venda ao ente público':'Estudo de viabilidade (âncoras da ARP nº 045/2026 do CIMINAS)'], ['Base do público', d.censo ? 'INEP, Censo Escolar 2025 — matrículas da educação especial na rede '+esfAdj() : 'IBGE, Censo 2022 — '+recorteTxt],
     ['Estudantes acompanhados', int(d.acomp)], ['Com pacote clínico', C.clinIncl?int(d.clin):'Não contratado'], ['Famílias alcançadas', int(d.familias)+' ('+num(P.familia,0)+'% dos acompanhados)'], ['Unidades escolares (estimativa)', int(d.escolas)],
     ['Vigência', S.vig+' '+(S.vig===1?'mês':'meses')], ['Valor do primeiro ano', brl(C.t.ano)], [B('VALOR TOTAL DO PROJETO'), B(brl(C.total))],
     ['Custo por estudante/mês', brl(est)], ...(C.gasto.emp>0?[['Gasto atual com Educação Especial', brl(C.gasto.emp)+' em '+C.gasto.anos.join(' e ')+' (SICONFI, subfunção 12.367)'], ['Escopo (1º ano) sobre o gasto atual', num(C.t.ano/C.gasto.emp*100,1)+'%']]:[]), ['Canal de contratação', CANAIS.find(c=>c.id===S.canal).t]]);
@@ -2134,7 +2134,7 @@ function montarPDF(){
   secao('9. Premissas e ressalvas');
   [(d.censo ? 'Base do público: INEP, Censo Escolar 2025 (Sinopse Estatística, tabelas 1.56, 1.58 e 3.45) — matrículas da educação especial na rede do ente e escolas com educação especial; o Censo Demográfico 2022 (IBGE) serve de referência.' : 'Base populacional: IBGE, Censo 2022 (SIDRA 10145, variável 13267) — pessoas com diagnóstico de TEA informado por profissional de saúde, por faixa quinquenal; recortes escolares estimados por distribuição uniforme dentro de cada faixa.'),
    (d.censo ? 'A taxa de adesão e os parâmetros de estrutura (profissionais de saúde, participantes da formação, horas de supervisão) são estimativas e serão confirmados no plano de trabalho; as quantidades serão ajustadas mantidos os preços unitários.' : 'Os parâmetros de estrutura da rede (unidades escolares, profissionais, percentual em rede pública, fator de ampliação) são provisórios e serão substituídos pelos dados do Censo Escolar e da Secretaria na fase de plano de trabalho; as quantidades serão ajustadas mantidos os preços unitários.'),
-   (isTEA()?'Preços da tabela TEAlliance 2026 com acréscimo de '+num(P.markup,0)+'% para o setor público; o AEE sob demanda é cobrado como complemento à licença da plataforma, sem dupla cobrança; o kit de material é entrega única no primeiro ano (a confirmar). Valores sujeitos à pesquisa de preços nos termos do art. 23 da Lei nº 14.133/2021.':'Preços com âncora pública derivam da ARP nº 045/2026 do CIMINAS; os demais são propostos e sujeitos à pesquisa de preços nos termos do art. 23 da Lei nº 14.133/2021.'),
+   (isTEA()?'Preços da tabela TEAlliance 2026 (venda ao ente público); o AEE sob demanda é cobrado como complemento à licença da plataforma, sem dupla cobrança; o kit de material é entrega única no primeiro ano (a confirmar). Valores sujeitos à pesquisa de preços nos termos do art. 23 da Lei nº 14.133/2021.':'Preços com âncora pública derivam da ARP nº 045/2026 do CIMINAS; os demais são propostos e sujeitos à pesquisa de preços nos termos do art. 23 da Lei nº 14.133/2021.'),
    'A avaliação é pedagógica, de habilidades (leitura, escrita, numeramento e atenção): sinaliza necessidade de aprofundamento e encaminha ao profissional habilitado, sem nomear diagnóstico.',
    'Excluída a rubrica de medicação à base de canabidiol, por não ser incorporada ao SUS para TEA, não ter registro na ANVISA nos produtos usualmente prescritos e estar fora das indicações da Resolução CFM nº 2.324/2022. A plataforma registra a medicação prescrita, sem custeio pelo contrato.',
    'Tratamento de dados pessoais de crianças conforme a LGPD, com Relatório de Impacto (RIPD) antes da implantação e consentimento parental específico.',
@@ -2429,7 +2429,7 @@ async function gerarXlsx(ctx){
   title(w1,'A50','F. CONDIÇÕES DA PROPOSTA (editáveis)');
   hdr(w1,51,['Parâmetro','Valor','Observação']);
   put(w1,'A52','Vigência do contrato (meses)'); put(w1,'B52',S.vig,{inp:true,fmt:'int'}); put(w1,'C52','Serviço contínuo: até 5 anos (arts. 106 e 107 da Lei nº 14.133/2021).');
-  put(w1,'A53','Escopo adotado'); put(w1,'B53',S.cen==='P'?'Personalizado':'Cenário '+S.cen); put(w1,'C53','Itens da proposta marcados com 1 na coluna G da aba 3 e na célula F16 da aba 4.');
+  put(w1,'A53','Escopo adotado'); put(w1,'B53',S.cen==='P'?'Personalizado':'Cenário '+S.cen); put(w1,'C53','Itens da proposta marcados com 1 na coluna '+(isTEA()?'F':'G')+' da aba 3 e na célula F16 da aba 4.');
   put(w1,'A54','Tipo de contratação'); put(w1,'B54',MODOS[ctx.modo].t,{wrap:true}); put(w1,'C54','Órgão demandante: '+ctx.orgao,{wrap:true});
   const est8 = redeKey()==='est', ceX = C.ceAll || {tot:0,rede:0,tea:0,esc:0};
   title(w1,'A56','G. CENSO ESCOLAR 2025 — EDUCAÇÃO ESPECIAL (INEP, Sinopse Estatística; dado oficial, somado da aba 8)');
@@ -2441,7 +2441,7 @@ async function gerarXlsx(ctx){
   put(w1,'A62','Escolas da rede '+esfAdj()+' com educação especial'); put(w1,'B62',fx(`SUM('8. Municipios'!${est8?'N':'M'}${mR0}:${est8?'N':'M'}${mR1})`,ceX.esc),{fmt:'int'}); put(w1,'C62','Sinopse Estatística 2025, tabela 3.45 — referência para a célula B30');
   title(w1,'A64','H. TABELA DE PREÇOS'+(isTEA()?' — TEALLIANCE 2026 (preço de venda ao ente)':' — ESTUDO DE VIABILIDADE'));
   hdr(w1,65,['Parâmetro','Valor','Observação']);
-  put(w1,'A66','Acréscimo para o setor público'); put(w1,'B66',P.markup/100,{inp:true,fmt:'0%'}); put(w1,'C66','Aplicado sobre os preços da tabela TEAlliance 2026 (aba 3).',{wrap:true});
+  put(w1,'A66','Tabela de preços adotada'); put(w1,'B66','TEAlliance 2026'); put(w1,'C66','Preço de venda ao ente público, por item, na aba 3.',{wrap:true});
   put(w1,'A67','Estudantes com AEE sob demanda (% dos acompanhados)'); put(w1,'B67',P.aeePct/100,{inp:true,fmt:'0%'}); put(w1,'C67','O AEE é cobrado como complemento à licença da plataforma.',{wrap:true});
   put(w1,'A68','Educadores na formação EAD por unidade escolar'); put(w1,'B68',P.eadEsc,{inp:true,fmt:'int'}); put(w1,'C68','Formação EAD por educador.');
   put(w1,'A69','Mínimo de participantes nas imersões presenciais'); put(w1,'B69',P.multMin,{inp:true,fmt:'int'}); put(w1,'C69','A tabela TEAlliance exige no mínimo 65.');
@@ -2503,26 +2503,26 @@ async function gerarXlsx(ctx){
       labA:'Plataforma, implantação, formação e suporte', labB:'Módulo opcional de avaliação gamificada', descB:'Cenário A mais o módulo de avaliação e laboratórios.', nrTxt:'implantação e integração'};
   } else {
     const w3 = wb.addWorksheet('3. Itens TEAlliance', {properties:{tabColor:{argb:'FFE0651A'}}});
-    w3.columns=[{width:52},{width:16},{width:13},{width:17},{width:17},{width:18},{width:12},{width:10},{width:12},{width:40}];
-    title(w3,'A1','ITENS E PREÇOS — TABELA TEALLIANCE 2026 (preço de venda ao ente) COM ACRÉSCIMO PARA O SETOR PÚBLICO');
-    put(w3,'A2','Preço da tabela em AMARELO (anual = mensal × 12). O acréscimo vem da aba 1, célula B66. Coluna G: 1 = item integra a proposta. O cuidado clínico está na aba 4.');
-    hdr(w3,4,['Item','Unidade','Quantidade','Preço tabela (R$/ano)','Preço com acréscimo','Total anual (R$)','Na proposta (1=sim)','Camada','Recorrente (1=sim)','Observação']);
+    w3.columns=[{width:52},{width:16},{width:13},{width:18},{width:18},{width:12},{width:10},{width:12},{width:40}];
+    title(w3,'A1','ITENS E PREÇOS — TABELA TEALLIANCE 2026 (preço de venda ao ente público)');
+    put(w3,'A2','Preço unitário em AMARELO (anual = mensal × 12; kit por unidade; consultoria VAAR por mês). Coluna F: 1 = item integra a proposta. O cuidado clínico está na aba 4.');
+    hdr(w3,4,['Item','Unidade','Quantidade','Preço unitário (R$)','Total anual (R$)','Na proposta (1=sim)','Camada','Recorrente (1=sim)','Observação']);
     const qT = {tpl:P2+'$B$8', tead:`ROUND(${P1}$B$30*${P1}$B$68,0)`, timr:`MAX(${P1}$B$69,${P1}$B$30)`, tae:`ROUND(${P2}$B$8*${P1}$B$67,0)`, tpar:`ROUND(${P2}$B$8*${P1}$B$26,0)`, tkit:P2+'$B$8', tvaar:`12*${P1}$B$38`};
     const its = ITENS.filter(it=>it.id!=='cli'); const r1=5, rN=r1+its.length-1;
     its.forEach((it,k)=>{ const r=r1+k, l=byId(it.id), ov=S.ovQ[it.id]!=null;
       put(w3,'A'+r,it.nome,{wrap:true}); put(w3,'B'+r,it.un);
       put(w3,'C'+r, ov ? l.q : fx(qT[it.id], l.qa), ov ? {inp:true,ov:true,fmt:'int',note:'Ajustado manualmente no painel. Cálculo-padrão: '+num(l.qa)} : {fmt:'int'});
-      put(w3,'D'+r, S.ovPU[it.id]!=null ? r2(S.ovPU[it.id]/(1+P.markup/100)) : it.base, {inp:true,fmt:'money'});
-      put(w3,'E'+r, fx(`ROUND(D${r}*(1+${P1}$B$66),2)`, l.pu), {fmt:'money'});
-      put(w3,'F'+r, fx(`C${r}*E${r}`, l.tot), {fmt:'money'});
-      put(w3,'G'+r, inc(it.id), {inp:true,fmt:'0'}); put(w3,'H'+r, it.cam); put(w3,'I'+r, it.rec?1:0, {fmt:'0'});
-      put(w3,'J'+r, ({tpl:'R$ 82/mês por estudante.', tead:'R$ 87/mês por educador.', timr:'R$ 441/mês por participante; mínimo de 65.', tae:'R$ 218 − R$ 82 da plataforma = R$ 136/mês: sem dupla cobrança.', tpar:'R$ 141/mês por familiar.', tkit:'R$ 550 por kit, entrega única (a confirmar).', tvaar:'R$ 27.664,25/mês; opcional, fora dos cenários A, B e C.'})[it.id]||'', {wrap:true}); });
-    const rt=rN+2, sumC = cam => `SUMIF(H${r1}:H${rN},"${cam}",F${r1}:F${rN})`, nrC = cam => `SUMIFS(F${r1}:F${rN},H${r1}:H${rN},"${cam}",I${r1}:I${rN},0)`;
+      put(w3,'D'+r, l.pu, S.ovPU[it.id]!=null ? {inp:true,ov:true,fmt:'money',note:'Ajustado manualmente no painel. Preço da tabela: '+brl(l.pa)} : {inp:true,fmt:'money'});
+      put(w3,'E'+r, fx(`C${r}*D${r}`, l.tot), {fmt:'money'});
+      put(w3,'F'+r, inc(it.id), {inp:true,fmt:'0'}); put(w3,'G'+r, it.cam); put(w3,'H'+r, it.rec?1:0, {fmt:'0'});
+      const mes = brl(r2(l.pu/12))+'/mês';
+      put(w3,'I'+r, ({tpl:mes+' por estudante.', tead:mes+' por educador.', timr:mes+' por participante; mínimo de 65.', tae:mes+' por estudante, como complemento à licença da plataforma: sem dupla cobrança.', tpar:mes+' por família.', tkit:'Por kit, entrega única (a confirmar).', tvaar:'Valor mensal; opcional, fora dos cenários A, B e C.'})[it.id]||'', {wrap:true}); });
+    const rt=rN+2, sumC = cam => `SUMIF(G${r1}:G${rN},"${cam}",E${r1}:E${rN})`, nrC = cam => `SUMIFS(E${r1}:E${rN},G${r1}:G${rN},"${cam}",H${r1}:H${rN},0)`;
     const lin = [['TOTAL — camada A (plataforma e formação)',sumC('A'),C.tA.ano],['TOTAL — camada D (acompanhamento pedagógico e familiar)',sumC('D'),C.tB.ano],['TOTAL — consultoria VAAR (opcional)',sumC('V'),C.ls.filter(l=>l.cam==='V').reduce((a,l)=>a+l.tot,0)],
       ['Não recorrente — camada A',nrC('A'),somar(C.ls.filter(l=>l.cam==='A')).nr],['Não recorrente — camada D (kit)',nrC('D'),somar(C.ls.filter(l=>l.cam==='D')).nr]];
-    lin.forEach((x,k)=>{ const r=rt+k; put(w3,'A'+r,x[0],{tot:true,bold:true}); put(w3,'F'+r,fx(x[1],x[2]),{tot:true,bold:true,fmt:'money'}); });
-    R5 = {A:P3+'$F$'+rt, B:P3+'$F$'+(rt+1), nrA:P3+'$F$'+(rt+3), nrB:P3+'$F$'+(rt+4),
-      sumInc:`SUMPRODUCT(${P3}F${r1}:F${rN},${P3}G${r1}:G${rN})+${P4}D16*${P4}F16`, nrInc:`SUMPRODUCT(${P3}F${r1}:F${rN},${P3}G${r1}:G${rN},1-${P3}I${r1}:I${rN})`,
+    lin.forEach((x,k)=>{ const r=rt+k; put(w3,'A'+r,x[0],{tot:true,bold:true}); put(w3,'E'+r,fx(x[1],x[2]),{tot:true,bold:true,fmt:'money'}); });
+    R5 = {A:P3+'$E$'+rt, B:P3+'$E$'+(rt+1), nrA:P3+'$E$'+(rt+3), nrB:P3+'$E$'+(rt+4),
+      sumInc:`SUMPRODUCT(${P3}E${r1}:E${rN},${P3}F${r1}:F${rN})+${P4}D16*${P4}F16`, nrInc:`SUMPRODUCT(${P3}E${r1}:E${rN},${P3}F${r1}:F${rN},1-${P3}H${r1}:H${rN})`,
       labA:'Plataforma e formação da rede', labB:'Acompanhamento pedagógico e familiar', descB:'Cenário A mais AEE sob demanda, treinamento parental e kit.', nrTxt:'kit de material'};
   }
 
@@ -2829,7 +2829,7 @@ async function gerarETP(ctx){
   c.push(h2('VI.2. Parâmetro público de referência — ARP nº 045/2026 (CIMINAS)'));
   c.push(K.kv([['Origem','Concorrência Eletrônica nº 004/2026, firmada em 27/08/2026'],['Licença de plataforma de avaliação','R$ 750,97 por aluno/ano'],['Implementação por unidade educacional','R$ 1.162,49 por unidade'],['Treinamento (turma de até 20)','R$ 3.520,84 por turma'],['Locação de laboratório itinerante','R$ 2.542,89 por serviço'],['Valor total registrado','R$ 80.400.000,00']]));
   c.push(p('O objeto da ARP 045/2026 não é idêntico: é útil para a ordem de grandeza dos itens de implantação, formação e avaliação, e não deve ser transposto diretamente para o licenciamento de gestão de PEI, dimensionado aqui por educando com PEI ativo.',{size:18, before:80}));
-  if(isTEA()) c.push(p('Nesta minuta, os preços unitários seguem a tabela de preços TEAlliance 2026 (preço de venda ao ente), com acréscimo de '+num(P.markup,0)+'% para o setor público. O AEE sob demanda é cobrado como complemento à licença da plataforma, sem dupla cobrança, e o kit de material é entrega única no primeiro ano.'));
+  if(isTEA()) c.push(p('Nesta minuta, os preços unitários seguem a tabela de preços TEAlliance 2026 (preço de venda ao ente público). O AEE sob demanda é cobrado como complemento à licença da plataforma, sem dupla cobrança, e o kit de material é entrega única no primeiro ano.'));
   c.push(h2('VI.3. Planilha de formação do valor estimado'));
   c.push(tbl(['#','Item','Unidade','Qtd.','Unitário','Total anual'], tabelaItens(K, L, [{v:x=>String(x.n)},{v:x=>x.desc+(x.rec?'':' *')},{v:x=>x.un},{v:x=>({__c:1,t:num(x.q),right:true})},{v:x=>({__c:1,t:brl(x.pu),right:true})},{v:x=>({__c:1,t:brl(x.tot),right:true}),sum:lt=>brl(lt.ano)}]), [5,37,13,10,15,20]));
   c.push(p('* Item não recorrente: incide apenas no primeiro ano.',{size:17, before:60}));
